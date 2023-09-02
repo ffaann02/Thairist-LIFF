@@ -28,7 +28,7 @@ function App() {
   },[]);
 
   return (
-    <div className="w-full h-full min-h-screen relative max-w-sm mx-auto">
+    <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
         <Navbar/>
         <Routes>
