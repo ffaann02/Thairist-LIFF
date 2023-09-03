@@ -4,6 +4,7 @@ import "./App.css";
 import Planner from "./components/Planner";
 import Navbar from "./components/Navbar";
 import Topbar from "./components/Topbar";
+import Workshop from "./components/Workshop";
 import {
   BrowserRouter as Router,
   Routes,
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           <Route path="/planner" element={<Planner/>}/>
           <Route path="/home" element={<Home/>}/>
+          <Route path="/workshop" element={<Workshop/>}/>
         </Routes>
       </Router>
     </div>
