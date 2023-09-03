@@ -10,6 +10,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import Home from "./components/Home";
 function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -35,6 +36,7 @@ function App() {
         <Topbar/>
         <Routes>
           <Route path="/planner" element={<Planner/>}/>
+          <Route path="/home" element={<Home/>}/>
         </Routes>
       </Router>
     </div>
