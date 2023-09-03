@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import liff from "@line/liff";
 import "./App.css";
 import Planner from "./components/Planner";
+import Navbar from "./components/Navbar";
+import Topbar from "./components/Topbar";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
-import Navbar from "./components/Navbar";
 function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -31,6 +32,7 @@ function App() {
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
         <Navbar/>
+        <Topbar/>
         <Routes>
           <Route path="/planner" element={<Planner/>}/>
         </Routes>

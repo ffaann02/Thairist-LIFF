@@ -2,6 +2,7 @@ import { BiHomeAlt } from "react-icons/bi"
 import {GrPlan} from "react-icons/gr"
 import {AiOutlineStar} from "react-icons/ai"
 import {PiHandFistLight} from "react-icons/pi"
+import {RiFilePaper2Line,RiFilePaper2Fill} from "react-icons/ri"
 const Navbar = () => {
     return (
         <div className="fixed w-full bottom-5 px-4 text-center z-10">
@@ -11,8 +12,8 @@ const Navbar = () => {
                     <p className="text-sm">Home</p>
                 </div>
                 <div className="mx-auto">
-                    <GrPlan className="text-2xl mx-auto"/>
-                    <p className="text-sm">Plan</p>
+                    <RiFilePaper2Fill className="text-2xl mx-auto text-blue-700"/>
+                    <p className="text-sm text-blue-700">Plan</p>
                 </div>
                 <div className="mx-auto">
                     <AiOutlineStar className="text-2xl mx-auto"/>
