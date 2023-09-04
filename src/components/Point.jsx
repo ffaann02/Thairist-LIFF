@@ -67,8 +67,11 @@ const Point = () => {
             <div className="px-4 bg-slate-50 mr-3 py-4 rounded-xl mt-0 border-[1px] drop-shadow-md grid grid-cols-2">
                 <p className="my-auto text-sm col-span-1">คะแนนของคุณสามารถใช้แลกของขวัญ ส่วนลด และอื่น ๆ ที่ร่วมรายการได้</p>
                 <Link to="/points/camera">
-                <button className="px-4 py-3 my-auto bg-blue-600 text-white rounded-xl drop-shadow-md col-span-1 ml-2">ดูรายละเอียดคะแนน</button>
-
+                    <div className="col-span-1 w-full flex justify-end">
+                        <button className="px-3 py-3 my-auto bg-blue-600 text-white rounded-xl drop-shadow-md">
+                            ดูรายละเอียดคะแนน
+                        </button>
+                    </div>
                 </Link>
             </div>
             <div className="mt-4 flex">
@@ -112,7 +115,7 @@ const Point = () => {
                             <img src={trip.imageUrl}
                                 className="rounded-xl opacity-75 h-full w-full" />
                             <div className="absolute left-2 top-2 bg-white px-2 py-1 rounded-lg flex">
-                                <AiOutlineStar className="text-xl my-auto mr-1 text-orange-600"/>
+                                <AiOutlineStar className="text-xl my-auto mr-1 text-orange-600" />
                                 <p>100 คะแนน</p>
                             </div>
                             {/* <div className="w-full absolute bottom-0 pr-4">

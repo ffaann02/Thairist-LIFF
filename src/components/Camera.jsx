@@ -68,7 +68,7 @@
 // };
 
 // export default CameraComponent;
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Webcam from 'react-webcam';
 
 const FACING_MODE_USER = 'user';
@@ -87,10 +87,12 @@ export default function WebcamCapture() {
 
   let videoConstraints = {
     facingMode: facingMode,
-    width: 270,
-    height: 480,
+    width: 500,
+    height: 600,
   };
-
+  useEffect(()=>{
+    setFacingMode(FACING_MODE_USER);
+  },[])
   const handleClick = useCallback(() => {
     setFacingMode((prevState) =>
       prevState === FACING_MODE_USER
@@ -105,7 +107,7 @@ export default function WebcamCapture() {
         <div className="bg-red-200 flex">
           {image === '' ? (
             <Webcam
-              className="mx-auto"
+              className="mx-auto w-full"
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
@@ -113,14 +115,14 @@ export default function WebcamCapture() {
               screenshotQuality={1}
             />
           ) : (
-            <img
-              src={image}
-              alt="Scan"
-              style={{ width: '500px', height: 'auto' }}
-            />
+            <div className='w-full h-[60vh]'>
+
+            </div>
           )}
         </div>
-        <button onClick={handleClick}>Switch camera</button>
+        <div className='w-full flex'>
+          <button onClick={handleClick} className='bg-blue-400 rounded-lg px-2 py-2 mx-auto mt-2'>Switch camera</button>
+        </div>
       </div>
     </>
   );
