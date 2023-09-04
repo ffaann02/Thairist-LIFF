@@ -30,7 +30,7 @@ const Navbar = () => {
                 <Link to="/workshop">
                     <div className={`mx-auto ${location.pathname=="/workshop"? "text-blue-700":"text-black"}`}>
                         <PiHandFistLight className="text-2xl mx-auto " />
-                        <p className="text-sm ">Workshop</p>
+                        <p className="text-sm ">Activities</p>
                     </div>
                 </Link>
             </div>
