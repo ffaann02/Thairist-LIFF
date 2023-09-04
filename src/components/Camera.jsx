@@ -21,13 +21,13 @@ const CameraComponent = () => {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const videoConstraints = isMobile ? { video: {
         facingMode: {
-          exact: "environment"
+            ideal: "environment"
         }
       } } : true;
     if(isMobile){
         alert("hello");
     }
-    navigator.mediaDevices.getUserMedia({ video: videoConstraints })
+    navigator.mediaDevices.getUserMedia({ videoConstraints })
       .then((stream) => {
         webcamRef.current.srcObject = stream;
         setIsCameraOn(true);
