@@ -43,8 +43,8 @@ export default function WebcamCapture() {
 
   let videoConstraints = {
     facingMode: facingMode,
-    width: 500,
-    height: 1000,
+    width: 600,
+    height: 1600,
   };
   useEffect(() => {
     setFacingMode(FACING_MODE_USER);
@@ -69,10 +69,10 @@ export default function WebcamCapture() {
         <div className='absolute left-2 top-4'>
           <IoIosArrowBack className='text-2xl text-white' />
         </div>
-        <div className="bg-red-200 flex">
+        <div className="w-full flex">
           {image === '' ? (
             <Webcam
-              className="mx-auto w-full"
+              className="mx-auto w-full h-full"
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
