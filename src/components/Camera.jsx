@@ -44,7 +44,7 @@ export default function WebcamCapture() {
   let videoConstraints = {
     facingMode: facingMode,
     width: 500,
-    height: 700,
+    height: 1000,
   };
   useEffect(() => {
     setFacingMode(FACING_MODE_USER);
