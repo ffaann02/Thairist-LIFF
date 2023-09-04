@@ -4,49 +4,40 @@ import Webcam from 'react-webcam';
 const CameraComponent = () => {
   const webcamRef = useRef(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
-  const [cameraDevices, setCameraDevices] = useState([]);
-  const [selectedDeviceId, setSelectedDeviceId] = useState(null);
 
-  // Function to toggle camera on/off
   const toggleCamera = () => {
     setIsCameraOn((prevIsCameraOn) => !prevIsCameraOn);
   };
 
-  // Function to switch between available cameras
-  const switchCamera = () => {
-    if (cameraDevices.length > 1) {
-      const currentIndex = cameraDevices.findIndex((device) => device.deviceId === selectedDeviceId);
-      const nextIndex = (currentIndex + 1) % cameraDevices.length;
-      setSelectedDeviceId(cameraDevices[nextIndex].deviceId);
+  const capture = () => {
+    if (webcamRef.current) {
+      const imageSrc = webcamRef.current.getScreenshot();
+      // Do something with the captured image, e.g., send it to the server or display it.
+      console.log('Captured image:', imageSrc);
     }
   };
 
   useEffect(() => {
-    // Get the list of available video devices when the component mounts
-    navigator.mediaDevices.enumerateDevices()
-      .then((devices) => {
-        const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-        setCameraDevices(videoDevices);
-        // Set the default camera (usually the first one) as the selected camera
-        if (videoDevices.length > 0) {
-          setSelectedDeviceId(videoDevices[0].deviceId);
-        }
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const videoConstraints = isMobile ? { facingMode: 'environment' } : true;
+
+    navigator.mediaDevices.getUserMedia({ video: videoConstraints })
+      .then((stream) => {
+        webcamRef.current.srcObject = stream;
+        setIsCameraOn(true);
       })
       .catch((error) => {
-        console.error('Error enumerating devices:', error);
+        console.error('Error accessing the camera:', error);
       });
   }, []);
 
   return (
     <div className="container mx-auto mt-8 text-center">
-      {selectedDeviceId && isCameraOn && (
+      {isCameraOn && (
         <Webcam
           audio={false}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
-          videoConstraints={{
-            deviceId: selectedDeviceId,
-          }}
           className="w-full h-auto"
         />
       )}
@@ -58,12 +49,12 @@ const CameraComponent = () => {
       >
         {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
       </button>
-      {cameraDevices.length > 1 && (
+      {isCameraOn && (
         <button
-          onClick={switchCamera}
+          onClick={capture}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
         >
-          Switch Camera
+          Capture Photo
         </button>
       )}
     </div>
