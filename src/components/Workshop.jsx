@@ -6,6 +6,10 @@ import "@egjs/react-flicking/dist/flicking-inline.css";
 import { FaPhoneAlt } from "react-icons/fa"
 import { FaBahtSign } from "react-icons/fa6"
 import { AiFillPlusCircle } from "react-icons/ai"
+import { IoChevronBackSharp, IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
+import { MdOutlineTempleBuddhist, MdOutlineBakeryDining } from "react-icons/md"
+import { BsSun } from "react-icons/bs"
+import Draggable from 'react-draggable';
 
 const Workshop = () => {
 
@@ -33,9 +37,161 @@ const Workshop = () => {
             }
         ]);
 
+    const [isDisplayAddToPlane, setIsDisplayAddToPlan] = useState(false)
+    const handleDisplayAddToPlan = (state) => {
+        setIsDisplayAddToPlan(state);
+    }
+
     return (
         <div className="w-full h-full pt-6 bg-slate-50 ">
             <div className="w-full h-full max-w-4xl mx-auto min-h-screen">
+
+                {isDisplayAddToPlane &&
+                    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
+                        <div className="relative rounded-xl h-[80%] mx-auto my-auto bg-white">
+                            <div className="grid grid-cols-8 ml-4 mt-4">
+                                <button className="col-span-1 my-auto bg-slate-100 rounded-full w-8 h-8" onClick={() => handleDisplayAddToPlan(false)}>
+                                    <IoChevronBackSharp className="mx-auto text-slate-800" />
+                                </button>
+                                <div className="col-span-7 ml-2 my-auto">
+                                    <p className="text-xl font-semibold mr-10">เที่ยววันหยุดจังหวัดสตูล</p>
+                                    <p className="text-md mt-1 text-slate-600">10 กันยายน - 12 กันยายน</p>
+                                </div>
+                            </div>
+                            <div className="flex px-1 mt-4 mx-auto justify-center mb-1 text-center">
+                                <div className="w-fit border-b-4 py-1 px-2 border-[#51b3ce] text-slate-800">
+                                    <p>วัน 1</p>
+                                    <p className="text-sm">10 ก.ย. 2566</p>
+                                </div>
+                                <div className="w-fit border-b-4 py-1 px-2 border-slate-200 text-slate-500">
+                                    <p>วัน 2</p>
+                                    <p className="text-sm">11 ก.ย. 2566</p>
+                                </div>
+                                <div className="w-fit border-b-4 py-1 px-2 border-slate-200 text-slate-500">
+                                    <p>วัน 3</p>
+                                    <p className="text-sm">12 ก.ย. 2566</p>
+                                </div>
+                            </div>
+                            <div className="">
+                            <div className="grid grid-cols-12 text-center py-2 mt-1">
+                                <div className="col-span-4 text-left ml-4 flex justify-between">
+                                    <p>8:00 น.</p>
+                                    <div className="ml-3 relative mr-3">
+                                        <div className="mt-1 rounded-full bg-slate-200 p-1 mx-auto">
+                                            <MdOutlineTempleBuddhist className="border-[1px] text-blue-600" />
+                                        </div>
+                                        <div className="h-[80%] mt-1 border-l-2 absolute flex justify-center left-[0.7rem] w-full border-dotted
+                                        border-blue-400"></div>
+                                    </div>
+                                </div>
+                                <div className="col-span-2">
+                                    <img src="https://ak-d.tripcdn.com/images/1i6302215cij6g8xc3131_W_400_0_R5_Q90.jpg?proc=source/trip"
+                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                </div>
+                                <div className="col-span-6 text-left ml-3">
+                                    <p className="text-xl text-bold">สะพานข้ามกาลเวลา</p>
+                                    <p className="text-slate-400 text-sm">มรดกโลก, อุทยานธรณีสตูล</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-12 text-center py-2 mt-1">
+                                <div className="col-span-4 text-left ml-4 flex justify-between">
+                                    <p>9:30 น.</p>
+                                    <div className="ml-3 relative mr-3">
+                                        <div className="mt-1 rounded-full bg-slate-200 p-1 mx-auto">
+                                            <IoWaterOutline className="border-[1px] text-blue-600" />
+                                        </div>
+                                        <div className="h-[80%] mt-1 border-l-2 absolute flex justify-center left-[0.7rem] w-full border-dotted
+                                        border-blue-400"></div>
+                                    </div>
+                                </div>
+                                <div className="col-span-2">
+                                    <img src="https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
+                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                </div>
+                                <div className="col-span-6 text-left ml-3">
+                                    <p className="text-xl text-bold">น้ำตกวังสายทอง</p>
+                                    <p className="text-slate-400 text-sm">ล่องแก่งชมธรรมชาติ</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-12 text-center py-2 mt-1">
+                                <div className="col-span-4 text-left ml-4 flex justify-between">
+                                    <p>12:00 น.</p>
+                                    <div className="ml-3 relative mr-3">
+                                        <div className="mt-1 rounded-full bg-slate-200 p-1 mx-auto">
+                                            <IoFastFoodOutline className="border-[1px] text-blue-600" />
+                                        </div>
+                                        <div className="h-[80%] mt-1 border-l-2 absolute flex justify-center left-[0.7rem] w-full border-dotted
+                                        border-blue-400"></div>
+                                    </div>
+                                </div>
+                                <div className="col-span-2">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/2276/2276931.png"
+                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem] bg-slate-100 p-1" />
+                                </div>
+                                <div className="col-span-6 text-left ml-3">
+                                    <p className="text-xl text-bold">อาหารเที่ยง</p>
+                                    <p className="text-slate-400 text-sm">รับประทานอาหารทะเล</p>
+                                </div>
+                            </div>
+
+                            <Draggable>
+                                <div className="grid grid-cols-12 text-center py-2 bg-blue-600">
+                                    <div className="col-span-4 text-left ml-4 flex justify-between">
+                                        <p className="text-white">14:00 น.</p>
+                                        <div className="ml-3 relative mr-3">
+                                            <div className="mt-1 rounded-full bg-slate-200 p-1 mx-auto">
+                                                <MdOutlineBakeryDining className="border-[1px] text-blue-600" />
+                                            </div>
+                                            <div className="h-[80%] mt-1 border-l-2 absolute flex justify-center left-[0.7rem] w-full border-dotted
+                                            border-blue-400"></div>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <img src="https://pbs.twimg.com/media/CgyhH5yXEAA2hxG.jpg"
+                                            className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                    </div>
+                                    <div className="col-span-6 text-left ml-2">
+                                        <p className="text-xl text-bold text-white">ทำขนม</p>
+                                        <p className="text-sm text-white">เรียนรู้การทำขนมบุหงาปูดะ</p>
+                                    </div>
+                                </div>
+                            </Draggable>
+
+                            <div className="grid grid-cols-12 text-center py-2 ">
+                                <div className="col-span-4 text-left ml-4 flex justify-between">
+                                    <p>17:30 น.</p>
+                                    <div className="ml-3 relative mr-3">
+                                        <div className="mt-1 rounded-full bg-slate-200 p-1 mx-auto">
+                                            <BsSun className="border-[1px] text-blue-600" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-span-2">
+                                    <img src="https://www.paiduaykan.com/travel/wp-content/uploads/2022/03/3-DSC00758.jpg"
+                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                </div>
+                                <div className="col-span-6 text-left ml-2">
+                                    <p className="text-xl text-bold">หาดปากบารา</p>
+                                    <p className="text-slate-400 text-sm">จุดชมวิวพระอาทิตย์ตก</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="mb-4 mt-4 flex justify-center">
+                            <button className="rounded-lg px-4 py-2 text-red-700 border-[1px] border-red-700" onClick={() => handleDisplayAddToPlan(false)}>
+                                <p className="my-auto">ยกเลิก</p>
+                            </button>
+                            <button className="ml-4 rounded-lg px-4 py-2 bg-blue-700 text-white">
+                                <p className="my-auto">ยืนยัน</p>
+                            </button>
+                        </div>
+
+                        </div>
+                    </div>
+                }
 
                 <div className='px-6 mx-auto'>
                     <div className="relative flex items-center w-full h-12 rounded-lg shadow-md bg-white overflow-hidden border-[1px] border-[#10000]">
@@ -83,7 +239,7 @@ const Workshop = () => {
                             <p className="text-gray-700 text-base mt-1">ลองลงมือทำขนมบุหงาปูดะด้วยตัวเอง มีผู้สอนละเอียดทุกขั้นตอน จากกลุ่มแม่บ้านเจ๊ะบิลัง</p>
                         </div>
                         <div className="px-6 pb-2 mt-2">
-                        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">ทำขนม</span>
+                            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">ทำขนม</span>
                             <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">ขนมพื้นเมือง</span>
                             <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">ของฝากสตูล</span>
                         </div>
@@ -96,7 +252,7 @@ const Workshop = () => {
                                 <FaPhoneAlt className="my-auto" />
                                 <p className="my-auto ml-2">โทร</p>
                             </button>
-                            <button className="ml-2 rounded-lg px-4 py-2 flex bg-blue-700 text-white">
+                            <button className="ml-2 rounded-lg px-4 py-2 flex bg-blue-700 text-white" onClick={() => handleDisplayAddToPlan(true)}>
                                 <AiFillPlusCircle className="my-auto" />
                                 <p className="my-auto ml-2">แผน</p>
                             </button>
