@@ -12,6 +12,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import Home from "./components/Home";
+import Point from "./components/Point";
 function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -39,6 +40,7 @@ function App() {
           <Route path="/planner" element={<Planner/>}/>
           <Route path="/home" element={<Home/>}/>
           <Route path="/workshop" element={<Workshop/>}/>
+          <Route path="/points" element={<Point/>}/>
         </Routes>
       </Router>
     </div>
