@@ -19,7 +19,11 @@ const CameraComponent = () => {
 
   useEffect(() => {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const videoConstraints = isMobile ? { facingMode: 'user' } : true;
+    const videoConstraints = isMobile ? { video: {
+        facingMode: {
+          exact: "environment"
+        }
+      } } : true;
     if(isMobile){
         alert("hello");
     }
