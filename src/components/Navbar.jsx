@@ -22,7 +22,7 @@ const Navbar = () => {
                     </div>
                 </Link>
                 <Link to="/points">
-                    <div className={`mx-auto ${location.pathname=="/points"? "text-blue-700":"text-black"}`}>
+                    <div className={`mx-auto ${location.pathname=="/points" || location.pathname=="/points/camera"? "text-blue-700":"text-black"}`}>
                         <AiOutlineStar className="text-2xl mx-auto " />
                         <p className="text-sm ">Points</p>
                     </div>

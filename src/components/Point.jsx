@@ -9,6 +9,7 @@ import latif from "/latif.jpeg"
 import logo from "/logo.png"
 import { FaLocationDot } from "react-icons/fa6"
 import { AiOutlineStar } from "react-icons/ai"
+import { Link } from "react-router-dom";
 const Point = () => {
     const [notes, setNotes] = useState([1, 2, 3, 4, 5, 6, 7]);
     const [currentTrips, setCurrentTrips] = useState([
@@ -65,7 +66,10 @@ const Point = () => {
             </div>
             <div className="px-4 bg-slate-50 mr-3 py-4 rounded-xl mt-0 border-[1px] drop-shadow-md grid grid-cols-2">
                 <p className="my-auto text-sm col-span-1">คะแนนของคุณสามารถใช้แลกของขวัญ ส่วนลด และอื่น ๆ ที่ร่วมรายการได้</p>
+                <Link to="/points/camera">
                 <button className="px-4 py-3 my-auto bg-blue-600 text-white rounded-xl drop-shadow-md col-span-1 ml-2">ดูรายละเอียดคะแนน</button>
+
+                </Link>
             </div>
             <div className="mt-4 flex">
                 <p className="text-lg">ของฝากใกล้คุณ</p>
