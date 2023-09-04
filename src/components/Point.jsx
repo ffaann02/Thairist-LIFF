@@ -52,7 +52,6 @@ const Point = () => {
             time: "8:30 น.",
             imageUrl: "https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
         },
-
     ]);
     return (
         <div className="w-full h-full pl-3.5 mt-4">
@@ -118,14 +117,6 @@ const Point = () => {
                                 <AiOutlineStar className="text-xl my-auto mr-1 text-orange-600" />
                                 <p>100 คะแนน</p>
                             </div>
-                            {/* <div className="w-full absolute bottom-0 pr-4">
-                                <div className="w-full py-1 px-2 rounded-b-xl mb-1">
-                                    <div className="w-full h-full bg-white rounded-lg pl-3 pr-2 py-2">
-                                        <p className="text-slate-700 text-xl tracking-widest">{trip.name}</p>
-                                        <p className="text-slate-700 text-md tracking-widest">{trip.time}</p>
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
                     ))}
                 </Flicking>
