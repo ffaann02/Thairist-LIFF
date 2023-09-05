@@ -18,11 +18,22 @@ export default function WebcamCapture() {
   const [currentPoints, setCurrentPoints] = useState([
     {
       id: 1,
-      name: 'กลุ่มแม่บ้านเจ๊ะบิลัง ขนมผูกรัก',
-      time: '50 คะแนน | ส่วนลด 10%',
-      imageUrl: 'https://sv1.picz.in.th/images/2023/09/02/dW5yIbR.jpeg',
+      name: "กลุ่มแม่บ้านเจ๊ะบิลัง ขนมผูกรัก",
+      time: "50 คะแนน | ส่วนลด 10%",
+      imageUrl: "https://sv1.picz.in.th/images/2023/09/02/dW5yIbR.jpeg",
     },
-    // Add your other data here
+    {
+      id: 2,
+      name: "ร้านแม่ทิพย์ โรตีกรอบไร้น้ำตาล",
+      time: "50 คะแนน | แถมฟรี 1 กล่อง",
+      imageUrl: "https://sv1.picz.in.th/images/2023/09/02/dW5yF38.jpeg",
+    },
+    {
+      id: 2,
+      name: "น้ำตกวังสายทอง",
+      time: "8:30 น.",
+      imageUrl: "https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
+    },
   ]);
   const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
 
@@ -153,26 +164,3 @@ const handleCaptureAndSave = () => {
     </>
   );
 }
-
-
-
-// const [currentPoints, setCurrentPoints] = useState([
-//   {
-//     id: 1,
-//     name: "กลุ่มแม่บ้านเจ๊ะบิลัง ขนมผูกรัก",
-//     time: "50 คะแนน | ส่วนลด 10%",
-//     imageUrl: "https://sv1.picz.in.th/images/2023/09/02/dW5yIbR.jpeg",
-//   },
-//   {
-//     id: 2,
-//     name: "ร้านแม่ทิพย์ โรตีกรอบไร้น้ำตาล",
-//     time: "50 คะแนน | แถมฟรี 1 กล่อง",
-//     imageUrl: "https://sv1.picz.in.th/images/2023/09/02/dW5yF38.jpeg",
-//   },
-//   {
-//     id: 2,
-//     name: "น้ำตกวังสายทอง",
-//     time: "8:30 น.",
-//     imageUrl: "https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
-//   },
-// ]);

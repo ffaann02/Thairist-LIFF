@@ -14,6 +14,7 @@ import {
 import Home from "./components/Home";
 import Point from "./components/Point";
 import CameraComponent from "./components/Camera";
+import PlannerSearch from "./components/PlannerSearch";
 function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -43,6 +44,7 @@ function App() {
           <Route path="/workshop" element={<Workshop/>}/>
           <Route path="/points" element={<Point/>}/>
           <Route path="/points/camera" element={<CameraComponent/>}/>
+          <Route path="/planner/search" element={<PlannerSearch/>}/>
         </Routes>
       </Router>
     </div>

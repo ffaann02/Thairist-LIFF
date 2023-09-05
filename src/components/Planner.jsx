@@ -1,7 +1,9 @@
 import { AiFillCaretLeft, AiFillCaretRight ,AiFillPlusCircle} from "react-icons/ai"
 import { MdOutlineTempleBuddhist } from "react-icons/md"
 import {IoWaterOutline,IoFastFoodOutline} from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 const Planner = () => {
+    const navigate = useNavigate();
     return (
         <div className="w-full h-full">
             <div className="w-full h-full max-w-4xl bg-slate-50 mx-auto min-h-screen">
@@ -63,7 +65,7 @@ const Planner = () => {
                             </div>
                         </div>
                         <div className="">
-                            <div className="grid grid-cols-12 text-center py-2 mt-1">
+                            <div className="grid grid-cols-12 text-center py-2 mt-1" onClick={()=>{navigate("/planner/search")}}>
                                 <div className="col-span-4 text-left ml-4 flex justify-between">
                                     <p>8:00 น.</p>
                                     <div className="ml-3 relative mr-3">
