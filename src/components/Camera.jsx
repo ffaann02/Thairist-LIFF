@@ -95,7 +95,7 @@ const handleCaptureAndSave = () => {
             <p>
               <FaLocationDot className="text-2xl text-red-600" />
             </p>
-            <p className="ml-1"> น้ำตกวังสายทอง, สตูล</p>
+            <p className="ml-1"> เกาะไข่, สตูล</p>
           </div>
         </div>
         <div className="absolute left-2 top-4">
