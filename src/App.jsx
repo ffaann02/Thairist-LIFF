@@ -29,6 +29,7 @@ function App() {
         if (liff.isLoggedIn()) {
           await getUserProfile();
         } else {
+          await getUserProfile();
           setUserProfile("No login from LINE");
         }
       } catch (e) {
