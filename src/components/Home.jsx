@@ -7,6 +7,9 @@ import { AiTwotoneEdit } from "react-icons/ai"
 import kongProfile from "/kong.jpeg"
 import latif from "/latif.jpeg"
 const Home = ({userData}) => {
+
+    console.log(userData);
+
     const [notes,setNotes] = useState([1,2,3,4,5,6,7]);
     const [currentTrips, setCurrentTrips] = useState([
         {
@@ -49,7 +52,9 @@ const Home = ({userData}) => {
 
             <div>
                 <p>Test update: </p>
-                <p>{userData}</p>
+                <p>{userData.userId}</p>
+                <p>{userData.displayName}</p>
+                <p>{userData.statusMessage}</p>
             </div>
 
             <div className="w-[105%] h-full mt-2 -ml-[5%]">

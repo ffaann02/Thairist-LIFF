@@ -30,6 +30,8 @@ function App() {
         if(liff.isLoggedIn()) {
           getUserProfile();
         }
+        setUserProfile("JSOIFJIOSDJF");
+        console.log("dsijfoidjf");
       })
       .catch((e) => {
         setMessage("LIFF init failed.");
@@ -40,6 +42,7 @@ function App() {
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
     setUserProfile(profile);
+    console.log(profile);
   }
 
   return (
