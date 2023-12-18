@@ -42,7 +42,7 @@ function App() {
 
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
-    setUserProfile(profile);
+    setUserProfile("Test set state");
   }
 
   return (
