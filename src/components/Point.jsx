@@ -68,7 +68,7 @@ const Point = () => {
             }
           })
           .catch((e) => {
-            setError(`${e}`);
+            console.log(e);
           });
       }, []);
 
