@@ -21,24 +21,24 @@ function App() {
   const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
-    liff
-      .init({
-        liffId: import.meta.env.VITE_LIFF_ID
-      })
-      .then(() => {
+    const initializeLiff = async () => {
+      try {
+        await liff.init({ liffId: import.meta.env.VITE_LIFF_ID });
         setMessage("LIFF init succeeded.");
-        if(liff.isLoggedIn()) {
-          getUserProfile();
-        }
-        else{
+
+        if (liff.isLoggedIn()) {
+          await getUserProfile();
+        } else {
           setUserProfile("No login from LINE");
         }
-      })
-      .catch((e) => {
+      } catch (e) {
         setMessage("LIFF init failed.");
         setError(`${e}`);
-      });
-  },[]);
+      }
+    };
+
+    initializeLiff();
+  }, []);
 
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
