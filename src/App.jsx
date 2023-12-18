@@ -24,25 +24,23 @@ function App() {
     liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
       .then(() => {
         setMessage("LIFF init succeeded.");
+        if(liff.isLoggedIn()) {
+          getUserProfile();
+        }
+        else{
+          liff.login();
+        }
       })
       .catch((e) => {
         setMessage("LIFF init failed.");
         setError(`${e}`);
       });
-    liff
-      .getProfile()
-      .then((profile) => {
-        const name = profile.displayName;
-        setUserProfile(name)
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
   }, []);
 
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
-    setUserProfile("LIFF is logged in");
+    console.log(profile.displayName);
+    setUserProfile(profile.displayName);
   }
 
   return (
