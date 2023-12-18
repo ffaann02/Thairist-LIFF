@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     liff.ready.then(() => {
-      if(liff.isInClient()){
+      if(liff.isInClient() === false){
         getUserProfile();
       }
       else{
