@@ -4,7 +4,7 @@ import { AiOutlineStar } from "react-icons/ai"
 import { PiHandFistLight } from "react-icons/pi"
 import { RiFilePaper2Line, RiFilePaper2Fill } from "react-icons/ri"
 import { Link, useLocation } from "react-router-dom"
-const Navbar = ({userData}) => {
+const Navbar = () => {
     const location = useLocation();
     return (
         <div className="fixed w-full bottom-5 px-4 text-center z-10">
@@ -33,15 +33,6 @@ const Navbar = ({userData}) => {
                         <p className="text-sm ">Activities</p>
                     </div>
                 </Link>
-                {userData && 
-                <div>
-                    <p>Test update: </p>
-                    <p>{userData}</p>
-                    {/* <p>{userData.userId}</p>
-                    <p>{userData.displayName}</p>
-                    <p>{userData.statusMessage}</p> */}
-                </div>
-            }
             </div>
         </div>
     )

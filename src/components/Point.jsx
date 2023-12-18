@@ -10,6 +10,7 @@ import logo from "/logo.png"
 import { FaLocationDot } from "react-icons/fa6"
 import { AiOutlineStar } from "react-icons/ai"
 import { Link } from "react-router-dom";
+
 const Point = () => {
     const [notes, setNotes] = useState([1, 2, 3, 4, 5, 6, 7]);
     const [currentTrips, setCurrentTrips] = useState([
@@ -53,6 +54,30 @@ const Point = () => {
             imageUrl: "https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
         },
     ]);
+
+    const [userProfile, setUserProfile] = useState();
+    useEffect(() => {
+        liff.init({ liffId: import.meta.env.VITE_LIFF_ID_POINTS })
+          .then(() => {
+            setMessage("LIFF init succeeded.");
+            if (liff.isLoggedIn()) {
+              getUserProfile();
+            }
+            else {
+              setUserProfile("No login from LINE");
+            }
+          })
+          .catch((e) => {
+            setMessage("LIFF init failed.");
+            setError(`${e}`);
+          });
+      }, []);
+
+      const getUserProfile = async () => {
+        const profile = await liff.getProfile();
+        setUserProfile("LIFF is logged in");
+      }
+
     return (
         <div className="w-full h-full pl-3.5 mt-4">
             <div className="w-full flex">
@@ -63,6 +88,15 @@ const Point = () => {
                 <p className="text-3xl font-bold text-blue-600 tracking-wider">219</p>
                 <p className="mt-[0.65rem] ml-1">คะแนน</p>
             </div>
+            {userProfile && 
+                <div>
+                    <p>Test update: </p>
+                    <p>{userProfile}</p>
+                    {/* <p>{userData.userId}</p>
+                    <p>{userData.displayName}</p>
+                    <p>{userData.statusMessage}</p> */}
+                </div>
+            }
             <div className="px-4 bg-slate-50 mr-3 py-4 rounded-xl mt-0 border-[1px] drop-shadow-md grid grid-cols-2">
                 <p className="my-auto text-sm col-span-1">คะแนนของคุณสามารถใช้แลกของขวัญ ส่วนลด และอื่น ๆ ที่ร่วมรายการได้</p>
                 <Link to="/points/camera">

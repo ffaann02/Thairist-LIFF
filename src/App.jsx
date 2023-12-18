@@ -18,18 +18,11 @@ import PlannerSearch from "./components/PlannerSearch";
 function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
     liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
       .then(() => {
         setMessage("LIFF init succeeded.");
-        if (liff.isLoggedIn()) {
-          getUserProfile();
-        }
-        else {
-          setUserProfile("No login from LINE");
-        }
       })
       .catch((e) => {
         setMessage("LIFF init failed.");
@@ -37,15 +30,10 @@ function App() {
       });
   }, []);
 
-  const getUserProfile = async () => {
-    const profile = await liff.getProfile();
-    setUserProfile("LIFF is logged in");
-  }
-
   return (
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
-        <Navbar userData={userProfile}/>
+        <Navbar />
         <Topbar />
         <Routes>
           <Route path="/planner" element={<Planner />} />
