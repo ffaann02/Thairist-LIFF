@@ -21,22 +21,24 @@ function App() {
   const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
-    const initializeLiff = async () => {
-      try {
-        await liff.init({ liffId: import.meta.env.VITE_LIFF_ID });
+    liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
+      .then(() => {
         setMessage("LIFF init succeeded.");
         if (liff.isLoggedIn()) {
-          await getUserProfile();
-        } else {
-          setUserProfile("No login from LINE");
+          getUserProfile();
         }
-      } catch (e) {
+        else {
+          setUserProfile("No login from LINE");
+          liff.login({ redirectUri: "https://thairist-liff.vercel.app/" });
+          if (liff.isLoggedIn()) {
+            getUserProfile();
+          }
+        }
+      })
+      .catch((e) => {
         setMessage("LIFF init failed.");
         setError(`${e}`);
-      }
-    };
-
-    initializeLiff();
+      });
   }, []);
 
   const getUserProfile = async () => {
@@ -47,15 +49,15 @@ function App() {
   return (
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
-        <Navbar/>
-        <Topbar/>
+        <Navbar />
+        <Topbar />
         <Routes>
-          <Route path="/planner" element={<Planner/>}/>
-          <Route path="/home" element={<Home userData={userProfile}/>}/>
-          <Route path="/workshop" element={<Workshop/>}/>
-          <Route path="/points" element={<Point/>}/>
-          <Route path="/points/camera" element={<CameraComponent/>}/>
-          <Route path="/planner/search" element={<PlannerSearch/>}/>
+          <Route path="/planner" element={<Planner />} />
+          <Route path="/home" element={<Home userData={userProfile} />} />
+          <Route path="/workshop" element={<Workshop />} />
+          <Route path="/points" element={<Point />} />
+          <Route path="/points/camera" element={<CameraComponent />} />
+          <Route path="/planner/search" element={<PlannerSearch />} />
         </Routes>
       </Router>
     </div>
