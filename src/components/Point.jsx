@@ -2,7 +2,7 @@ import Flicking from "@egjs/react-flicking"
 import { AutoPlay } from "@egjs/flicking-plugins"
 import "@egjs/react-flicking/dist/flicking.css";
 import "@egjs/react-flicking/dist/flicking-inline.css";
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { AiTwotoneEdit } from "react-icons/ai"
 import kongProfile from "/kong.jpeg"
 import latif from "/latif.jpeg"
