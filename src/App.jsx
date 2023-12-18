@@ -25,13 +25,13 @@ function App() {
       try {
         await liff.init({ liffId: import.meta.env.VITE_LIFF_ID });
         setMessage("LIFF init succeeded.");
-
-        if (liff.isLoggedIn()) {
-          await getUserProfile();
-        } else {
-          await getUserProfile();
-          setUserProfile("No login from LINE");
-        }
+        await getUserProfile();
+        // if (liff.isLoggedIn()) {
+        //   await getUserProfile();
+        // } else {
+          
+        //   setUserProfile("No login from LINE");
+        // }
       } catch (e) {
         setMessage("LIFF init failed.");
         setError(`${e}`);
