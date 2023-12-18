@@ -6,7 +6,7 @@ import React, { useState } from "react"
 import { AiTwotoneEdit } from "react-icons/ai"
 import kongProfile from "/kong.jpeg"
 import latif from "/latif.jpeg"
-const Home = (userData) => {
+const Home = ({userData}) => {
     const [notes,setNotes] = useState([1,2,3,4,5,6,7]);
     const [currentTrips, setCurrentTrips] = useState([
         {
