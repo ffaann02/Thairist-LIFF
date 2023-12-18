@@ -6,7 +6,7 @@ import React, { useState } from "react"
 import { AiTwotoneEdit } from "react-icons/ai"
 import kongProfile from "/kong.jpeg"
 import latif from "/latif.jpeg"
-const Home = () => {
+const Home = ({userProfile}) => {
     const [notes,setNotes] = useState([1,2,3,4,5,6,7]);
     const [currentTrips, setCurrentTrips] = useState([
         {
@@ -42,6 +42,17 @@ const Home = () => {
                     <p className="mr-4 text-slate-500">กำลังจะถึง</p>
                 </div>
             </div>
+
+            {userProfile && 
+                <div className="text-2xl my-auto">
+                    <p>Test update: </p>
+                    <p>{userProfile}</p>
+                    {/* <p>{userData.userId}</p>
+                    <p>{userData.displayName}</p>
+                    <p>{userData.statusMessage}</p> */}
+                </div>
+            }
+
             <div className="mt-4 flex">
                 <p className="text-lg">เที่ยววันหยุดจังหวัดสตูล</p>
                 <AiTwotoneEdit className="my-auto text-xl text-blue-800 ml-2" />

@@ -18,8 +18,17 @@ import PlannerSearch from "./components/PlannerSearch";
 function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
+    liff.ready.then(() => {
+      if(liff.isInClient()){
+        getUserProfile();
+      }
+      else{
+        setUserProfile("No LIFF login");
+      }
+    })
     liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
       .then(() => {
         setMessage("LIFF init succeeded.");
@@ -30,6 +39,11 @@ function App() {
       });
   }, []);
 
+  const getUserProfile = async () => {
+    const profile = await liff.getProfile();
+    setUserProfile("LIFF is logged in");
+  }
+
   return (
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
@@ -37,7 +51,7 @@ function App() {
         <Topbar />
         <Routes>
           <Route path="/planner" element={<Planner />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<Home userProfile={userProfile}/>} />
           <Route path="/workshop" element={<Workshop />} />
           <Route path="/points" element={<Point />} />
           <Route path="/points/camera" element={<CameraComponent />} />
