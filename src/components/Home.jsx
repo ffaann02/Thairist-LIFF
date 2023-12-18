@@ -6,7 +6,7 @@ import React, { useState } from "react"
 import { AiTwotoneEdit } from "react-icons/ai"
 import kongProfile from "/kong.jpeg"
 import latif from "/latif.jpeg"
-const Home = ({userData}) => {
+const Home = () => {
 
     console.log(userData);
 
@@ -49,17 +49,6 @@ const Home = ({userData}) => {
                 <p className="text-lg">เที่ยววันหยุดจังหวัดสตูล</p>
                 <AiTwotoneEdit className="my-auto text-xl text-blue-800 ml-2" />
             </div>
-
-            {userData && 
-                <div>
-                    <p>Test update: </p>
-                    <p>{userData}</p>
-                    {/* <p>{userData.userId}</p>
-                    <p>{userData.displayName}</p>
-                    <p>{userData.statusMessage}</p> */}
-                </div>
-            }
-
             <div className="w-[105%] h-full mt-2 -ml-[5%]">
                 <Flicking renderOnlyVisible={true}>
                     {currentTrips.map((trip) =>

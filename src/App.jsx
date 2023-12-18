@@ -29,10 +29,6 @@ function App() {
         }
         else {
           setUserProfile("No login from LINE");
-          liff.login({ redirectUri: "https://thairist-liff.vercel.app/" });
-          if (liff.isLoggedIn()) {
-            getUserProfile();
-          }
         }
       })
       .catch((e) => {
@@ -49,11 +45,11 @@ function App() {
   return (
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
-        <Navbar />
+        <Navbar userData={userProfile}/>
         <Topbar />
         <Routes>
           <Route path="/planner" element={<Planner />} />
-          <Route path="/home" element={<Home userData={userProfile} />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/workshop" element={<Workshop />} />
           <Route path="/points" element={<Point />} />
           <Route path="/points/camera" element={<CameraComponent />} />
