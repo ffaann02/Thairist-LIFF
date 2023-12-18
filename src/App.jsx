@@ -25,13 +25,11 @@ function App() {
       try {
         await liff.init({ liffId: import.meta.env.VITE_LIFF_ID });
         setMessage("LIFF init succeeded.");
-        await getUserProfile();
-        // if (liff.isLoggedIn()) {
-        //   await getUserProfile();
-        // } else {
-          
-        //   setUserProfile("No login from LINE");
-        // }
+        if (liff.isLoggedIn()) {
+          await getUserProfile();
+        } else {
+          setUserProfile("No login from LINE");
+        }
       } catch (e) {
         setMessage("LIFF init failed.");
         setError(`${e}`);
@@ -42,8 +40,8 @@ function App() {
   }, []);
 
   const getUserProfile = async () => {
-    // const profile = await liff.getProfile();
-    setUserProfile("Test set state");
+    const profile = await liff.getProfile();
+    setUserProfile("LIFF is logged in");
   }
 
   return (
