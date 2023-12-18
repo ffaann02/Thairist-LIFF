@@ -48,6 +48,7 @@ const Home = (userProfile) => {
             </div>
 
             <div>
+                <p>Test update</p>
                 <p>{userProfile}</p>
             </div>
 
