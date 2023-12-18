@@ -50,12 +50,15 @@ const Home = ({userData}) => {
                 <AiTwotoneEdit className="my-auto text-xl text-blue-800 ml-2" />
             </div>
 
-            <div>
-                <p>Test update: </p>
-                <p>{userData.userId}</p>
-                <p>{userData.displayName}</p>
-                <p>{userData.statusMessage}</p>
-            </div>
+            {userData && 
+                <div>
+                    <p>Test update: </p>
+                    <p>{userData}</p>
+                    {/* <p>{userData.userId}</p>
+                    <p>{userData.displayName}</p>
+                    <p>{userData.statusMessage}</p> */}
+                </div>
+            }
 
             <div className="w-[105%] h-full mt-2 -ml-[5%]">
                 <Flicking renderOnlyVisible={true}>
