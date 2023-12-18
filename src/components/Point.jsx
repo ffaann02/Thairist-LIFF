@@ -10,6 +10,7 @@ import logo from "/logo.png"
 import { FaLocationDot } from "react-icons/fa6"
 import { AiOutlineStar } from "react-icons/ai"
 import { Link } from "react-router-dom";
+import liff from "@line/liff";
 
 const Point = () => {
     const [notes, setNotes] = useState([1, 2, 3, 4, 5, 6, 7]);
@@ -59,7 +60,6 @@ const Point = () => {
     useEffect(() => {
         liff.init({ liffId: import.meta.env.VITE_LIFF_ID_POINTS })
           .then(() => {
-            setMessage("LIFF init succeeded.");
             if (liff.isLoggedIn()) {
               getUserProfile();
             }
@@ -68,7 +68,6 @@ const Point = () => {
             }
           })
           .catch((e) => {
-            setMessage("LIFF init failed.");
             setError(`${e}`);
           });
       }, []);
@@ -89,7 +88,7 @@ const Point = () => {
                 <p className="mt-[0.65rem] ml-1">คะแนน</p>
             </div>
             {userProfile && 
-                <div>
+                <div className="text-2xl my-auto">
                     <p>Test update: </p>
                     <p>{userProfile}</p>
                     {/* <p>{userData.userId}</p>
