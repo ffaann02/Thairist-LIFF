@@ -21,14 +21,6 @@ function App() {
   const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
-    liff.ready.then(() => {
-      if(liff.isInClient() === false){
-        getUserProfile();
-      }
-      else{
-        setUserProfile("No LIFF login");
-      }
-    })
     liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
       .then(() => {
         setMessage("LIFF init succeeded.");
@@ -36,6 +28,15 @@ function App() {
       .catch((e) => {
         setMessage("LIFF init failed.");
         setError(`${e}`);
+      });
+    liff
+      .getProfile()
+      .then((profile) => {
+        const name = profile.displayName;
+        setUserProfile(name)
+      })
+      .catch((err) => {
+        console.log("error", err);
       });
   }, []);
 
@@ -51,7 +52,7 @@ function App() {
         <Topbar />
         <Routes>
           <Route path="/planner" element={<Planner />} />
-          <Route path="/home" element={<Home userProfile={userProfile}/>} />
+          <Route path="/home" element={<Home userProfile={userProfile} />} />
           <Route path="/workshop" element={<Workshop />} />
           <Route path="/points" element={<Point />} />
           <Route path="/points/camera" element={<CameraComponent />} />
