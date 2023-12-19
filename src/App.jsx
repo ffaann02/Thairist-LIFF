@@ -39,22 +39,22 @@ function App() {
 
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
-    console.log(profile.displayName);
+    console.log(`displayName: ${profile.displayName}`);
     setUserProfile(profile.displayName);
   }
 
   return (
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
-        <Navbar />
-        <Topbar />
+        <Navbar userProfile={userProfile}/>
+        <Topbar userProfile={userProfile}/>
         <Routes>
-          <Route path="/planner" element={<Planner />} />
+          <Route path="/planner" element={<Planner userProfile={userProfile}/>} />
           <Route path="/home" element={<Home userProfile={userProfile} />} />
-          <Route path="/workshop" element={<Workshop />} />
-          <Route path="/points" element={<Point />} />
-          <Route path="/points/camera" element={<CameraComponent />} />
-          <Route path="/planner/search" element={<PlannerSearch />} />
+          <Route path="/workshop" element={<Workshop userProfile={userProfile}/>} />
+          <Route path="/points" element={<Point userProfile={userProfile}/>} />
+          <Route path="/points/camera" element={<CameraComponent userProfile={userProfile}/>} />
+          <Route path="/planner/search" element={<PlannerSearch userProfile={userProfile}/>} />
         </Routes>
       </Router>
     </div>
