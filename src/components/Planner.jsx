@@ -1,9 +1,24 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"
+import axios from "axios";
 import { AiFillCaretLeft, AiFillCaretRight ,AiFillPlusCircle} from "react-icons/ai"
 import { MdOutlineTempleBuddhist } from "react-icons/md"
 import {IoWaterOutline,IoFastFoodOutline} from "react-icons/io5"
-import { useNavigate } from "react-router-dom"
-const Planner = () => {
+
+const Planner = ({userProfile}) => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(userProfile){
+            console.log(`user_id: ${userProfile.userId}`);
+            axios.get(`http://localhost:3200/check_plan_exist?owner_id=${userProfile.userId}`)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.log(err));
+        }
+    }, [])
+
     return (
         <div className="w-full h-full">
             <div className="w-full h-full max-w-4xl bg-slate-50 mx-auto min-h-screen">

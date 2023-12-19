@@ -46,7 +46,7 @@ const Home = ({userProfile}) => {
             {userProfile && 
                 <div className="text-2xl my-auto">
                     <p>Test update: </p>
-                    <p>{userProfile}</p>
+                    <p>{userProfile.displayName}</p>
                     {/* <p>{userData.userId}</p>
                     <p>{userData.displayName}</p>
                     <p>{userData.statusMessage}</p> */}

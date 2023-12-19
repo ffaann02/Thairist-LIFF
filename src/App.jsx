@@ -40,7 +40,7 @@ function App() {
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
     console.log(`displayName: ${profile.displayName}`);
-    setUserProfile(profile.displayName);
+    setUserProfile(profile);
   }
 
   return (
