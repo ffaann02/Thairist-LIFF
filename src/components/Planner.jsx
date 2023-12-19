@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import {  useState ,useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import { AiFillCaretLeft, AiFillCaretRight ,AiFillPlusCircle} from "react-icons/ai"
@@ -7,13 +7,21 @@ import {IoWaterOutline,IoFastFoodOutline} from "react-icons/io5"
 
 const Planner = ({userProfile}) => {
     const navigate = useNavigate();
+    const [isPlanExist, setIsPlanExist] = useState(false);
 
     useEffect(() => {
         if(userProfile){
             console.log(`user_id: ${userProfile.userId}`);
             axios.get(`http://localhost:3200/check_plan_exist?owner_id=${userProfile.userId}`)
                 .then(res => {
-                    console.log(res);
+                    console.log(res.data);
+                    console.log(res.data.empty);
+                    if(res.data.empty){
+                        setIsPlanExist(false);
+                    }
+                    else{
+                        setIsPlanExist(true);
+                    }
                 })
                 .catch(err => console.log(err));
         }
