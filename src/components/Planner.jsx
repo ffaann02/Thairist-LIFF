@@ -1,31 +1,35 @@
-import {  useState ,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
-import { AiFillCaretLeft, AiFillCaretRight ,AiFillPlusCircle} from "react-icons/ai"
+import { AiFillCaretLeft, AiFillCaretRight, AiFillPlusCircle } from "react-icons/ai"
 import { MdOutlineTempleBuddhist } from "react-icons/md"
-import {IoWaterOutline,IoFastFoodOutline} from "react-icons/io5"
+import { IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
 
-const Planner = ({userProfile}) => {
+const Planner = ({ userProfile }) => {
     const navigate = useNavigate();
     const [isPlanExist, setIsPlanExist] = useState(false);
 
     useEffect(() => {
-        if(userProfile){
+        if (userProfile) {
             console.log(`user_id: ${userProfile.userId}`);
             axios.get(`http://localhost:3200/check_plan_exist?owner_id=${userProfile.userId}`)
                 .then(res => {
                     console.log(res.data);
                     console.log(res.data.empty);
-                    if(res.data.empty){
+                    if (res.data.empty) {
                         setIsPlanExist(false);
                     }
-                    else{
+                    else {
                         setIsPlanExist(true);
                     }
                 })
                 .catch(err => console.log(err));
         }
     }, [])
+
+    const createPlan = () => {
+
+    }
 
     return (
         <div className="w-full h-full">
@@ -55,6 +59,17 @@ const Planner = ({userProfile}) => {
                     <img src="https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
                         className="w-full h-[40vh]" />
                 </div>
+
+                {isPlanExist === false
+                    ?
+                    <div>
+                        <p>คุณยังไม่ได้สร้างแผนการท่องเที่ยว</p>
+                    </div> 
+                    :
+                    <div>
+                        <p>บลา ๆ</p>
+                    </div>}
+
                 <div className="text-center mt-3">
                     <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
                     <div className="">
@@ -84,11 +99,11 @@ const Planner = ({userProfile}) => {
                                 <p className="text-sm">12 ก.ย. 2566</p>
                             </div>
                             <div className="w-fit border-b-4 py-1 px-4 border-slate-200 flex">
-                                <AiFillPlusCircle className="my-auto text-xl text-blue-600"/>
+                                <AiFillPlusCircle className="my-auto text-xl text-blue-600" />
                             </div>
                         </div>
                         <div className="">
-                            <div className="grid grid-cols-12 text-center py-2 mt-1" onClick={()=>{navigate("/planner/search")}}>
+                            <div className="grid grid-cols-12 text-center py-2 mt-1" onClick={() => { navigate("/planner/search") }}>
                                 <div className="col-span-4 text-left ml-4 flex justify-between">
                                     <p>8:00 น.</p>
                                     <div className="ml-3 relative mr-3">
