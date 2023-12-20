@@ -31,7 +31,7 @@ const OldPlanner = () => {
                             </div>
                         </div>
                     </div>
-                    <img src="https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
+                    <img src="https://files.thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
                         className="w-full h-[40vh]" />
                 </div>
 
@@ -88,7 +88,7 @@ const OldPlanner = () => {
                                     </div>
                                 </div>
                                 <div className="col-span-2">
-                                    <img src="https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
+                                    <img src="https://files.thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
                                         className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
                                 </div>
                                 <div className="col-span-6 text-left ml-3">
@@ -128,7 +128,7 @@ const OldPlanner = () => {
                                     </div>
                                 </div>
                                 <div className="col-span-2">
-                                    <img src="https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
+                                    <img src="https://files.thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
                                         className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
                                 </div>
                                 <div className="col-span-6 text-left ml-3">

@@ -22,13 +22,13 @@ const Home = () => {
             id: 2,
             name: "น้ำตกวังสายทอง",
             time: "9:30 น. | 10 กันยายน",
-            imageUrl: "https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
+            imageUrl: "https://files.thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
         },
         {
             id: 2,
             name: "น้ำตกวังสายทอง",
             time: "8:30 น.",
-            imageUrl: "https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
+            imageUrl: "https://files.thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG",
         },
 
     ]);
