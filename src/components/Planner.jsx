@@ -4,40 +4,181 @@ import axios from "axios";
 import { AiFillCaretLeft, AiFillCaretRight, AiFillPlusCircle } from "react-icons/ai"
 import { MdOutlineTempleBuddhist } from "react-icons/md"
 import { IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import { Calendar } from "react-modern-calendar-datepicker";
 
 const Planner = ({ userProfile }) => {
     const navigate = useNavigate();
     const [isPlanExist, setIsPlanExist] = useState(false);
+    const [planID, setPlanID] = useState();
+    const [tempSelectedDays, setTempSelectedDays] = useState([]);
+    const [selectedDays, setSelectedDays] = useState([]);
+    const [isSelectDaysClicked, setIsSelectDaysClicked] = useState(false);
+    const [currentSelectDay, setCurrentSelectDay] = useState(null);
+
+    const monthNames = ["ม.ค.", "ก.พ.", "มี.ย.", "เม.ย.", "พ.ค.", "มิ.ย.",
+        "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+    ];
 
     useEffect(() => {
         if (userProfile) {
             console.log(`user_id: ${userProfile.userId}`);
             axios.get(`http://localhost:3200/check_plan_exist?owner_id=${userProfile.userId}`)
                 .then(res => {
-                    console.log(res.data);
-                    console.log(res.data.empty);
                     if (res.data.empty) {
+                        console.log("Plan is Empty");
                         setIsPlanExist(false);
+                        setSelectedDays([]);
+                        setTempSelectedDays([]);
+                        setIsSelectDaysClicked(false);
+                        setPlanID();
                     }
                     else {
+                        console.log("Already have plan");
+                        const days = res.data.result;
+                        console.log(days);
                         setIsPlanExist(true);
+                        setSelectedDays(days);
+                        setTempSelectedDays(days);
+                        setIsSelectDaysClicked(true);
+                        setPlanID(res.data.plan_id);
+                        if (currentSelectDay === null) {
+                            setCurrentSelectDay(0);
+                        }
                     }
                 })
                 .catch(err => console.log(err));
         }
     }, [])
 
-    const createPlan = () => {
+    // useEffect(() => {
+    //     if(userProfile){
 
+    //     }
+    // }, [isPlanExist])
+
+    const generatedPlanID = () => {
+        // Generate random characters
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const randomChars = Array.from({ length: 3 }, () => characters[Math.floor(Math.random() * characters.length)]);
+        // Generate random numbers
+        const randomNumber = Math.floor(1000 + Math.random() * 9000);
+        // Combine characters and numbers to create the unique ID
+        const uniqueId = `${randomChars.join('')}${randomNumber}`;
+        return uniqueId;
+    }
+
+    const displayDate = () => {
+        document.getElementById('my_modal_4').showModal();
+    }
+
+    const handleSelectedDays = () => {
+        console.log(isPlanExist);
+        if (isPlanExist === false) {
+            const planId = generatedPlanID();
+            setPlanID(planId);
+            console.log(planId);
+            // Post to database
+            axios.post(`http://localhost:3200/create_new_plan`, {
+                plan_id: planId,
+                owner_id: userProfile.userId,
+                dates: tempSelectedDays
+            })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.log(err));
+        }
+        setSelectedDays(tempSelectedDays);
+        setIsSelectDaysClicked(true);
+        setIsPlanExist(true);
+        if (currentSelectDay === null) {
+            setCurrentSelectDay(0);
+        }
+        // Update to database
+        axios.put(`http://localhost:3200/update_plan`, {
+            plan_id: planID,
+            owner_id: userProfile.userId,
+            dates: tempSelectedDays
+        })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => console.log(err));
     }
 
     return (
         <div className="w-full h-full">
             <div className="w-full h-full max-w-4xl bg-slate-50 mx-auto min-h-screen">
-                <div className="relative h-[40vh]">
+
+                {isPlanExist === false && selectedDays.length === 0 || isSelectDaysClicked === false
+                    ?
+                    <div className="pt-3w-full h-full min-h-screen text-center flex">
+                        <div className="m-auto mt-[80%]">
+                            <p className="text-xl font-semibold">คุณยังไม่ได้วางแผนการท่องเที่ยว</p>
+                            <button className="mt-4 p-2 px-4 text-lg rounded-lg bg-[#51b3ce]" onClick={displayDate}>
+                                <p className="my-auto text-white">สร้างแผนการท่องเที่ยว</p>
+                            </button>
+                        </div>
+                    </div>
+                    :
+                    <div>
+                        <div className="text-center pt-3">
+                            <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
+                            <div className="">
+                                <div className="flex px-1 mx-auto justify-center mb-1">
+                                    {selectedDays.map((date, index) => (
+                                        <div className={`w-fit border-b-4 py-1 px-2 
+                                        ${currentSelectDay === index ? "border-[#51b3ce] text-slate-800" : "border-slate-200 text-slate-500"}`}
+                                            key={index} onClick={() => setCurrentSelectDay(index)}>
+                                            <p>วัน {index + 1}</p>
+                                            <p>{date.day} {monthNames[date.month - 1]} {date.year + 543}</p>
+                                        </div>
+                                    ))}
+                                    <div className="w-fit py-1 px-4 flex">
+                                        <AiFillPlusCircle className="my-auto text-xl text-blue-600" onClick={displayDate} />
+                                    </div>
+                                </div>
+                                <div className="pt-4">
+
+                                    <p>จัดการแผนท่องเที่ยว</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>}
+
+                {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                <dialog id="my_modal_4" className="modal">
+                    <div className="modal-box w-11/12 max-w-5xl">
+                        <div className="w-full flex">
+                            <h3 className="mx-auto font-bold text-lg">เลือกวันท่องเที่ยวที่คุณต้องการ</h3>
+                        </div>
+
+                        <Calendar
+                            value={tempSelectedDays}
+                            onChange={setTempSelectedDays}
+                            shouldHighlightWeekends
+                        />
+
+                        <div className="modal-action">
+                            <form method="dialog">
+                                {/* if there is a button, it will close the modal */}
+                                <button className="btn" onClick={() => setTempSelectedDays(selectedDays)}>ยกเลิก</button>
+                            </form>
+                            <form method="dialog">
+                                {/* if there is a button, it will close the modal */}
+                                <button className="btn bg-[#51b3ce] text-white" onClick={() => handleSelectedDays()}>
+                                    เลือก
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                </dialog>
+
+
+                {/* <div className="relative h-[40vh]">
                     <p className="absolute text-white right-2 top-2 tracking-widest text-xl">9:30 น.</p>
-                    {/* <AiFillCaretLeft className="absolute text-5xl text-white top-[27.5%] text-opacity-50 cursor-pointer" />
-                    <AiFillCaretRight className="absolute text-5xl text-white top-[27.5%] text-opacity-50 right-0 cursor-pointer" /> */}
                     <div className="absolute bottom-0 text-white tracking-wider pl-3 pr-2 bg-green-400 w-full bg-opacity-50 
                     py-3 grid grid-cols-2">
                         <div>
@@ -58,34 +199,12 @@ const Planner = ({ userProfile }) => {
                     </div>
                     <img src="https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
                         className="w-full h-[40vh]" />
-                </div>
+                </div> */}
 
-                {isPlanExist === false
-                    ?
-                    <div>
-                        <p>คุณยังไม่ได้สร้างแผนการท่องเที่ยว</p>
-                    </div> 
-                    :
-                    <div>
-                        <p>บลา ๆ</p>
-                    </div>}
-
-                <div className="text-center mt-3">
+                {/* <div className="text-center mt-3">
                     <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
                     <div className="">
                         <div className="flex px-1 mx-auto justify-center mb-1">
-                            {/* <div className="p-2 border-2 border-[#51b3ce] rounded-xl mx-1 w-16 bg-[#51b3ce] text-white">
-                                <p>อาทิตย์</p>
-                                <p>10</p>
-                            </div>
-                            <div className="p-2 border-2 rounded-xl mx-1 w-16">
-                                <p>จันทร์</p>
-                                <p>11</p>
-                            </div>
-                            <div className="p-2 border-2 rounded-xl mx-1 w-16">
-                                <p>อังคาร</p>
-                                <p>12</p>
-                            </div> */}
                             <div className="w-fit border-b-4 py-1 px-2 border-[#51b3ce] text-slate-800">
                                 <p>วัน 1</p>
                                 <p className="text-sm">10 ก.ย. 2566</p>
@@ -198,7 +317,7 @@ const Planner = ({ userProfile }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )
