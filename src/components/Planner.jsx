@@ -6,15 +6,23 @@ import { MdOutlineTempleBuddhist } from "react-icons/md"
 import { IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar } from "react-modern-calendar-datepicker";
+import { useUser } from "../UserContext";
 
-const Planner = ({ userProfile }) => {
+const Planner = () => {
+
+    const { userProfile, setUser } = useUser();
+
     const navigate = useNavigate();
+
     const [isPlanExist, setIsPlanExist] = useState(false);
     const [planID, setPlanID] = useState();
+
     const [tempSelectedDays, setTempSelectedDays] = useState([]);
     const [selectedDays, setSelectedDays] = useState([]);
     const [isSelectDaysClicked, setIsSelectDaysClicked] = useState(false);
     const [currentSelectDay, setCurrentSelectDay] = useState(null);
+
+    const [isActivitiyExist, setIsActivitiesExist] = useState(false);
 
     const monthNames = ["ม.ค.", "ก.พ.", "มี.ย.", "เม.ย.", "พ.ค.", "มิ.ย.",
         "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
@@ -49,13 +57,24 @@ const Planner = ({ userProfile }) => {
                 })
                 .catch(err => console.log(err));
         }
-    }, [])
+    }, [userProfile])
 
-    // useEffect(() => {
-    //     if(userProfile){
-
-    //     }
-    // }, [isPlanExist])
+    useEffect(() => {
+        if(userProfile && isPlanExist === true){
+            axios.get(`http://localhost:3200/fetch_plan_detail?plan_id=${planID}`)
+                .then(res => {
+                    if(res.data.empty){
+                        setIsActivitiesExist(false);
+                        console.log(res.data.message);
+                    }
+                    else{
+                        console.log(res.data.message);
+                        setIsActivitiesExist(true);
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+    }, [isPlanExist])
 
     const generatedPlanID = () => {
         // Generate random characters
@@ -71,6 +90,10 @@ const Planner = ({ userProfile }) => {
     const displayDate = () => {
         document.getElementById('my_modal_4').showModal();
     }
+
+    const closeModal = () => {
+        document.getElementById('my_modal_4').close();
+      };
 
     const handleSelectedDays = () => {
         console.log(isPlanExist);
@@ -105,6 +128,11 @@ const Planner = ({ userProfile }) => {
                 console.log(res);
             })
             .catch(err => console.log(err));
+        closeModal();
+    }
+
+    const handleAddActivity = () => {
+        navigate('/activity');
     }
 
     return (
@@ -140,8 +168,15 @@ const Planner = ({ userProfile }) => {
                                     </div>
                                 </div>
                                 <div className="pt-4">
-
-                                    <p>จัดการแผนท่องเที่ยว</p>
+                                    {isActivitiyExist === false &&
+                                        <div>
+                                            <p className="font-semibold ">คุณยังไม่มีสถานที่หรือกิจกรรมใด ๆ ในแผนการท่องเที่ยว</p>
+                                            <p className="text-slate-600">คลิกปุ่มข้างล่างเพื่อเพิ่มได้เลย</p>
+                                        </div>
+                                    }
+                                    <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleAddActivity()}>
+                                        <p className="text-white">เพิ่มสถานที่หรือกิจกรรม</p>
+                                    </button>
                                 </div>
                             </div>
                         </div>

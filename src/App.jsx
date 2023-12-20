@@ -15,10 +15,15 @@ import Home from "./components/Home";
 import Point from "./components/Point";
 import CameraComponent from "./components/Camera";
 import PlannerSearch from "./components/PlannerSearch";
+import { useUser } from './UserContext';
+
 function App() {
+
+  const { userProfile, setUser } = useUser();
+
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [userProfile, setUserProfile] = useState();
+  // const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
     liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
@@ -27,10 +32,11 @@ function App() {
         if(liff.isLoggedIn()) {
           getUserProfile();
         }
-        // for dev on pc
+        // for functional
         // else{
         //   liff.login();
         // }
+        // for dev on pc
         else{
           const templateProfile = 
           {
@@ -39,7 +45,7 @@ function App() {
             "pictureUrl": "https://profile.line-scdn.net/0h54lO-CdPahtBNn7fINgUZDFmaXFiRzMJaAByLycwMCx1ASQabwQsKnwzNC19USsdPVIte30wMS9NJR19X2CWL0YGNyp9BypNbVIs_w",
             "statusMessage": "templateProfile!"
           }
-          setUserProfile(templateProfile);
+          setUser(templateProfile);
         }
       })
       .catch((e) => {
@@ -51,21 +57,21 @@ function App() {
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
     console.log(`displayName: ${profile.displayName}`);
-    setUserProfile(profile);
+    setUser(profile);
   }
 
   return (
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
       <Router>
-        <Navbar userProfile={userProfile}/>
-        <Topbar userProfile={userProfile}/>
+        <Navbar />
+        <Topbar />
         <Routes>
-          <Route path="/planner" element={<Planner userProfile={userProfile}/>} />
-          <Route path="/home" element={<Home userProfile={userProfile} />} />
-          <Route path="/workshop" element={<Workshop userProfile={userProfile}/>} />
-          <Route path="/points" element={<Point userProfile={userProfile}/>} />
-          <Route path="/points/camera" element={<CameraComponent userProfile={userProfile}/>} />
-          <Route path="/planner/search" element={<PlannerSearch userProfile={userProfile}/>} />
+          <Route path="/planner" element={<Planner />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/activity" element={<Workshop />} />
+          <Route path="/points" element={<Point />} />
+          <Route path="/points/camera" element={<CameraComponent />} />
+          <Route path="/planner/search" element={<PlannerSearch />} />
         </Routes>
       </Router>
     </div>

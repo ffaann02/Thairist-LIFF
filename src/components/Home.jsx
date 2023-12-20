@@ -6,7 +6,10 @@ import React, { useState } from "react"
 import { AiTwotoneEdit } from "react-icons/ai"
 import kongProfile from "/kong.jpeg"
 import latif from "/latif.jpeg"
-const Home = ({userProfile}) => {
+import { useUser } from "../UserContext";
+
+const Home = () => {
+    const { userProfile, setUser } = useUser();
     const [notes,setNotes] = useState([1,2,3,4,5,6,7]);
     const [currentTrips, setCurrentTrips] = useState([
         {
@@ -42,16 +45,6 @@ const Home = ({userProfile}) => {
                     <p className="mr-4 text-slate-500">กำลังจะถึง</p>
                 </div>
             </div>
-
-            {userProfile && 
-                <div className="text-2xl my-auto">
-                    <p>Test update: </p>
-                    <p>{userProfile.displayName}</p>
-                    {/* <p>{userData.userId}</p>
-                    <p>{userData.displayName}</p>
-                    <p>{userData.statusMessage}</p> */}
-                </div>
-            }
 
             <div className="mt-4 flex">
                 <p className="text-lg">เที่ยววันหยุดจังหวัดสตูล</p>

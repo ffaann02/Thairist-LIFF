@@ -27,8 +27,8 @@ const Navbar = () => {
                         <p className="text-sm ">Points</p>
                     </div>
                 </Link>
-                <Link to="/workshop">
-                    <div className={`mx-auto ${location.pathname=="/workshop"? "text-blue-700":"text-black"}`}>
+                <Link to="/activity">
+                    <div className={`mx-auto ${location.pathname=="/activity"? "text-blue-700":"text-black"}`}>
                         <PiHandFistLight className="text-2xl mx-auto " />
                         <p className="text-sm ">Activities</p>
                     </div>
