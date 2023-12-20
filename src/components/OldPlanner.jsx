@@ -7,6 +7,8 @@ import { IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
 
 const OldPlanner = () => {
 
+    const navigate = useNavigate();
+
     return (
         <div className="w-full h-full">
             <div className="w-full h-full max-w-4xl bg-slate-50 mx-auto min-h-screen">
