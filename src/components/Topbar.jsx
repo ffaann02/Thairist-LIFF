@@ -1,7 +1,9 @@
 import { IoLocationSharp } from "react-icons/io5"
 import { BiChevronLeft } from "react-icons/bi"
 import logo from "/logo2.png"
-const Topbar = ({ userProfile }) => {
+import { useUser } from "../UserContext"
+const Topbar = () => {
+  const { userProfile } = useUser();
   return (
     <div className="h-10 w-full justify-between pl-3 pr-2 flex">
       <div className="flex">
