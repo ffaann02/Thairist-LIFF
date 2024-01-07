@@ -47,14 +47,13 @@ function App() {
             "statusMessage": "templateProfile!"
           }
           setUser(templateProfile);
-          console.log("User init success")
         }
       })
       .catch((e) => {
         setMessage("LIFF init failed.");
         setError(`${e}`);
       });
-  }, [userProfile]);
+  }, []);
 
   const getUserProfile = async () => {
     const profile = await liff.getProfile();
@@ -63,7 +62,7 @@ function App() {
   }
 
   return (
-    <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto">
+    <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto bg-slate-50">
       <Router>
           <Navbar />
           <Topbar />

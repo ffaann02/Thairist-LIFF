@@ -4,10 +4,12 @@ import kongProfile from "/kong.jpeg"
 import latif from "/latif.jpeg"
 import { useUser } from "../../UserContext";
 import OverlapHeroButton from "./OverlapHeroButton";
-
+import MenuHeroButton from "./MenuHeroButton";
+import CarouselHero from "./CarouselHero";
+import HomeCoverImage from "/Head.png"
 const Home = () => {
     const { userProfile, setUser } = useUser();
-    const [notes,setNotes] = useState([1,2,3,4,5,6,7]);
+    const [notes, setNotes] = useState([1, 2, 3, 4, 5, 6, 7]);
     const [currentTrips, setCurrentTrips] = useState([
         {
             id: 1,
@@ -30,10 +32,13 @@ const Home = () => {
 
     ]);
     return (
-        <div className="w-full h-full mt-4">
-            <div className="w-full min-h-[20vh] bg-blue-200">
+        <div className="w-full h-full">
+            <div className="w-full min-h-[25vh] bg-blue-200 bg-cover">
+                <img src={HomeCoverImage}/>
             </div>
-            <OverlapHeroButton/>
+            <OverlapHeroButton />
+            <MenuHeroButton />
+            <CarouselHero/>
         </div>
     )
 }
