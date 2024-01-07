@@ -18,6 +18,7 @@ import PlannerSearch from "./components/PlannerSearch";
 import OldPlanner from "./components/OldPlanner";
 import { useUser, UserProvider } from './UserContext';
 import EmptyFooter from "./components/EmptyFooter";
+import ARdisplay from "./components/ARdisplay";
 
 function App() {
 
@@ -73,6 +74,7 @@ function App() {
             <Route path="/activity" element={<Workshop />} />
             <Route path="/points" element={<Point />} />
             <Route path="/points/camera" element={<CameraComponent />} />
+            <Route path="/points/ar" element={<ARdisplay/>} />
             <Route path="/planner/search" element={<PlannerSearch />} />
           </Routes>
           <MenuBar/>
