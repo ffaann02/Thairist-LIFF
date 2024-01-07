@@ -33,7 +33,7 @@ const Home = () => {
     ]);
     return (
         <div className="w-full h-full">
-            <div className="w-full min-h-[25vh] bg-blue-200 bg-cover">
+            <div className="w-full min-h-[25vh] bg-cover pt-10">
                 <img src={HomeCoverImage}/>
             </div>
             <OverlapHeroButton />

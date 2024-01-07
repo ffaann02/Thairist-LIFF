@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import liff from "@line/liff";
 import "./App.css";
 import Planner from "./components/Planner";
-import Navbar from "./components/Navbar";
+import MenuBar from "./components/MenuBar";
 import Topbar from "./components/Topbar";
 import Workshop from "./components/Workshop";
 import {
@@ -17,6 +17,7 @@ import CameraComponent from "./components/Camera";
 import PlannerSearch from "./components/PlannerSearch";
 import OldPlanner from "./components/OldPlanner";
 import { useUser, UserProvider } from './UserContext';
+import EmptyFooter from "./components/EmptyFooter";
 
 function App() {
 
@@ -64,7 +65,6 @@ function App() {
   return (
     <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto bg-slate-50">
       <Router>
-          <Navbar />
           <Topbar />
           <Routes>
             <Route path="/planner" element={<Planner />} />
@@ -75,6 +75,8 @@ function App() {
             <Route path="/points/camera" element={<CameraComponent />} />
             <Route path="/planner/search" element={<PlannerSearch />} />
           </Routes>
+          <MenuBar/>
+          <EmptyFooter/>
       </Router>
     </div>
   );

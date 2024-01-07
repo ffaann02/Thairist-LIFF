@@ -4,10 +4,10 @@ import { AiOutlineStar } from "react-icons/ai"
 import { PiHandFistLight } from "react-icons/pi"
 import { RiFilePaper2Line, RiFilePaper2Fill } from "react-icons/ri"
 import { Link, useLocation } from "react-router-dom"
-const Navbar = () => {
+const MenuBar = () => {
     const location = useLocation();
     return (
-        <div className="fixed w-full bottom-5 px-4 text-center z-10">
+        <div className="fixed w-full bottom-4 px-4 text-center z-10">
             <div className="w-full h-full py-3 rounded-xl px-4 grid grid-cols-4" id="navbar">
                 <Link to="/home">
                     <div className={`mx-auto ${location.pathname=="/home"? "text-blue-700":"text-black"}`}>
@@ -37,4 +37,4 @@ const Navbar = () => {
         </div>
     )
 }
-export default Navbar
+export default MenuBar
