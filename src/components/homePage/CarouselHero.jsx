@@ -1,13 +1,22 @@
+import { PiHandsPrayingFill } from "react-icons/pi";
+
 const CarouselHero = () => {
     return (
-        <div className="w-full h-full bg-white mt-4 pl-4 pt-2 py-6 shadow-md border-[1px]">
-            <h2>เที่ยวที่ไหนดี ?</h2>
-            <div className="carousel carousel-center space-x-4 h-[200px]">
-                <div className="carousel-item">
-                    <img src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg" className="rounded-box" />
+        <div className="w-full h-full bg-white mt-4 pl-4 pt-3 py-6 shadow-md border-[1px]">
+            <h2 className="">เที่ยวที่ไหนดี ?</h2>
+            <div className="carousel carousel-center space-x-4 h-[200px] mt-1">
+                <div className="carousel-item relative border-[1px] rounded-box drop-shadow-sm">
+                    <div className="w-full absolute px-4 pb-2 pt-6 bg-gradient-to-t from-[#51b3ce] via-[#51b3ce] to-transparent rounded-b-box flex bottom-0">
+                        <PiHandsPrayingFill className="my-auto text-xl text-yellow-200 mr-1" />
+                        <p className="text-xl text-white">10 สถานที่ทำบุญกลางปี</p>
+                    </div>
+                    <img
+                        src="https://www.govivigo.com/content/upload/images/Thailand%20Travel_North/Thailand_Travel_North_Doi-Inthanon-National-Park_Chiang-Mai_1.jpg"
+                        className="w-[300px] rounded-box"
+                    />
                 </div>
                 <div className="carousel-item">
-                    <img src="https://daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg" className="rounded-box" />
+                    <img src="https://image.makewebeasy.net/makeweb/m_1920x0/FJ8KH0VZs/GL/ppo1_1.jpg" className="rounded-box" />
                 </div>
                 <div className="carousel-item">
                     <img src="https://daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg" className="rounded-box" />

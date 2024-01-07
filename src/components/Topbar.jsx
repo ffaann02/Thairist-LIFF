@@ -5,7 +5,7 @@ import { useUser } from "../UserContext"
 const Topbar = () => {
   const { userProfile } = useUser();
   return (
-    <div className="h-10 w-full justify-between pl-3 pr-2 flex">
+    <div className="h-10 w-full justify-between pl-3 pr-2 flex fixed bg-white">
       <div className="flex">
         {/* <BiChevronLeft className="my-auto text-3xl"/> */}
         <img src={logo} className="w-16 py-1 mr-1.5" />
