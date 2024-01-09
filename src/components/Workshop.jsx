@@ -86,7 +86,7 @@ const Workshop = () => {
                                 </div>
                                 <div className="col-span-2">
                                     <img src="https://ak-d.tripcdn.com/images/1i6302215cij6g8xc3131_W_400_0_R5_Q90.jpg?proc=source/trip"
-                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
                                 </div>
                                 <div className="col-span-6 text-left ml-3">
                                     <p className="text-xl text-bold">สะพานข้ามกาลเวลา</p>
@@ -107,7 +107,7 @@ const Workshop = () => {
                                 </div>
                                 <div className="col-span-2">
                                     <img src="https://thailandtourismdirectory.go.th/assets/upload/2017/11/02/2017110227f237e6b7f96587b6202ff3607ad88a153922.JPG"
-                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
                                 </div>
                                 <div className="col-span-6 text-left ml-3">
                                     <p className="text-xl text-bold">น้ำตกวังสายทอง</p>
@@ -128,7 +128,7 @@ const Workshop = () => {
                                 </div>
                                 <div className="col-span-2">
                                     <img src="https://cdn-icons-png.flaticon.com/512/2276/2276931.png"
-                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem] bg-slate-100 p-1" />
+                                        className="rounded-xl shadow-md w-full h-[3.9rem] bg-slate-100 p-1" />
                                 </div>
                                 <div className="col-span-6 text-left ml-3">
                                     <p className="text-xl text-bold">อาหารเที่ยง</p>
@@ -150,7 +150,7 @@ const Workshop = () => {
                                     </div>
                                     <div className="col-span-2">
                                         <img src="https://pbs.twimg.com/media/CgyhH5yXEAA2hxG.jpg"
-                                            className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                            className="rounded-xl shadow-md w-full h-[3.9rem]" />
                                     </div>
                                     <div className="col-span-6 text-left ml-2">
                                         <p className="text-xl text-bold text-white">ทำขนม</p>
@@ -170,7 +170,7 @@ const Workshop = () => {
                                 </div>
                                 <div className="col-span-2">
                                     <img src="https://www.paiduaykan.com/travel/wp-content/uploads/2022/03/3-DSC00758.jpg"
-                                        className="rounded-xl drop-shadow-md w-full h-[3.9rem]" />
+                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
                                 </div>
                                 <div className="col-span-6 text-left ml-2">
                                     <p className="text-xl text-bold">หาดปากบารา</p>
@@ -193,7 +193,7 @@ const Workshop = () => {
                     </div>
                 }
 
-                <div className='px-6 mx-auto'>
+                <div className='px-6 mx-auto pt-10'>
                     <div className="relative flex items-center w-full h-12 rounded-lg shadow-md bg-white overflow-hidden border-[1px] border-[#10000]">
                         <div className="grid place-items-center h-full w-12 text-gray-300">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -202,7 +202,7 @@ const Workshop = () => {
                         </div>
 
                         <input
-                            class="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
+                            className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
                             type="text"
                             id="search"
                             placeholder="ค้นหา" />

@@ -56,7 +56,7 @@ const Point = () => {
     ]);
 
     return (
-        <div className="w-full h-full pl-3.5 mt-4">
+        <div className="w-full h-full pl-3.5 pt-14">
             <div className="w-full flex">
                 <img src={logo} className="w-16" />
                 <p className="text-2xl my-auto ml-4 tracking-wider">คะแนนสะสมของคุณ</p>
