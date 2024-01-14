@@ -11,7 +11,7 @@ import { FaLocationDot } from "react-icons/fa6"
 import { AiOutlineStar } from "react-icons/ai"
 import { Link } from "react-router-dom";
 
-const Point = () => {
+const OldPoint = () => {
     const [notes, setNotes] = useState([1, 2, 3, 4, 5, 6, 7]);
     const [currentTrips, setCurrentTrips] = useState([
         {
@@ -127,4 +127,4 @@ const Point = () => {
         </div>
     )
 }
-export default Point;
+export default OldPoint;

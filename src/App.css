@@ -10,9 +10,23 @@
 #navbar {
   /* From https://css.glass */
 background: rgba(255, 255, 255, 0.2);
-border-radius: 16px;
 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 backdrop-filter: blur(5px);
 -webkit-backdrop-filter: blur(5px);
 border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#FilterBar button{
+  position: relative;
+}
+
+#FilterBar button::after {
+  content: "";
+  display: block;
+  width: 50%; /* Adjust this value to control the underline width */
+  height: 3px; /* Adjust this value to control the underline thickness */
+  background-color: #51b3ce; /* Adjust this value to control the underline color */
+  position: absolute;
+  bottom: -2px; /* Adjust this value to control the distance between text and underline */
+  left: 25%; /* Adjust this value to center the underline */
 }

@@ -9,8 +9,8 @@ const MenuBar = () => {
     return (
         <div className="fixed w-full bottom-4 px-4 text-center z-10">
             <div className="w-full h-full py-3 rounded-xl px-4 grid grid-cols-4" id="navbar">
-                <Link to="/home">
-                    <div className={`mx-auto ${location.pathname=="/home"? "text-blue-700":"text-black"}`}>
+                <Link to="/">
+                    <div className={`mx-auto ${location.pathname=="/"? "text-blue-700":"text-black"}`}>
                         <BiHomeAlt className="text-2xl mx-auto " />
                         <p className="text-sm ">Home</p>
                     </div>
