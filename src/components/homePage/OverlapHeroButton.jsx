@@ -3,7 +3,7 @@ const OverlapHeroButton = () => {
   return (
     <div className="px-6 w-full drop-shadow-md -mt-4">
       <div className="w-full h-full bg-white px-2 py-3 rounded-lg border-[1px] flex">
-        <Link to="https://ar-js-sample.vercel.app">
+        <Link to="https://liff.line.me/2000611383-9jMP88x6/?key=1">
           <div className="flex flex-grow justify-center">
             <img src="https://cdn-icons-png.flaticon.com/512/718/718022.png" className="w-10 h-10" />
             <div className="ml-2">
