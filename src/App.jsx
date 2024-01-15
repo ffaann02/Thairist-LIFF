@@ -12,17 +12,19 @@ import {
   useLocation,
 } from "react-router-dom";
 import Home from "./components/homePage/Home";
-import Point from "./components/Point";
 import CameraComponent from "./components/Camera";
 import PlannerSearch from "./components/PlannerSearch";
 import OldPlanner from "./components/planPage/OldPlanner";
 import { useUser, UserProvider } from './UserContext';
 import EmptyFooter from "./components/EmptyFooter";
 import ARdisplay from "./components/ARdisplay";
+import TestAR from "./components/TestAR";
+import OldPoint from "./components/OldPoint";
+import Point from "./components/pointPage/Point";
 
 function App() {
 
-  const { userProfile, setUser } = useUser();
+  const { userProfile, setUser,isOpenAR } = useUser();
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -64,21 +66,22 @@ function App() {
   }
 
   return (
-    <div className="w-full h-full min-h-screen relative max-w-4xl mx-auto bg-slate-50">
+    <div className={`w-full h-full min-h-screen relative max-w-4xl mx-auto ${!isOpenAR ? "bg-slate-50":null}`}>
       <Router>
-          <Topbar />
+          {!isOpenAR ? <Topbar />:null}
           <Routes>
             <Route path="/planner" element={<Planner />} />
             {/* <Route path="/planner" element={<OldPlanner />} /> */}
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/activity" element={<Activity />} />
-            <Route path="/points" element={<Point />} />
+            <Route path="/points" element={<Point/>} />
+            {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
-            <Route path="/points/ar" element={<ARdisplay/>} />
+            <Route path="/points/ar" element={<TestAR/>} />
             <Route path="/planner/search" element={<PlannerSearch />} />
           </Routes>
-          <MenuBar/>
-          <EmptyFooter/>
+          {!isOpenAR ? <MenuBar />:null}
+          {!isOpenAR ? <EmptyFooter />:null}
       </Router>
     </div>
   );
