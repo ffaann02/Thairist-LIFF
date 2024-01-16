@@ -18,7 +18,7 @@ const ARdisplay = () => {
           <InstantTracker placementMode={placementMode} placementCameraOffset={[6, 7, -5]}>
             <mesh geometry={geometry} material={material}/>
           </InstantTracker>
-          <directionalLight position={[2.5, 8, 5]} intensity={1.5} />
+          <directionalLight position={[10, 15, 2]} intensity={1.5} />
           <Loader />
         </ZapparCanvas>
       </div>
