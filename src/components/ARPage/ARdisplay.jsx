@@ -14,7 +14,7 @@ const ARdisplay = () => {
       <BrowserCompatibility />
       <div className="bg-red-200 w-full h-full min-h-screen flex flex-grow">
         <ZapparCanvas className="w-full min-h-screen bg-blue-200">
-          <ZapparCamera />
+          <ZapparCamera userCameraMirrorMode="poses"/>
           <InstantTracker placementMode={placementMode} placementCameraOffset={[0, 0, -5]}>
             <mesh geometry={geometry} material={material}/>
           </InstantTracker>
