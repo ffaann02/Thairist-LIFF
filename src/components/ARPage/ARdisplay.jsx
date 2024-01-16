@@ -1,4 +1,5 @@
 import { ZapparCamera, ZapparCanvas, Loader} from "@zappar/zappar-react-three-fiber";
+import "./ar.css"
 const ARdisplay = () => {
   return (
     <div className="bg-red-200 w-full h-full min-h-screen flex flex-grow">

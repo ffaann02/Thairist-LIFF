@@ -18,10 +18,9 @@ import OldPlanner from "./components/OldPlanner";
 import { useUser, UserProvider } from './UserContext';
 import EmptyFooter from "./components/EmptyFooter";
 // import ARdisplay from "./components/ARdisplay";
-import TestAR from "./components/TestAR";
 import OldPoint from "./components/OldPoint";
 import Point from "./components/pointPage/Point";
-import ARdisplay from "./components/ARdisplay";
+import ARdisplay from "./components/ARPage/ARdisplay";
 
 function App() {
 
