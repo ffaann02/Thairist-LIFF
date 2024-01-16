@@ -12,6 +12,9 @@
     "@egjs/react-flicking": "^4.11.0",
     "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
     "@line/liff": "2.22.3",
+    "@react-three/drei": "^9.94.1",
+    "@react-three/fiber": "^8.15.14",
+    "@types/three": "^0.160.0",
     "@zappar/zappar-react-three-fiber": "^2.4.9",
     "axios": "^1.6.2",
     "file-saver": "^2.0.5",
@@ -21,7 +24,8 @@
     "react-icons": "^4.10.1",
     "react-modern-calendar-datepicker": "^3.1.6",
     "react-router-dom": "^6.15.0",
-    "react-webcam": "^7.1.1"
+    "react-webcam": "^7.1.1",
+    "three": "^0.157.0"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.0.1",
