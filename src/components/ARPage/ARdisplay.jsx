@@ -1,4 +1,4 @@
-import { ZapparCamera, ZapparCanvas, Loader, BrowserCompatibility, InstantTracker } from "@zappar/zappar-react-three-fiber";
+import { ZapparCamera, ZapparCanvas, Loader, BrowserCompatibility, InstantTracker} from "@zappar/zappar-react-three-fiber";
 import "./ar.css"
 import { useState } from "react";
 import * as THREE from 'three';
