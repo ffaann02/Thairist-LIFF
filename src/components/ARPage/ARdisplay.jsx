@@ -15,7 +15,7 @@ const ARdisplay = () => {
       <div className="bg-red-200 w-full h-full min-h-screen flex flex-grow">
         <ZapparCanvas className="w-full min-h-screen bg-blue-200">
           <ZapparCamera userCameraMirrorMode="poses"/>
-          <InstantTracker placementMode={placementMode} placementCameraOffset={[0, 0, -5]}>
+          <InstantTracker placementMode={placementMode} placementCameraOffset={[6, 7, -5]}>
             <mesh geometry={geometry} material={material}/>
           </InstantTracker>
           <directionalLight position={[2.5, 8, 5]} intensity={1.5} />
