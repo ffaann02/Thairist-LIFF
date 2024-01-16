@@ -17,10 +17,11 @@ import PlannerSearch from "./components/PlannerSearch";
 import OldPlanner from "./components/OldPlanner";
 import { useUser, UserProvider } from './UserContext';
 import EmptyFooter from "./components/EmptyFooter";
-import ARdisplay from "./components/ARdisplay";
+// import ARdisplay from "./components/ARdisplay";
 import TestAR from "./components/TestAR";
 import OldPoint from "./components/OldPoint";
 import Point from "./components/pointPage/Point";
+import ARdisplay from "./components/ARdisplay";
 
 function App() {
 
@@ -77,7 +78,7 @@ function App() {
             <Route path="/points" element={<Point/>} />
             {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
-            <Route path="/points/ar" element={<TestAR/>} />
+            <Route path="/points/ar" element={<ARdisplay/>} />
             <Route path="/planner/search" element={<PlannerSearch />} />
           </Routes>
           {!isOpenAR ? <MenuBar />:null}
