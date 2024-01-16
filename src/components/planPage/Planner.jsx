@@ -166,38 +166,46 @@ const Planner = () => {
                                 </div>
 
                                 <div className="pt-4">
-                                    {planDetailExist
-                                        ?
+                                    {planDetailExist ?
                                         planDetailExist.map((detail, index) => (
-                                            <div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
-                                                <div className="col-span-4 text-left ml-4 flex justify-between">
-                                                    <div className='h-full text-black my-auto'>
-                                                        <p className="top-0">{detail.start_time} น.</p>
-                                                        <p className="bottom-0">{detail.end_time} น.</p>
-                                                    </div>
-                                                    <div className="ml-3 relative mr-3">
-                                                        <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                                            (detail.formated_date.day === selectedDays[currentSelectDay].day &&
+                                                detail.formated_date.month === selectedDays[currentSelectDay].month &&
+                                                detail.formated_date.year === selectedDays[currentSelectDay].year)
+                                                ?
+                                                (
+                                                    <div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
+                                                        <div className="col-span-4 text-left ml-4 flex justify-between">
+                                                            <div className='h-full text-black my-auto'>
+                                                                <p className="top-0">{detail.start_time} น.</p>
+                                                                <p className="bottom-0">{detail.end_time} น.</p>
+                                                            </div>
+                                                            <div className="ml-3 relative mr-3">
+                                                                <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                                                                </div>
+                                                                <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
+                                                                    border-blue-400"></div>
+                                                            </div>
                                                         </div>
-                                                        <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                                border-blue-400"></div>
+                                                        <div className="col-span-2">
+                                                            <img src={detail.image_url}
+                                                                className="rounded-xl shadow-md w-full h-[3.9rem]" />
+                                                        </div>
+                                                        <div className="col-span-6 text-left ml-3">
+                                                            <p className="text-xl text-bold">{detail.attraction_name}</p>
+                                                            <p className="text-slate-400 text-sm">{detail.tag}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="col-span-2">
-                                                    <img src={detail.image_url}
-                                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
-                                                </div>
-                                                <div className="col-span-6 text-left ml-3">
-                                                    <p className="text-xl text-bold">{detail.attraction_name}</p>
-                                                    <p className="text-slate-400 text-sm">{detail.tag}</p>
-                                                </div>
-                                            </div>
+                                                )
+                                                : null
                                         ))
-                                        :
-                                        <div>
+                                        : <div>
                                             <p className="font-semibold ">คุณยังไม่มีสถานที่หรือกิจกรรมใด ๆ ในแผนการท่องเที่ยว</p>
                                             <p className="text-slate-600">คลิกปุ่มข้างล่างเพื่อเพิ่มได้เลย</p>
                                         </div>
                                     }
+
+
+
                                     <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleAddActivity()}>
                                         <p className="text-white">เพิ่มสถานที่หรือกิจกรรม</p>
                                     </button>

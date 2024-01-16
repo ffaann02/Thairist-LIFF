@@ -19,7 +19,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     const monthNames = ["ม.ค.", "ก.พ.", "มี.ย.", "เม.ย.", "พ.ค.", "มิ.ย.",
         "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
     ];
-    const [planDetail, setPlanDetail] = useState();
+    const [planDetailExist, setPlanDetailExist] = useState();
     const [endNewPlanTime, setEndNewPlanTime] = useState();
 
     useEffect(() => {
@@ -49,7 +49,8 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                         console.log("No plan detail");
                     }
                     else {
-                        setPlanDetail(res.data.result);
+                        console.log(res.data.result);
+                        setPlanDetailExist(res.data.result);
                         console.log("Had plan detail");
                     }
                 })
@@ -136,30 +137,36 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
                         <div className="">
 
-                            {planDetail &&
-                                planDetail.map((detail, index) => (
-                                    <div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
-                                        <div className="col-span-4 text-left ml-4 flex justify-between">
-                                            <div className='h-full text-black my-auto'>
-                                                <p className="top-0">{detail.start_time} น.</p>
-                                                <p className="bottom-0">{detail.end_time} น.</p>
-                                            </div>
-                                            <div className="ml-3 relative mr-3">
-                                                <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                            {planDetailExist &&
+                                planDetailExist.map((detail, index) => (
+
+                                    (detail.formated_date.day === dates[currentSelectDay].day &&
+                                        detail.formated_date.month === dates[currentSelectDay].month &&
+                                        detail.formated_date.year === dates[currentSelectDay].year)
+                                        ?
+                                        <div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
+                                            <div className="col-span-4 text-left ml-4 flex justify-between">
+                                                <div className='h-full text-black my-auto'>
+                                                    <p className="top-0">{detail.start_time} น.</p>
+                                                    <p className="bottom-0">{detail.end_time} น.</p>
                                                 </div>
-                                                <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                        border-blue-400"></div>
+                                                <div className="ml-3 relative mr-3">
+                                                    <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                                                    </div>
+                                                    <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
+                                                     border-blue-400"></div>
+                                                </div>
+                                            </div>
+                                            <div className="col-span-2">
+                                                <img src={detail.image_url}
+                                                    className="rounded-xl shadow-md w-full h-[3.9rem]" />
+                                            </div>
+                                            <div className="col-span-6 text-left ml-3">
+                                                <p className="text-xl text-bold">{detail.attraction_name}</p>
+                                                <p className="text-slate-400 text-sm">{detail.tag}</p>
                                             </div>
                                         </div>
-                                        <div className="col-span-2">
-                                            <img src={detail.image_url}
-                                                className="rounded-xl shadow-md w-full h-[3.9rem]" />
-                                        </div>
-                                        <div className="col-span-6 text-left ml-3">
-                                            <p className="text-xl text-bold">{detail.attraction_name}</p>
-                                            <p className="text-slate-400 text-sm">{detail.tag}</p>
-                                        </div>
-                                    </div>
+                                        : null
                                 ))
                             }
 
@@ -202,6 +209,9 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                     </div>
                 </div>
             }
+
+            {/** เพิ่มเงื่อนไขสำหรับ user ที่ยังไม่สร้าง plan */}
+
         </div>
 
         // <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
