@@ -3,20 +3,20 @@ import "./ar.css"
 import { useState } from "react";
 import * as THREE from 'three';
 
-const geometry = new THREE.BoxGeometry(2, 2, 2);
+const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new THREE.Mesh(geometry, material);
 
 const ARdisplay = () => {
   const [placementMode, setPlacementMode] = useState(false);
-  const [cubePosition, setCubePosition] = useState([0, 0, -5]);
+  const [cubePosition, setCubePosition] = useState([1, 1, -5]);
   return (
     <>
       <BrowserCompatibility />
       <div className="bg-red-200 w-full h-full min-h-screen flex flex-grow">
         <ZapparCanvas className="w-full min-h-screen bg-blue-200">
-          <ZapparCamera userCameraMirrorMode="poses" poseMode={"attitude"}/>
-          <InstantTracker placementMode={placementMode} placementCameraOffset={[0, 0, -5]}>
+          <ZapparCamera userCameraMirrorMode="poses" poseMode={"attitude"} environmentMap/>
+          <InstantTracker placementMode={placementMode}>
             <mesh
               geometry={geometry}
               material={material} 
