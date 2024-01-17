@@ -9,7 +9,7 @@ const cube = new THREE.Mesh(geometry, material);
 
 const ARdisplay = () => {
   const [placementMode, setPlacementMode] = useState(false);
-  const [cubePosition, setCubePosition] = useState([1, 1, -5]);
+  const [cubePosition, setCubePosition] = useState([1, 1, -3]);
   return (
     <>
       <BrowserCompatibility />
