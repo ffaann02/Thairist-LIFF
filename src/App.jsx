@@ -21,6 +21,7 @@ import EmptyFooter from "./components/EmptyFooter";
 import OldPoint from "./components/OldPoint";
 import Point from "./components/pointPage/Point";
 import ARdisplay from "./components/ARPage/ARdisplay";
+import WebXR from "./components/ARPage/WebXR";
 
 function App() {
 
@@ -78,6 +79,7 @@ function App() {
             {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
             <Route path="/points/ar" element={<ARdisplay/>} />
+            <Route path="/points/ar2" element={<WebXR/>} />
             <Route path="/planner/search" element={<PlannerSearch />} />
           </Routes>
           {!isOpenAR ? <MenuBar />:null}

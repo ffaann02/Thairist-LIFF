@@ -1,4 +1,4 @@
-import { ZapparCamera, ZapparCanvas, Loader, BrowserCompatibility, InstantTracker} from "@zappar/zappar-react-three-fiber";
+import { ZapparCamera, ZapparCanvas, Loader, BrowserCompatibility, InstantTracker } from "@zappar/zappar-react-three-fiber";
 import "./ar.css"
 import { useState } from "react";
 import * as THREE from 'three';
@@ -9,6 +9,7 @@ const cube = new THREE.Mesh(geometry, material);
 
 const ARdisplay = () => {
   const [placementMode, setPlacementMode] = useState(false);
+  const [cubePosition, setCubePosition] = useState([0, 0, -5]);
   return (
     <>
       <BrowserCompatibility />
@@ -16,11 +17,25 @@ const ARdisplay = () => {
         <ZapparCanvas className="w-full min-h-screen bg-blue-200">
           <ZapparCamera userCameraMirrorMode="poses" />
           <InstantTracker placementMode={placementMode} placementCameraOffset={[0, 0, -5]}>
-            <mesh geometry={geometry} material={material}/>
+            <mesh
+              geometry={geometry}
+              material={material} 
+              position={cubePosition}
+              onUpdate={(self) => {
+                // Access the position of the cube from the Three.js object
+                const newPosition = self.position.toArray();
+                console.log("Cube Position:", newPosition);
+
+                // Update the state with the new position
+                setCubePosition(newPosition);
+              }}/>
           </InstantTracker>
           <directionalLight position={[2.5, 8, 5]} intensity={1.5} />
           <Loader />
         </ZapparCanvas>
+        <div className="absolute top-20 w-full flex">
+            <p className="mx-auto text-xl">{cubePosition[0]},{cubePosition[1]},{cubePosition[2]}</p>
+        </div>
         <div
           className="absolute bottom-48 w-full"
 
