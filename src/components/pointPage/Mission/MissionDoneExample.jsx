@@ -68,10 +68,10 @@ const ARListDataReview = [
     },
 ];
 
-export const ARList3D = (props) => {
+export const ARList = ({title}) => {
     return (
         <div className="w-full h-full pl-4 pb-2">
-            <h2 className="">{props.title}</h2>
+            <h2 className="">{title}</h2>
             <div className="carousel carousel-center space-x-3 h-[200px] mt-1">
                 {ARListData3D.map((item, index)=>(
 
