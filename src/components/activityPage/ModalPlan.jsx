@@ -28,6 +28,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     const [endTimeSelects, setEndTimeSelects] = useState();
     const [disabledHours, setDisabledHours] = useState([]);
     const [newOrderPlanDetail, setNewOrderPlanDetail] = useState();
+    const [defaultStartTime, setDefaultStartTime] = useState();
 
     useEffect(() => {
         if (userProfile) {
@@ -56,17 +57,15 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                     }
                     else {
                         setPlanDetailExist(res.data.result);
-                        setNewOrderPlanDetail(res.data.result);
                     }
                 })
         }
     }, [planData])
 
     useEffect(() => {
-        if(planData && planDetailExist){
-            switchDay(0, planData.result[0]);
+        if (planData && planDetailExist) {
+            // switchDay(0, planData.result[0]);
             console.log(planDetailExist);
-            // Sort newOrderPlan by time
             sortByStartTime(planDetailExist);
         }
     }, [planDetailExist])
@@ -88,20 +87,65 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             const [hours, minutes] = attraction.start_time.split(':').map(Number);
             attraction.start_minutes = hours * 60 + minutes;
         });
-    
         // Sort the array based on "start_minutes"
         newArray.sort((a, b) => a.start_minutes - b.start_minutes);
-    
         // Remove the temporary "start_minutes" property
         newArray.forEach(attraction => delete attraction.start_minutes);
-    
-        console.log(newArray);
-        return attractions;
+
+        // merge selectedAttraction to array
+        selectedAttraction.formated_date = {
+            day: parseInt(dates[currentSelectDay].day),
+            month: parseInt(dates[currentSelectDay].month),
+            year: parseInt(dates[currentSelectDay].year)
+        }
+        selectedAttraction.isSelectedAttraction = true;
+        console.log(selectedAttraction);
+        newArray.push(selectedAttraction);
+
+        setNewOrderPlanDetail(newArray);
+        switchDay(0, planData.result[0], newArray);
     }
-    
+
+    const findDefaultTime = (specific_day, sortedPlanDetail) => {
+        console.log("TEST");
+        const dataDay = sortedPlanDetail.filter(detail => {
+            return (
+                detail.formated_date.day === specific_day.day &&
+                detail.formated_date.month === specific_day.month &&
+                detail.formated_date.year === specific_day.year &&
+                !detail.isSelectedAttraction
+            );
+        });
+        sortedPlanDetail.forEach(detail => {
+            if (detail.isSelectedAttraction === true) {
+                detail.formated_date.day = specific_day.day;
+                detail.formated_date.month = specific_day.month;
+                detail.formated_date.year = specific_day.year;
+            }
+        });
+        console.log(dataDay);
+        if (dataDay.length > 0) {
+            const [lastHours, lastMinutes] = dataDay[dataDay.length - 1].end_time.split(':');
+            const startTime = `${lastHours}:${lastMinutes}`;
+            const endTime = addHoursToTime(startTime, selectedAttraction.period);
+            setDefaultStartTime(startTime);
+            setEndTimeSelects(endTime);
+        }
+        else {
+            const startTime = selectedAttraction.open_time;
+            const endTime = addHoursToTime(startTime, selectedAttraction.period);
+            setDefaultStartTime(startTime);
+            setEndTimeSelects(endTime);
+        }
+    }
+
+    const switchDay = (indexDay, specific_day, sortedPlanDetail) => {
+        setCurrentSelectDay(indexDay);
+        calculateOverlapTime(specific_day);
+        findDefaultTime(specific_day, sortedPlanDetail);
+    }
 
     const addHoursToTime = (baseTime, hoursToAdd) => {
-        console.log(hoursToAdd);
         // Parse the base time string into hours and minutes
         const [baseHours, baseMinutes] = baseTime.split(':').map(Number);
 
@@ -141,9 +185,28 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     }
 
     const handleTimeChange = (time, timeString) => {
-        setStartTimeSelects(timeString);
         const endTime = addHoursToTime(timeString, selectedAttraction.period);
+        setStartTimeSelects(timeString);
         setEndTimeSelects(endTime);
+
+        const newArray = [...newOrderPlanDetail];
+        console.log(newArray);
+        // Convert "start_time" to minutes since midnight for easy comparison
+        newArray.forEach(attraction => {
+            if(attraction.start_time){
+                const [hours, minutes] = attraction.start_time.split(':').map(Number);
+                attraction.start_minutes = hours * 60 + minutes;
+            }
+            else{
+                const [hours, minutes] = timeString.split(':').map(Number);
+                attraction.start_minutes = hours * 60 + minutes;
+            }
+        });
+        // Sort the array based on "start_minutes"
+        newArray.sort((a, b) => a.start_minutes - b.start_minutes);
+        // Remove the temporary "start_minutes" property
+        newArray.forEach(attraction => delete attraction.start_minutes);
+        setNewOrderPlanDetail(newArray);
     };
 
     const arrayRange = (start, stop, step) =>
@@ -179,11 +242,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         };
     };
 
-    const switchDay = (indexDay, specific_day) => {
-        setCurrentSelectDay(indexDay);
-        calculateOverlapTime(specific_day);
-    }
-
     return (
         <div>
             {planData && dates &&
@@ -201,16 +259,18 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                         </div>
 
                         <div className="flex px-1 mt-4 mx-auto justify-center mb-1 text-center">
-                            {dates.map((date, index) => (
-                                <div
-                                    key={index}
-                                    className={`w-fit border-b-4 py-1 px-2
-                                    ${currentSelectDay === index ? "border-[#51b3ce] text-slate-800" : "border-slate-200 text-slate-500"}`}
-                                    onClick={() => switchDay(index, date)}>
-                                    <p>วัน {index + 1}</p>
-                                    <p className="text-sm">{date.day} {monthNames[date.month - 1]} {date.year + 543}</p>
-                                </div>
-                            ))}
+                            {newOrderPlanDetail &&
+                                dates.map((date, index) => (
+                                    <div
+                                        key={index}
+                                        className={`w-fit border-b-4 py-1 px-2
+                                        ${currentSelectDay === index ? "border-[#51b3ce] text-slate-800" : "border-slate-200 text-slate-500"}`}
+                                        onClick={() => switchDay(index, date, newOrderPlanDetail)}>
+                                        <p>วัน {index + 1}</p>
+                                        <p className="text-sm">{date.day} {monthNames[date.month - 1]} {date.year + 543}</p>
+                                    </div>
+                                ))
+                            }
                         </div>
 
                         <div className="">
@@ -220,23 +280,25 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                     className="mx-auto w-36 h-full shadow-md" />
                             </div>
                             <div className="grid grid-cols-12 py-2 pt-4">
-                                <div className="col-span-4 text-left pl-6">
-                                    <p className='text-sm'>เริ่ม</p>
-                                    <TimePicker
-                                        onChange={handleTimeChange}
-                                        defaultValue={dayjs('00:00', 'HH:mm')}
-                                        minuteStep={15}
-                                        placeholder="เลือกเวลา"
-                                        format={'HH:mm'}
-                                        size="small"
-                                        disabledTime={disabledTime} />
-                                    <p className='text-sm pt-2'>สิ้นสุด</p>
-                                    <TimePicker
-                                        disabled={true}
-                                        placeholder={endTimeSelects}
-                                        format={'HH:mm'}
-                                        size="small" />
-                                </div>
+                                {defaultStartTime &&
+                                    <div className="col-span-4 text-left pl-6">
+                                        <p className='text-sm'>เริ่ม</p>
+                                        <TimePicker
+                                            onChange={handleTimeChange}
+                                            // defaultValue={dayjs(defaultStartTime, 'HH:mm')}
+                                            placeholder={defaultStartTime}
+                                            minuteStep={15}
+                                            format={'HH:mm'}
+                                            size="small"
+                                            disabledTime={disabledTime} />
+                                        <p className='text-sm pt-2'>สิ้นสุด</p>
+                                        <TimePicker
+                                            disabled={true}
+                                            placeholder={endTimeSelects}
+                                            format={'HH:mm'}
+                                            size="small" />
+                                    </div>
+                                }
                                 <div className="col-span-8 text-left pt-4 pl-6">
                                     <p className="text-xl text-bold">{selectedAttraction.name}</p>
                                     <p className="text-sm">ระยะเวลาที่ใช้: {selectedAttraction.period} ชั่วโมง</p>
@@ -252,67 +314,72 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                 <p className='text-lg'>แผนการเที่ยวของคุณ</p>
                             </div>
 
-                            {planDetailExist &&
-                                planDetailExist.map((detail, index) => (
-
+                            {newOrderPlanDetail &&
+                                newOrderPlanDetail.map((detail, index) => (
                                     (detail.formated_date.day === dates[currentSelectDay].day &&
                                         detail.formated_date.month === dates[currentSelectDay].month &&
-                                        detail.formated_date.year === dates[currentSelectDay].year)
-                                        ?
-                                        <div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
-                                            <div className="col-span-4 text-left ml-4 flex justify-between">
-                                                <div className='h-full text-black my-auto'>
-                                                    <p className="top-0">{detail.start_time} น.</p>
-                                                    <p className="bottom-0">{detail.end_time} น.</p>
+                                        detail.formated_date.year === dates[currentSelectDay].year &&
+                                        !detail.isSelectedAttraction)
+                                        ? (<div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
+                                                <div className="col-span-4 text-left ml-4 flex justify-between">
+                                                    <div className='h-full text-black my-auto'>
+                                                        <p className="top-0">{detail.start_time} น.</p>
+                                                        <p className="bottom-0">{detail.end_time} น.</p>
+                                                    </div>
+                                                    <div className="ml-3 relative mr-3">
+                                                        <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                                                        </div>
+                                                        <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
+                                                 border-blue-400"></div>
+                                                    </div>
                                                 </div>
+                                                <div className="col-span-2">
+                                                    <img src={detail.image_url}
+                                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
+                                                </div>
+                                                <div className="col-span-6 text-left ml-3">
+                                                    <p className="text-xl text-bold">{detail.attraction_name}</p>
+                                                    <p className="text-slate-400 text-sm">{detail.tag}</p>
+                                                </div>
+                                            </div>)
+                                        : (detail.formated_date.day === dates[currentSelectDay].day &&
+                                            detail.formated_date.month === dates[currentSelectDay].month &&
+                                            detail.formated_date.year === dates[currentSelectDay].year &&
+                                            detail.isSelectedAttraction === true) 
+                                            ? <div key={index} className="grid grid-cols-12 text-center py-2 bg-blue-600">
+                                            <div className="col-span-4 text-left ml-4 flex justify-between">
+                                                {(startTimeSelects && endTimeSelects) ?
+                                                    <div className='h-full text-white my-auto'>
+            
+                                                        <p className="top-0">{startTimeSelects}</p>
+                                                        <p className="bottom-0">{endTimeSelects}</p>
+                                                    </div>
+                                                    :
+                                                    <div className='h-full text-white my-auto'>
+            
+                                                        <p className="top-0">{defaultStartTime}</p>
+                                                        <p className="bottom-0">{endTimeSelects}</p>
+                                                    </div>}
+            
                                                 <div className="ml-3 relative mr-3">
                                                     <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
                                                     </div>
                                                     <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                     border-blue-400"></div>
+                                                                    border-blue-400"></div>
                                                 </div>
                                             </div>
                                             <div className="col-span-2">
-                                                <img src={detail.image_url}
+                                                <img src={selectedAttraction.image_url}
                                                     className="rounded-xl shadow-md w-full h-[3.9rem]" />
                                             </div>
-                                            <div className="col-span-6 text-left ml-3">
-                                                <p className="text-xl text-bold">{detail.attraction_name}</p>
-                                                <p className="text-slate-400 text-sm">{detail.tag}</p>
+                                            <div className="col-span-6 text-left ml-2">
+                                                <p className="text-xl text-bold text-white">{selectedAttraction.name}</p>
+                                                <p className="text-sm text-white">{selectedAttraction.tag}</p>
                                             </div>
-                                        </div>
-                                        : null
+                                        </div> 
+                                            : null
                                 ))
                             }
-
-                            <div className="grid grid-cols-12 text-center py-2 bg-blue-600">
-                                <div className="col-span-4 text-left ml-4 flex justify-between">
-                                    {(startTimeSelects && endTimeSelects) ?
-                                        <div className='h-full text-white my-auto'>
-
-                                            <p className="top-0">{startTimeSelects}</p>
-                                            <p className="bottom-0">{endTimeSelects}</p>
-                                        </div>
-                                        :
-                                        <div className='h-full text-white my-auto'>
-                                        </div>}
-
-                                    <div className="ml-3 relative mr-3">
-                                        <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
-                                        </div>
-                                        <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                        border-blue-400"></div>
-                                    </div>
-                                </div>
-                                <div className="col-span-2">
-                                    <img src={selectedAttraction.image_url}
-                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
-                                </div>
-                                <div className="col-span-6 text-left ml-2">
-                                    <p className="text-xl text-bold text-white">{selectedAttraction.name}</p>
-                                    <p className="text-sm text-white">{selectedAttraction.tag}</p>
-                                </div>
-                            </div>
 
                         </div>
 
