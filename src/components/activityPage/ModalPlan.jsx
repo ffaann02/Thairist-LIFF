@@ -81,7 +81,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
     const sortByStartTime = (attractions) => {
         const newArray = [...attractions];
-        console.log(newArray);
         // Convert "start_time" to minutes since midnight for easy comparison
         newArray.forEach(attraction => {
             const [hours, minutes] = attraction.start_time.split(':').map(Number);
@@ -99,7 +98,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             year: parseInt(dates[currentSelectDay].year)
         }
         selectedAttraction.isSelectedAttraction = true;
-        console.log(selectedAttraction);
         newArray.push(selectedAttraction);
 
         setNewOrderPlanDetail(newArray);
@@ -107,7 +105,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     }
 
     const findDefaultTime = (specific_day, sortedPlanDetail) => {
-        console.log("TEST");
         const dataDay = sortedPlanDetail.filter(detail => {
             return (
                 detail.formated_date.day === specific_day.day &&
@@ -123,7 +120,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                 detail.formated_date.year = specific_day.year;
             }
         });
-        console.log(dataDay);
         if (dataDay.length > 0) {
             const [lastHours, lastMinutes] = dataDay[dataDay.length - 1].end_time.split(':');
             const startTime = `${lastHours}:${lastMinutes}`;
@@ -173,6 +169,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             tag: selectedAttraction.tag,
             start_time: startTimeSelects,
             end_time: endTimeSelects,
+            period: selectedAttraction.period,
             date: dates[currentSelectDay],
             image_url: selectedAttraction.image_url
         })
@@ -190,7 +187,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         setEndTimeSelects(endTime);
 
         const newArray = [...newOrderPlanDetail];
-        console.log(newArray);
         // Convert "start_time" to minutes since midnight for easy comparison
         newArray.forEach(attraction => {
             if(attraction.start_time){
@@ -217,6 +213,8 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
     const calculateOverlapTime = (specific_day) => {
         let disable_hour_array = [];
+        const closed_hour = createClosedHoursArray();
+        disable_hour_array = [...closed_hour];
         planDetailExist.map((detail) => {
             if ((detail.formated_date.day === specific_day.day &&
                 detail.formated_date.month === specific_day.month &&
@@ -233,6 +231,24 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         setDisabledHours(disable_hour_array);
     }
 
+    const createClosedHoursArray = () => {
+        const open_time = selectedAttraction.open_time.split(':');
+        const close_time = selectedAttraction.close_time.split(':');
+        const open = parseInt(open_time[0]);  
+        const close = parseInt(close_time[0]); 
+        const closedHours = [];
+        // Adding hours before the market opens
+        for (let i = 0; i < open; i++) {
+          closedHours.push(i);
+        }
+        // Adding hours after the market closes
+        for (let i = close; i < 24; i++) {
+          closedHours.push(i);
+        }
+
+        return closedHours;
+      }
+
     const disabledTime = (current, type) => {
         // Disable hours after 6 PM
         return {
@@ -245,9 +261,9 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     return (
         <div>
             {planData && dates &&
-                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
+                <div className="justify-center items-center flex overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
 
-                    <div className="relative rounded-xl h-[80%] mx-auto my-auto bg-white">
+                    <div className="relative rounded-xl h-[80%] mx-auto my-auto bg-white overflow-scroll">
                         <div className="grid grid-cols-8 ml-4 mt-4">
                             <button className="col-span-1 my-auto bg-slate-100 rounded-full w-8 h-8" onClick={() => DisplayModalState()}>
                                 <IoChevronBackSharp className="mx-auto text-slate-800" />
@@ -383,7 +399,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
                         </div>
 
-                        <div className="mb-4 mt-4 flex justify-center">
+                        <div className="bottom-0 mb-4 mt-4 flex justify-center">
                             <button className="rounded-lg px-4 py-2 text-red-700 border-[1px] border-red-700" onClick={() => DisplayModalState()}>
                                 <p className="my-auto">ยกเลิก</p>
                             </button>
