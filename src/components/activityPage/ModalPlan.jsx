@@ -4,8 +4,10 @@ import { useUser } from "../../UserContext";
 import { IoChevronBackSharp, IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
 import { MdOutlineTempleBuddhist, MdOutlineBakeryDining } from "react-icons/md"
 import { BsSun } from "react-icons/bs"
-import Draggable from 'react-draggable';
 import { useNavigate } from "react-router-dom"
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { TimePicker } from 'antd';
 
 const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
@@ -20,7 +22,12 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
     ];
     const [planDetailExist, setPlanDetailExist] = useState();
-    const [endNewPlanTime, setEndNewPlanTime] = useState();
+
+    dayjs.extend(customParseFormat);
+    const [startTimeSelects, setStartTimeSelects] = useState();
+    const [endTimeSelects, setEndTimeSelects] = useState();
+    const [disabledHours, setDisabledHours] = useState([]);
+    const [newOrderPlanDetail, setNewOrderPlanDetail] = useState();
 
     useEffect(() => {
         if (userProfile) {
@@ -33,7 +40,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                     else {
                         setPlanData(res.data);
                         dateFormat(res.data.result);
-                        console.log("Already have plan");
                     }
                 })
                 .catch(err => console.log(err));
@@ -42,20 +48,28 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
     useEffect(() => {
         if (planData) {
-            addHoursToTime(selectedAttraction.open_time, selectedAttraction.period);
+            // addHoursToTime(selectedAttraction.open_time, selectedAttraction.period);
             axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_plan_detail?plan_id=${planData.plan_id}`)
                 .then(res => {
                     if (res.data.empty) {
                         console.log("No plan detail");
                     }
                     else {
-                        console.log(res.data.result);
                         setPlanDetailExist(res.data.result);
-                        console.log("Had plan detail");
+                        setNewOrderPlanDetail(res.data.result);
                     }
                 })
         }
     }, [planData])
+
+    useEffect(() => {
+        if(planData && planDetailExist){
+            switchDay(0, planData.result[0]);
+            console.log(planDetailExist);
+            // Sort newOrderPlan by time
+            sortByStartTime(planDetailExist);
+        }
+    }, [planDetailExist])
 
     const DisplayModalState = () => {
         displayModalPlan(false, 0);
@@ -66,11 +80,30 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         setCurrentSelectDay(0);
     }
 
+    const sortByStartTime = (attractions) => {
+        const newArray = [...attractions];
+        console.log(newArray);
+        // Convert "start_time" to minutes since midnight for easy comparison
+        newArray.forEach(attraction => {
+            const [hours, minutes] = attraction.start_time.split(':').map(Number);
+            attraction.start_minutes = hours * 60 + minutes;
+        });
+    
+        // Sort the array based on "start_minutes"
+        newArray.sort((a, b) => a.start_minutes - b.start_minutes);
+    
+        // Remove the temporary "start_minutes" property
+        newArray.forEach(attraction => delete attraction.start_minutes);
+    
+        console.log(newArray);
+        return attractions;
+    }
+    
 
     const addHoursToTime = (baseTime, hoursToAdd) => {
         console.log(hoursToAdd);
         // Parse the base time string into hours and minutes
-        const [baseHours, baseMinutes] = baseTime.split('.').map(Number);
+        const [baseHours, baseMinutes] = baseTime.split(':').map(Number);
 
         // Calculate the total minutes for the base time
         const totalBaseMinutes = baseHours * 60 + baseMinutes;
@@ -83,8 +116,8 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         const newMinutes = totalNewMinutes % 60;
 
         // Format the result as HH.MM
-        const formattedResult = `${String(newHours).padStart(2, '0')}.${String(newMinutes).padStart(2, '0')}`;
-        setEndNewPlanTime(formattedResult);
+        const formattedResult = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
+        return formattedResult;
     }
 
     // update to db
@@ -94,8 +127,8 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             attraction_name: selectedAttraction.name,
             attraction_description: selectedAttraction.description,
             tag: selectedAttraction.tag,
-            start_time: selectedAttraction.open_time,
-            end_time: endNewPlanTime,
+            start_time: startTimeSelects,
+            end_time: endTimeSelects,
             date: dates[currentSelectDay],
             image_url: selectedAttraction.image_url
         })
@@ -107,10 +140,55 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             .catch(err => console.log(err));
     }
 
+    const handleTimeChange = (time, timeString) => {
+        setStartTimeSelects(timeString);
+        const endTime = addHoursToTime(timeString, selectedAttraction.period);
+        setEndTimeSelects(endTime);
+    };
+
+    const arrayRange = (start, stop, step) =>
+        Array.from(
+            { length: (stop - start) / step + 1 },
+            (value, index) => start + index * step
+        );
+
+    const calculateOverlapTime = (specific_day) => {
+        let disable_hour_array = [];
+        planDetailExist.map((detail) => {
+            if ((detail.formated_date.day === specific_day.day &&
+                detail.formated_date.month === specific_day.month &&
+                detail.formated_date.year === specific_day.year)) {
+                const start_time = detail.start_time.split(':');
+                const start_hour = parseInt(start_time[0]);
+                const end_time = detail.end_time.split(':');
+                const end_hour = parseInt(end_time[0]);
+                // Create new array and unions with previous array
+                const hour_array = [...Array(end_hour - start_hour)].map((_, index) => start_hour + index);
+                disable_hour_array = [...new Set([...disable_hour_array, ...hour_array])];
+            }
+        })
+        setDisabledHours(disable_hour_array);
+    }
+
+    const disabledTime = (current, type) => {
+        // Disable hours after 6 PM
+        return {
+            disabledHours: () => [...disabledHours],
+            disabledMinutes: () => [],
+            disabledSeconds: () => [],
+        };
+    };
+
+    const switchDay = (indexDay, specific_day) => {
+        setCurrentSelectDay(indexDay);
+        calculateOverlapTime(specific_day);
+    }
+
     return (
         <div>
             {planData && dates &&
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
+
                     <div className="relative rounded-xl h-[80%] mx-auto my-auto bg-white">
                         <div className="grid grid-cols-8 ml-4 mt-4">
                             <button className="col-span-1 my-auto bg-slate-100 rounded-full w-8 h-8" onClick={() => DisplayModalState()}>
@@ -128,7 +206,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                     key={index}
                                     className={`w-fit border-b-4 py-1 px-2
                                     ${currentSelectDay === index ? "border-[#51b3ce] text-slate-800" : "border-slate-200 text-slate-500"}`}
-                                    onClick={() => setCurrentSelectDay(index)}>
+                                    onClick={() => switchDay(index, date)}>
                                     <p>วัน {index + 1}</p>
                                     <p className="text-sm">{date.day} {monthNames[date.month - 1]} {date.year + 543}</p>
                                 </div>
@@ -136,6 +214,43 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                         </div>
 
                         <div className="">
+
+                            <div className='flex justify-items-center pt-6'>
+                                <img src={selectedAttraction.image_url}
+                                    className="mx-auto w-36 h-full shadow-md" />
+                            </div>
+                            <div className="grid grid-cols-12 py-2 pt-4">
+                                <div className="col-span-4 text-left pl-6">
+                                    <p className='text-sm'>เริ่ม</p>
+                                    <TimePicker
+                                        onChange={handleTimeChange}
+                                        defaultValue={dayjs('00:00', 'HH:mm')}
+                                        minuteStep={15}
+                                        placeholder="เลือกเวลา"
+                                        format={'HH:mm'}
+                                        size="small"
+                                        disabledTime={disabledTime} />
+                                    <p className='text-sm pt-2'>สิ้นสุด</p>
+                                    <TimePicker
+                                        disabled={true}
+                                        placeholder={endTimeSelects}
+                                        format={'HH:mm'}
+                                        size="small" />
+                                </div>
+                                <div className="col-span-8 text-left pt-4 pl-6">
+                                    <p className="text-xl text-bold">{selectedAttraction.name}</p>
+                                    <p className="text-sm">ระยะเวลาที่ใช้: {selectedAttraction.period} ชั่วโมง</p>
+                                    <p className="text-sm">{selectedAttraction.tag}</p>
+                                </div>
+                            </div>
+
+                            <div className='w-full pt-4'>
+                                <div className='border-t-2'></div>
+                            </div>
+
+                            <div className='w-full flex justify-center pt-2'>
+                                <p className='text-lg'>แผนการเที่ยวของคุณ</p>
+                            </div>
 
                             {planDetailExist &&
                                 planDetailExist.map((detail, index) => (
@@ -170,13 +285,18 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                 ))
                             }
 
-                            {/* <Draggable> */}
                             <div className="grid grid-cols-12 text-center py-2 bg-blue-600">
                                 <div className="col-span-4 text-left ml-4 flex justify-between">
-                                    <div className='h-full text-white my-auto'>
-                                        <p className="top-0">{selectedAttraction.open_time} น.</p>
-                                        <p className="bottom-0">{endNewPlanTime} น.</p>
-                                    </div>
+                                    {(startTimeSelects && endTimeSelects) ?
+                                        <div className='h-full text-white my-auto'>
+
+                                            <p className="top-0">{startTimeSelects}</p>
+                                            <p className="bottom-0">{endTimeSelects}</p>
+                                        </div>
+                                        :
+                                        <div className='h-full text-white my-auto'>
+                                        </div>}
+
                                     <div className="ml-3 relative mr-3">
                                         <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
                                         </div>
@@ -193,7 +313,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                     <p className="text-sm text-white">{selectedAttraction.tag}</p>
                                 </div>
                             </div>
-                            {/* </Draggable> */}
 
                         </div>
 
