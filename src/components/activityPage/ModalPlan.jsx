@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import { useUser } from "../../UserContext";
 import { IoChevronBackSharp, IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
 import { MdOutlineTempleBuddhist, MdOutlineBakeryDining } from "react-icons/md"
 import { BsSun } from "react-icons/bs"
-import { useNavigate } from "react-router-dom"
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { TimePicker } from 'antd';
@@ -13,9 +13,10 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
     const { userProfile, setUser } = useUser();
 
-    const navagate = useNavigate();
+    const navigate = useNavigate();
 
     const [planData, setPlanData] = useState();
+    const [noPlanCreated, setNoPlanCreated] = useState();
     const [dates, setDates] = useState();
     const [currentSelectDay, setCurrentSelectDay] = useState(null);
     const monthNames = ["ม.ค.", "ก.พ.", "มี.ย.", "เม.ย.", "พ.ค.", "มิ.ย.",
@@ -37,10 +38,12 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                 .then(res => {
                     if (res.data.empty) {
                         console.log("Plan is empty");
+                        setNoPlanCreated(true);
                     }
                     else {
                         setPlanData(res.data);
                         dateFormat(res.data.result);
+                        console.log(res.data.plan_name);
                     }
                 })
                 .catch(err => console.log(err));
@@ -63,12 +66,29 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     }, [planData])
 
     useEffect(() => {
+        // Already have plan detail
         if (planData && planDetailExist) {
-            // switchDay(0, planData.result[0]);
             console.log(planDetailExist);
             sortByStartTime(planDetailExist);
         }
-    }, [planDetailExist])
+        // Empty array
+        else {
+            if (dates) {
+                console.log(dates);
+                const duplicateSelectedAttraction = selectedAttraction;
+                duplicateSelectedAttraction.isSelectedAttraction = true;
+                duplicateSelectedAttraction.formated_date = {
+                    day: parseInt(dates[0].day),
+                    month: parseInt(dates[0].month),
+                    year: parseInt(dates[0].year)
+                }
+                const arrayOfSelectledAttraction = [duplicateSelectedAttraction];
+                console.log(arrayOfSelectledAttraction);
+                setNewOrderPlanDetail(arrayOfSelectledAttraction);
+                findDefaultTime(dates[0], arrayOfSelectledAttraction);
+            }
+        }
+    }, [planDetailExist, dates])
 
     const DisplayModalState = () => {
         displayModalPlan(false, 0);
@@ -167,7 +187,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             attraction_name: selectedAttraction.name,
             attraction_description: selectedAttraction.description,
             tag: selectedAttraction.tag,
-            start_time: startTimeSelects,
+            start_time: startTimeSelects || defaultStartTime,
             end_time: endTimeSelects,
             period: selectedAttraction.period,
             date: dates[currentSelectDay],
@@ -175,7 +195,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         })
             .then(res => {
                 console.log(res);
-                navagate('/planner');
+                navigate('/planner');
                 // navigate to plan page
             })
             .catch(err => console.log(err));
@@ -189,11 +209,11 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         const newArray = [...newOrderPlanDetail];
         // Convert "start_time" to minutes since midnight for easy comparison
         newArray.forEach(attraction => {
-            if(attraction.start_time){
+            if (attraction.start_time) {
                 const [hours, minutes] = attraction.start_time.split(':').map(Number);
                 attraction.start_minutes = hours * 60 + minutes;
             }
-            else{
+            else {
                 const [hours, minutes] = timeString.split(':').map(Number);
                 attraction.start_minutes = hours * 60 + minutes;
             }
@@ -215,39 +235,41 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         let disable_hour_array = [];
         const closed_hour = createClosedHoursArray();
         disable_hour_array = [...closed_hour];
-        planDetailExist.map((detail) => {
-            if ((detail.formated_date.day === specific_day.day &&
-                detail.formated_date.month === specific_day.month &&
-                detail.formated_date.year === specific_day.year)) {
-                const start_time = detail.start_time.split(':');
-                const start_hour = parseInt(start_time[0]);
-                const end_time = detail.end_time.split(':');
-                const end_hour = parseInt(end_time[0]);
-                // Create new array and unions with previous array
-                const hour_array = [...Array(end_hour - start_hour)].map((_, index) => start_hour + index);
-                disable_hour_array = [...new Set([...disable_hour_array, ...hour_array])];
-            }
-        })
+        if (planDetailExist) {
+            planDetailExist.map((detail) => {
+                if ((detail.formated_date.day === specific_day.day &&
+                    detail.formated_date.month === specific_day.month &&
+                    detail.formated_date.year === specific_day.year)) {
+                    const start_time = detail.start_time.split(':');
+                    const start_hour = parseInt(start_time[0]);
+                    const end_time = detail.end_time.split(':');
+                    const end_hour = parseInt(end_time[0]);
+                    // Create new array and unions with previous array
+                    const hour_array = [...Array(end_hour - start_hour)].map((_, index) => start_hour + index);
+                    disable_hour_array = [...new Set([...disable_hour_array, ...hour_array])];
+                }
+            })
+        }
         setDisabledHours(disable_hour_array);
     }
 
     const createClosedHoursArray = () => {
         const open_time = selectedAttraction.open_time.split(':');
         const close_time = selectedAttraction.close_time.split(':');
-        const open = parseInt(open_time[0]);  
-        const close = parseInt(close_time[0]); 
+        const open = parseInt(open_time[0]);
+        const close = parseInt(close_time[0]);
         const closedHours = [];
         // Adding hours before the market opens
         for (let i = 0; i < open; i++) {
-          closedHours.push(i);
+            closedHours.push(i);
         }
         // Adding hours after the market closes
         for (let i = close; i < 24; i++) {
-          closedHours.push(i);
+            closedHours.push(i);
         }
 
         return closedHours;
-      }
+    }
 
     const disabledTime = (current, type) => {
         // Disable hours after 6 PM
@@ -269,7 +291,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                 <IoChevronBackSharp className="mx-auto text-slate-800" />
                             </button>
                             <div className="col-span-7 ml-2 my-auto">
-                                <p className="text-xl font-semibold mr-10">{planData.plan_id} (*แก้เป็นชื่อ)</p>
+                                <p className="text-xl font-semibold mr-10">{planData.plan_name}</p>
                                 <p className="text-md mt-1 text-slate-600">{dates[0].day} กันยายน - {dates[dates.length - 1].day} กันยายน</p>
                             </div>
                         </div>
@@ -337,62 +359,62 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                         detail.formated_date.year === dates[currentSelectDay].year &&
                                         !detail.isSelectedAttraction)
                                         ? (<div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
-                                                <div className="col-span-4 text-left ml-4 flex justify-between">
-                                                    <div className='h-full text-black my-auto'>
-                                                        <p className="top-0">{detail.start_time} น.</p>
-                                                        <p className="bottom-0">{detail.end_time} น.</p>
-                                                    </div>
-                                                    <div className="ml-3 relative mr-3">
-                                                        <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
-                                                        </div>
-                                                        <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                 border-blue-400"></div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-2">
-                                                    <img src={detail.image_url}
-                                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
-                                                </div>
-                                                <div className="col-span-6 text-left ml-3">
-                                                    <p className="text-xl text-bold">{detail.attraction_name}</p>
-                                                    <p className="text-slate-400 text-sm">{detail.tag}</p>
-                                                </div>
-                                            </div>)
-                                        : (detail.formated_date.day === dates[currentSelectDay].day &&
-                                            detail.formated_date.month === dates[currentSelectDay].month &&
-                                            detail.formated_date.year === dates[currentSelectDay].year &&
-                                            detail.isSelectedAttraction === true) 
-                                            ? <div key={index} className="grid grid-cols-12 text-center py-2 bg-blue-600">
                                             <div className="col-span-4 text-left ml-4 flex justify-between">
-                                                {(startTimeSelects && endTimeSelects) ?
-                                                    <div className='h-full text-white my-auto'>
-            
-                                                        <p className="top-0">{startTimeSelects}</p>
-                                                        <p className="bottom-0">{endTimeSelects}</p>
-                                                    </div>
-                                                    :
-                                                    <div className='h-full text-white my-auto'>
-            
-                                                        <p className="top-0">{defaultStartTime}</p>
-                                                        <p className="bottom-0">{endTimeSelects}</p>
-                                                    </div>}
-            
+                                                <div className='h-full text-black my-auto'>
+                                                    <p className="top-0">{detail.start_time} น.</p>
+                                                    <p className="bottom-0">{detail.end_time} น.</p>
+                                                </div>
                                                 <div className="ml-3 relative mr-3">
                                                     <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
                                                     </div>
                                                     <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                                    border-blue-400"></div>
+                                                 border-blue-400"></div>
                                                 </div>
                                             </div>
                                             <div className="col-span-2">
-                                                <img src={selectedAttraction.image_url}
+                                                <img src={detail.image_url}
                                                     className="rounded-xl shadow-md w-full h-[3.9rem]" />
                                             </div>
-                                            <div className="col-span-6 text-left ml-2">
-                                                <p className="text-xl text-bold text-white">{selectedAttraction.name}</p>
-                                                <p className="text-sm text-white">{selectedAttraction.tag}</p>
+                                            <div className="col-span-6 text-left ml-3">
+                                                <p className="text-xl text-bold">{detail.attraction_name}</p>
+                                                <p className="text-slate-400 text-sm">{detail.tag}</p>
                                             </div>
-                                        </div> 
+                                        </div>)
+                                        : (detail.formated_date.day === dates[currentSelectDay].day &&
+                                            detail.formated_date.month === dates[currentSelectDay].month &&
+                                            detail.formated_date.year === dates[currentSelectDay].year &&
+                                            detail.isSelectedAttraction === true)
+                                            ? <div key={index} className="grid grid-cols-12 text-center py-2 bg-blue-600">
+                                                <div className="col-span-4 text-left ml-4 flex justify-between">
+                                                    {(startTimeSelects && endTimeSelects) ?
+                                                        <div className='h-full text-white my-auto'>
+
+                                                            <p className="top-0">{startTimeSelects}</p>
+                                                            <p className="bottom-0">{endTimeSelects}</p>
+                                                        </div>
+                                                        :
+                                                        <div className='h-full text-white my-auto'>
+
+                                                            <p className="top-0">{defaultStartTime}</p>
+                                                            <p className="bottom-0">{endTimeSelects}</p>
+                                                        </div>}
+
+                                                    <div className="ml-3 relative mr-3">
+                                                        <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                                                        </div>
+                                                        <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
+                                                                    border-blue-400"></div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-2">
+                                                    <img src={selectedAttraction.image_url}
+                                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
+                                                </div>
+                                                <div className="col-span-6 text-left ml-2">
+                                                    <p className="text-xl text-bold text-white">{selectedAttraction.name}</p>
+                                                    <p className="text-sm text-white">{selectedAttraction.tag}</p>
+                                                </div>
+                                            </div>
                                             : null
                                 ))
                             }
@@ -413,6 +435,31 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             }
 
             {/** เพิ่มเงื่อนไขสำหรับ user ที่ยังไม่สร้าง plan */}
+            {noPlanCreated &&
+                <div className="justify-center items-center flex overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
+                    <div className="relative rounded-xl h-[20%] mx-auto my-auto bg-white overflow-scroll">
+                        <div className='w-full h-full'>
+                            <div className='flex justify-center'>
+                            <p className='px-8 pt-6 mx-auto my-auto text-xl font-semibold'>คุณยังไม่ได้สร้างแผนการท่องเที่ยว</p>
+                            </div>
+
+                            <div className='flex justify-center'>
+                            <p className='px-12 pt-2 mx-auto my-auto text-lg'>สร้างแผนการท่องเที่ยวได้ตามใจคุณ</p>
+                            </div>
+                            
+                            <div className='flex justify-center gap-2 pb-6 pt-2' >
+                            <button className="mt-4 px-4 py-2 rounded-lg bg-white border border-[#51b3ce]" onClick={() => DisplayModalState()}>
+                                <p className="text-[#51b3ce]">ยกเลิก</p>
+                            </button>
+                            <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => navigate('/planner')}>
+                                <p className="text-white">สร้าง</p>
+                            </button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            }
 
         </div>
 

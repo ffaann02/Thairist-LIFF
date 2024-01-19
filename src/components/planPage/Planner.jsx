@@ -23,6 +23,8 @@ const Planner = () => {
     const [selectedDays, setSelectedDays] = useState([]);
     const [isSelectDaysClicked, setIsSelectDaysClicked] = useState(false);
     const [currentSelectDay, setCurrentSelectDay] = useState(null);
+    const [planName, setPlanName] = useState("");
+    const [tempPlanName, setTempPlanName] = useState("");
 
     const [planDetailExist, setPlanDetailExist] = useState();
     const [newOrderPlanDetail, setNewOrderPlanDetail] = useState();
@@ -31,6 +33,9 @@ const Planner = () => {
         "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
     ];
 
+    const [isDraggingEnabled, setIsDraggingEnabled] = useState(false);
+    const [editedPlanData, setEditedPlanData] = useState([]);
+
     useEffect(() => {
         if (userProfile) {
             console.log(`user_id: ${userProfile.userId}`);
@@ -38,6 +43,7 @@ const Planner = () => {
                 .then(res => {
                     if (res.data.empty) {
                         setIsPlanExist(false);
+                        setPlanName("");
                         setSelectedDays([]);
                         setTempSelectedDays([]);
                         setIsSelectDaysClicked(false);
@@ -46,6 +52,7 @@ const Planner = () => {
                     else {
                         const days = res.data.result;
                         setIsPlanExist(true);
+                        setPlanName(res.data.plan_name);
                         setSelectedDays(days);
                         setTempSelectedDays(days);
                         setIsSelectDaysClicked(true);
@@ -63,8 +70,14 @@ const Planner = () => {
                 .then(res => {
                     if (res.data.empty) {
                         setPlanDetailExist();
+                        if (currentSelectDay === null) {
+                            setCurrentSelectDay(0);
+                        }
                     }
                     else {
+                        if (currentSelectDay === null) {
+                            setCurrentSelectDay(0);
+                        }
                         setPlanDetailExist(res.data.result);
                         sortByStartTime(res.data.result, true);
                     }
@@ -72,6 +85,10 @@ const Planner = () => {
                 .catch(err => console.log(err));
         }
     }, [isPlanExist, planID])
+
+    useEffect(() => {
+        console.log(editedPlanData);
+    }, [editedPlanData])
 
     const generatedPlanID = () => {
         // Generate random characters
@@ -88,7 +105,34 @@ const Planner = () => {
         document.getElementById('my_modal_4').showModal();
     }
 
+    const checkName = (oldName, newName) => {
+        // Case 1: Use the pervious name
+        if (oldName === newName && newName !== "") {
+            console.log("case 1");
+            return oldName;
+        }
+        // Case 2: Auto-fill name
+        else if (oldName === newName && newName === ""){
+            console.log("case 2");
+            return
+        }
+        // Case 3: User leave it empty, use previous name
+        else if (oldName !== newName && newName === ""){
+            console.log("case 3");
+            return oldName;
+        }
+        // Case 4: Re-name
+        else {
+            console.log("case 4");
+            return newName;
+        }
+    }
+
     const handleSelectedDays = () => {
+        if (currentSelectDay === null) {
+            setCurrentSelectDay(0);
+        }
+        const currentPlanName = checkName(planName, tempPlanName);
         if (isPlanExist === false) {
             const planId = generatedPlanID();
             setPlanID(planId);
@@ -97,7 +141,8 @@ const Planner = () => {
             axios.post(`${import.meta.env.VITE_SERVER_HTTP}/create_new_plan`, {
                 plan_id: planId,
                 owner_id: userProfile.userId,
-                dates: tempSelectedDays
+                dates: tempSelectedDays,
+                plan_name: currentPlanName
             })
                 .then(res => {
                     console.log(res);
@@ -107,14 +152,12 @@ const Planner = () => {
         setSelectedDays(tempSelectedDays);
         setIsSelectDaysClicked(true);
         setIsPlanExist(true);
-        if (currentSelectDay === null) {
-            setCurrentSelectDay(0);
-        }
         // Update to database
-        axios.put(`${import.meta.env.VITE_SERVER_HTTP}/update_plan`, {
+        axios.put(`${import.meta.env.VITE_SERVER_HTTP}/update_plan_date`, {
             plan_id: planID,
             owner_id: userProfile.userId,
-            dates: tempSelectedDays
+            dates: tempSelectedDays,
+            plan_name: currentPlanName
         })
             .then(res => {
                 console.log(res);
@@ -122,14 +165,15 @@ const Planner = () => {
             .catch(err => console.log(err));
     }
 
+    const handleInputName = (e) => {
+        setTempPlanName(e.target.value);
+    }
+
     const handleAddActivity = () => {
         navigate('/activity');
     }
 
     const sortByStartTime = (attractions, callFirstTime, currentDay) => {
-        if (currentSelectDay === null) {
-            setCurrentSelectDay(0);
-        }
         const newArray = [...attractions];
         const dataDay = newArray.filter(detail => {
             if (callFirstTime === true) {
@@ -167,22 +211,15 @@ const Planner = () => {
         // Calculate endtime
         const source_startTime = data[sourceIndex].start_time;
         const source_period = data[sourceIndex].period;
-
         const destination_startTime = data[destinationIndex].start_time;
         const destination_period = data[destinationIndex].period;
-
         const source_endTime = addHoursToTime(source_startTime, destination_period);
         const destination_endTime = addHoursToTime(destination_startTime, source_period);
-
-        console.log(source_endTime);
-        console.log(destination_endTime);
-
         // Swap startTime and change endTime
         data[sourceIndex].start_time = destination_startTime;
         data[sourceIndex].end_time = destination_endTime;
         data[destinationIndex].start_time = source_startTime
         data[destinationIndex].end_time = source_endTime;
-
         // Convert "start_time" to minutes since midnight for easy comparison
         data.forEach(attraction => {
             const [hours, minutes] = attraction.start_time.split(':').map(Number);
@@ -192,8 +229,7 @@ const Planner = () => {
         data.sort((a, b) => a.start_minutes - b.start_minutes);
         // Remove the temporary "start_minutes" property
         data.forEach(attraction => delete attraction.start_minutes);
-        // console.log(data);
-
+        addToState(data);
         return data;
     }
 
@@ -230,13 +266,60 @@ const Planner = () => {
         }
     }
 
-
     const handleDragStart = () => {
         // good times for mobile
         if (window.navigator.vibrate) {
             window.navigator.vibrate(100);
         }
     };
+
+    const handleEditButton = () => {
+        setIsDraggingEnabled(true);
+    }
+
+    const addToState = (newDataArray) => {
+        newDataArray.forEach(newData => {
+          // Check if the newData's id already exists in the state
+          const existingItem = editedPlanData.find(item => item.id === newData.id);
+          if (!existingItem) {
+            // If not a duplicate, add the newData to the state
+            setEditedPlanData(prevState => [...prevState, newData]);
+          } 
+          else {
+            // console.log("ELSE");
+            // console.log(`id: ${newData.id} id:${existingItem.id}`);
+            // console.log(existingItem.start_time);
+            // console.log(newData.start_time);
+            // console.log(existingItem.end_time);
+            // console.log(newData.end_time);
+            // console.log(editedPlanData);
+            // If duplicate, check for changes in start_time and end_time
+            if (existingItem.start_time !== newData.start_time ||
+                existingItem.end_time !== newData.end_time) 
+            {
+                // console.log("TESTTTT");
+              // If the times are different, update the state with the new data
+              setEditedPlanData(prevState =>
+                prevState.map(item =>
+                  item.id === newData.id ? { ...item, ...newData } : item
+                )
+              );
+            }
+          }
+        });
+      };
+
+    const handleSaveButton = () => {
+        setIsDraggingEnabled(false);
+        // Update to database
+        axios.put(`${import.meta.env.VITE_SERVER_HTTP}/edit_plan_timeline`, {
+            editData: editedPlanData,
+        })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => console.log(err));
+    }
 
     return (
         <div className="w-full h-full pt-12">
@@ -272,6 +355,12 @@ const Planner = () => {
                                         </div>
                                     </div>
 
+                                    {isDraggingEnabled &&
+                                        <div>
+                                            <p>กดค้างและลากแผนการเที่ยวที่คุณต้องการเปลี่ยนเวลา</p>
+                                        </div>
+                                    }
+
                                     <Droppable droppableId='ROOT' type='group'>
                                         {(provided) => (
                                             <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -279,7 +368,11 @@ const Planner = () => {
                                                     ?
                                                     <div>
                                                         {newOrderPlanDetail.map((detail, index) => (
-                                                            <Draggable draggableId={index.toString()} key={index} index={index}>
+                                                            <Draggable
+                                                                draggableId={index.toString()}
+                                                                key={index}
+                                                                index={index}
+                                                                isDragDisabled={!isDraggingEnabled}>
                                                                 {(provided) => (
                                                                     <div {...provided.dragHandleProps}
                                                                         {...provided.draggableProps}
@@ -306,7 +399,15 @@ const Planner = () => {
                                         )}
                                     </Droppable>
 
-                                    <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleAddActivity()}>
+                                    {isDraggingEnabled
+                                        ? <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleSaveButton()}>
+                                            <p className="text-white">บันทึก</p>
+                                        </button>
+                                        : <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleEditButton()}>
+                                            <p className="text-white">แก้ไข</p>
+                                        </button>
+                                    }
+                                    <button className="ml-2 mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleAddActivity()}>
                                         <p className="text-white">เพิ่มสถานที่หรือกิจกรรม</p>
                                     </button>
 
@@ -318,7 +419,14 @@ const Planner = () => {
                 <dialog id="my_modal_4" className="modal">
                     <div className="modal-box w-11/12 max-w-5xl">
                         <div className="w-full flex">
-                            <h3 className="mx-auto font-bold text-lg">เลือกวันท่องเที่ยวที่คุณต้องการ</h3>
+                            <h3 className="mx-auto font-bold text-lg">สร้างแผนการท่องเที่ยว</h3>
+                        </div>
+
+                        <div className="w-full mt-4 mb-4 justify-items-center border border-slate-400">
+                            <input  type="text" 
+                                    placeholder={planName}
+                                    onChange={handleInputName}
+                                    className="w-full px-4 py-2 bg-white"/>
                         </div>
 
                         <Calendar
