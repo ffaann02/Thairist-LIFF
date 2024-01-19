@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import liff from "@line/liff";
 import "./App.css";
-import Planner from "./components/Planner";
+import Planner from "./components/planPage/Planner";
 import MenuBar from "./components/MenuBar";
 import Topbar from "./components/Topbar";
-import Workshop from "./components/Workshop";
+import Activity from "./components/activityPage/Activity";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +14,7 @@ import {
 import Home from "./components/homePage/Home";
 import CameraComponent from "./components/Camera";
 import PlannerSearch from "./components/PlannerSearch";
-import OldPlanner from "./components/OldPlanner";
+import OldPlanner from "./components/planPage/OldPlanner";
 import { useUser, UserProvider } from './UserContext';
 import EmptyFooter from "./components/EmptyFooter";
 // import ARdisplay from "./components/ARdisplay";
@@ -74,7 +74,7 @@ function App() {
             <Route path="/planner" element={<Planner />} />
             {/* <Route path="/planner" element={<OldPlanner />} /> */}
             <Route path="/" element={<Home />} />
-            <Route path="/activity" element={<Workshop />} />
+            <Route path="/activity" element={<Activity />} />
             <Route path="/points" element={<Point/>} />
             {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
