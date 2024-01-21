@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { IoIosMore } from "react-icons/io";
-import AlertDelete from './alertDelete';
+import AlertDelete from './AlertDelete';
 
 const PlanList = ({ index, detail, refetch }) => {
 
