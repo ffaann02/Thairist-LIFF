@@ -195,8 +195,9 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         })
             .then(res => {
                 console.log(res);
-                navigate('/planner');
+                DisplayModalState();
                 // navigate to plan page
+                //navigate('/planner');
             })
             .catch(err => console.log(err));
     }

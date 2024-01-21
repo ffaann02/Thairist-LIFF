@@ -16,6 +16,13 @@ const Planner = () => {
 
     const navigate = useNavigate();
 
+    const currentDate = new Date();
+    const minimumCalendar = {
+        year: currentDate.getFullYear(),
+        month: currentDate.getMonth() + 1,
+        day: currentDate.getDate()
+      };
+
     const [isPlanExist, setIsPlanExist] = useState(false);
     const [planID, setPlanID] = useState();
 
@@ -63,6 +70,26 @@ const Planner = () => {
         }
     }, [userProfile])
 
+    const fetchPlanDetail = () => {
+        axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_plan_detail?plan_id=${planID}`)
+                .then(res => {
+                    if (res.data.empty) {
+                        setPlanDetailExist();
+                        if (currentSelectDay === null) {
+                            setCurrentSelectDay(0);
+                        }
+                    }
+                    else {
+                        if (currentSelectDay === null) {
+                            setCurrentSelectDay(0);
+                        } 
+                        setPlanDetailExist(res.data.result);
+                        sortByStartTime(res.data.result, false, selectedDays[currentSelectDay]);
+                    }
+                })
+                .catch(err => console.log(err));
+    }
+
     useEffect(() => {
         if (userProfile && planID && isPlanExist === true) {
             console.log(planID);
@@ -77,7 +104,7 @@ const Planner = () => {
                     else {
                         if (currentSelectDay === null) {
                             setCurrentSelectDay(0);
-                        }
+                        } 
                         setPlanDetailExist(res.data.result);
                         sortByStartTime(res.data.result, true);
                     }
@@ -112,12 +139,12 @@ const Planner = () => {
             return oldName;
         }
         // Case 2: Auto-fill name
-        else if (oldName === newName && newName === ""){
+        else if (oldName === newName && newName === "") {
             console.log("case 2");
             return
         }
         // Case 3: User leave it empty, use previous name
-        else if (oldName !== newName && newName === ""){
+        else if (oldName !== newName && newName === "") {
             console.log("case 3");
             return oldName;
         }
@@ -175,6 +202,7 @@ const Planner = () => {
 
     const sortByStartTime = (attractions, callFirstTime, currentDay) => {
         const newArray = [...attractions];
+        console.log(newArray);
         const dataDay = newArray.filter(detail => {
             if (callFirstTime === true) {
                 return (
@@ -255,6 +283,7 @@ const Planner = () => {
     }
 
     const handleDragDrop = (result) => {
+        console.log(result);
         const { source, destination, type } = result;
         if (!destination) return;
         if (source.droppableId === destination.droppableId &&
@@ -273,41 +302,38 @@ const Planner = () => {
         }
     };
 
-    const handleEditButton = () => {
-        setIsDraggingEnabled(true);
-    }
-
     const addToState = (newDataArray) => {
         newDataArray.forEach(newData => {
-          // Check if the newData's id already exists in the state
-          const existingItem = editedPlanData.find(item => item.id === newData.id);
-          if (!existingItem) {
-            // If not a duplicate, add the newData to the state
-            setEditedPlanData(prevState => [...prevState, newData]);
-          } 
-          else {
-            // console.log("ELSE");
-            // console.log(`id: ${newData.id} id:${existingItem.id}`);
-            // console.log(existingItem.start_time);
-            // console.log(newData.start_time);
-            // console.log(existingItem.end_time);
-            // console.log(newData.end_time);
-            // console.log(editedPlanData);
-            // If duplicate, check for changes in start_time and end_time
-            if (existingItem.start_time !== newData.start_time ||
-                existingItem.end_time !== newData.end_time) 
-            {
-                // console.log("TESTTTT");
-              // If the times are different, update the state with the new data
-              setEditedPlanData(prevState =>
-                prevState.map(item =>
-                  item.id === newData.id ? { ...item, ...newData } : item
-                )
-              );
+            // Check if the newData's id already exists in the state
+            const existingItem = editedPlanData.find(item => item.id === newData.id);
+            if (!existingItem) {
+                // If not a duplicate, add the newData to the state
+                setEditedPlanData(prevState => [...prevState, newData]);
             }
-          }
+            else {
+                // If duplicate, check for changes in start_time and end_time
+                if (existingItem.start_time !== newData.start_time ||
+                    existingItem.end_time !== newData.end_time) {
+                    // If the times are different, update the state with the new data
+                    setEditedPlanData(prevState =>
+                        prevState.map(item =>
+                            item.id === newData.id ? { ...item, ...newData } : item
+                        )
+                    );
+                }
+            }
         });
-      };
+    };
+
+    const handleCancleEditButton = () => {
+        setIsDraggingEnabled(false);
+        // refetch to re-order list
+        fetchPlanDetail();
+    }
+
+    const handleDeleteButton = () => {
+        fetchPlanDetail();
+    }
 
     const handleSaveButton = () => {
         setIsDraggingEnabled(false);
@@ -364,7 +390,7 @@ const Planner = () => {
                                     <Droppable droppableId='ROOT' type='group'>
                                         {(provided) => (
                                             <div {...provided.droppableProps} ref={provided.innerRef}>
-                                                {newOrderPlanDetail
+                                                {(newOrderPlanDetail)
                                                     ?
                                                     <div>
                                                         {newOrderPlanDetail.map((detail, index) => (
@@ -384,7 +410,8 @@ const Planner = () => {
                                                                             <PlanList
                                                                                 key={index}
                                                                                 index={index}
-                                                                                detail={detail} />
+                                                                                detail={detail}
+                                                                                refetch={handleDeleteButton}/>
                                                                             : null}
                                                                     </div>
                                                                 )}
@@ -399,17 +426,25 @@ const Planner = () => {
                                         )}
                                     </Droppable>
 
-                                    {isDraggingEnabled
-                                        ? <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleSaveButton()}>
-                                            <p className="text-white">บันทึก</p>
-                                        </button>
-                                        : <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleEditButton()}>
-                                            <p className="text-white">แก้ไข</p>
+                                    {(isDraggingEnabled && planDetailExist)
+                                        ? <div>
+                                            <button className="ml-2 mt-4 px-4 py-2 rounded-lg  bg-white border border-[#51b3ce]" onClick={() => handleCancleEditButton()}>
+                                                <p className="text-[#51b3ce]">ยกเลิก</p>
+                                            </button>
+                                            <button className="ml-2 mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleSaveButton()}>
+                                                <p className="text-white">บันทึก</p>
+                                            </button>
+                                        </div>
+                                        : <button className="ml-2 mt-4 px-4 py-2 rounded-lg bg-white border border-[#51b3ce]" onClick={() => setIsDraggingEnabled(true)}>
+                                            <p className="text-[#51b3ce]">แก้ไข</p>
                                         </button>
                                     }
-                                    <button className="ml-2 mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleAddActivity()}>
-                                        <p className="text-white">เพิ่มสถานที่หรือกิจกรรม</p>
-                                    </button>
+
+                                    {!isDraggingEnabled &&
+                                        <button className="ml-2 mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => handleAddActivity()}>
+                                            <p className="text-white">เพิ่มสถานที่หรือกิจกรรม</p>
+                                        </button>
+                                    }
 
                                 </div>
                             </DragDropContext>
@@ -423,16 +458,17 @@ const Planner = () => {
                         </div>
 
                         <div className="w-full mt-4 mb-4 justify-items-center border border-slate-400">
-                            <input  type="text" 
-                                    placeholder={planName}
-                                    onChange={handleInputName}
-                                    className="w-full px-4 py-2 bg-white"/>
+                            <input type="text"
+                                placeholder={planName}
+                                onChange={handleInputName}
+                                className="w-full px-4 py-2 bg-white" />
                         </div>
 
                         <Calendar
                             value={tempSelectedDays}
                             onChange={setTempSelectedDays}
                             shouldHighlightWeekends
+                            minimumDate={minimumCalendar}
                         />
 
                         <div className="modal-action">

@@ -19,7 +19,7 @@ const Workshop = () => {
                 setAttraction(res.data);
             })
             .catch(err => console.log(err));
-    },[])
+    }, [])
 
     const [panels, setPanels] = useState
         ([
@@ -56,7 +56,7 @@ const Workshop = () => {
             <div className="w-full h-full max-w-4xl mx-auto min-h-screen">
 
                 {isDisplayModalPlan &&
-                    <ModalPlan 
+                    <ModalPlan
                         displayModalPlan={handleModalPlanState}
                         selectedAttraction={attractions[selectedCard]}
                     />
@@ -93,11 +93,11 @@ const Workshop = () => {
                     </button>
                 </div>
 
-                
-                {attractions && 
+
+                {attractions &&
                     <div>
                         {attractions.map((place, index) => (
-                            <LargeCard 
+                            <LargeCard
                                 key={index}
                                 id={index}
                                 data={place}
@@ -128,6 +128,7 @@ const Workshop = () => {
                         ))}
                     </Flicking>
                 </div>
+
             </div>
         </div>
     )
