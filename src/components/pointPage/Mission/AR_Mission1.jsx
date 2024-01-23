@@ -1,19 +1,19 @@
-// const ARListData3D = [
-//   {
-//     title: "ค้นหารูปภาพพระอิศวร",
-//     point: 10,
-//     url: "https://static.thairath.co.th/media/Dtbezn3nNUxytg04anEu1ycMhwXHejY3kIQajz6uOvJ4jF.webp",
-//     ar_url: "https://pngimg.com/d/mario_PNG125.png",
-//     coordinate:[0,0], // lat,long
-//     location:"เสาชิงชา",
-//   },
-//   {
-//     title: "ค้นหารูปภาพพระอิศวร",
-//     url: "https://static.thairath.co.th/media/Dtbezn3nNUxytg04anEu1ycMhwXHejY3kIQajz6uOvJ4jF.webp",
-//     ar_url: "https://pngimg.com/d/mario_PNG125.png"
-//   },
-// ];
-
+const ARListData3D = [
+  {
+    title: "ค้นหารูปภาพพระอิศวร",
+    point: 10,
+    url: "https://static.thairath.co.th/media/Dtbezn3nNUxytg04anEu1ycMhwXHejY3kIQajz6uOvJ4jF.webp",
+    ar_url: "https://pngimg.com/d/mario_PNG125.png",
+    coordinate:[0,0], // lat,long
+    location:"เสาชิงชา",
+    province:"กรุงเทพมหานคร"
+  },
+  {
+    title: "ค้นหารูปภาพพระอิศวร",
+    url: "https://static.thairath.co.th/media/Dtbezn3nNUxytg04anEu1ycMhwXHejY3kIQajz6uOvJ4jF.webp",
+    ar_url: "https://pngimg.com/d/mario_PNG125.png"
+  },
+];
 const AR_Mission1 = ({ title , ARListData3D }) => {
   
   return (
