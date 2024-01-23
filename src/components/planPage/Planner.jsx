@@ -9,6 +9,8 @@ import { Calendar } from '@hassanmojab/react-modern-calendar-datepicker';
 import { useUser } from "../../UserContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import PlanList from "./PlanList";
+import LargePicture from "./LargePicture";
+import { generatedPlanID, addHoursToTime, checkName } from "./utils";
 
 const Planner = () => {
 
@@ -117,42 +119,8 @@ const Planner = () => {
         console.log(editedPlanData);
     }, [editedPlanData])
 
-    const generatedPlanID = () => {
-        // Generate random characters
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        const randomChars = Array.from({ length: 3 }, () => characters[Math.floor(Math.random() * characters.length)]);
-        // Generate random numbers
-        const randomNumber = Math.floor(1000 + Math.random() * 9000);
-        // Combine characters and numbers to create the unique ID
-        const uniqueId = `${randomChars.join('')}${randomNumber}`;
-        return uniqueId;
-    }
-
     const displayDate = () => {
         document.getElementById('my_modal_4').showModal();
-    }
-
-    const checkName = (oldName, newName) => {
-        // Case 1: Use the pervious name
-        if (oldName === newName && newName !== "") {
-            console.log("case 1");
-            return oldName;
-        }
-        // Case 2: Auto-fill name
-        else if (oldName === newName && newName === "") {
-            console.log("case 2");
-            return
-        }
-        // Case 3: User leave it empty, use previous name
-        else if (oldName !== newName && newName === "") {
-            console.log("case 3");
-            return oldName;
-        }
-        // Case 4: Re-name
-        else {
-            console.log("case 4");
-            return newName;
-        }
     }
 
     const handleSelectedDays = () => {
@@ -261,21 +229,6 @@ const Planner = () => {
         return data;
     }
 
-    const addHoursToTime = (baseTime, hoursToAdd) => {
-        // Parse the base time string into hours and minutes
-        const [baseHours, baseMinutes] = baseTime.split(':').map(Number);
-        // Calculate the total minutes for the base time
-        const totalBaseMinutes = baseHours * 60 + baseMinutes;
-        // Calculate the total minutes for the new time after adding hours
-        const totalNewMinutes = totalBaseMinutes + hoursToAdd * 60;
-        // Calculate the hours and minutes for the new time
-        const newHours = Math.floor(totalNewMinutes / 60);
-        const newMinutes = totalNewMinutes % 60;
-        // Format the result as HH.MM
-        const formattedResult = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
-        return formattedResult;
-    }
-
     const switchDay = (indexDay, date) => {
         console.log(date);
         setCurrentSelectDay(indexDay);
@@ -363,6 +316,12 @@ const Planner = () => {
                     </div>
                     :
                     <div>
+                        {newOrderPlanDetail && 
+                        <div className="w-full">
+                                <LargePicture 
+                                    data={planDetailExist}/>
+                        </div>}
+                        
                         <div className="text-center pt-3">
                             <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
                             <DragDropContext onDragEnd={handleDragDrop} onDragStart={() => handleDragStart()}>
@@ -370,7 +329,7 @@ const Planner = () => {
                                     <div className="flex px-1 mx-auto justify-center mb-1">
                                         {selectedDays.map((date, index) => (
                                             <div className={`w-fit border-b-4 py-1 px-2 
-                                        ${currentSelectDay === index ? "border-[#51b3ce] text-slate-800" : "border-slate-200 text-slate-500"}`}
+                                                ${currentSelectDay === index ? "border-[#51b3ce] text-slate-800" : "border-slate-200 text-slate-500"}`}
                                                 key={index} onClick={() => switchDay(index, date)}>
                                                 <p>วัน {index + 1}</p>
                                                 <p>{date.day} {monthNames[date.month - 1]} {date.year + 543}</p>
@@ -390,7 +349,7 @@ const Planner = () => {
                                     <Droppable droppableId='ROOT' type='group'>
                                         {(provided) => (
                                             <div {...provided.droppableProps} ref={provided.innerRef}>
-                                                {(newOrderPlanDetail)
+                                                {newOrderPlanDetail
                                                     ?
                                                     <div>
                                                         {newOrderPlanDetail.map((detail, index) => (
