@@ -30,18 +30,18 @@ const ExcPointFoodData = [
 
 const ExcPointDrinkData = [
     {
-        title: "แลกเหรียญ 300 เพื่อเเลกฟรี",
-        shopname: "KhanomThaiShop",
-        totalcoin: "300",
-        discountfrom: "800",
-        url:"https://i.ibb.co/DQFvm7x/1.png",
+        title: "แลกเหรียญ 250 เพื่อส่วนลดค่าโดยสาร",
+        shopname: "FactTaxoTour",
+        totalcoin: "250",
+        discountfrom: "500",
+        url:"https://i.ibb.co/jLnwTgn/823.png",
     },
     {
-        title: "แลกเหรียญ 300 เพื่อเเลกฟรี",
-        shopname: "KhanomThaiShop",
-        totalcoin: "300",
-        discountfrom: "800",
-        url:"https://i.ibb.co/DQFvm7x/1.png",
+        title: "แลกเหรียญ 500 เพื่อรับส่วนลดที่ร่วมรายการ",
+        shopname: "KhongFhakShop",
+        totalcoin: "500",
+        discountfrom: "1000",
+        url:"https://i.ibb.co/VWrmJYh/2.png",
     },
 ];
 

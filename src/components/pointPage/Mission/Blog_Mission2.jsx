@@ -1,4 +1,5 @@
 import { MdOutlineMessage } from "react-icons/md";
+import { RiCopperCoinFill } from "react-icons/ri";
 
 const ARListDataExp = [
   {
@@ -39,15 +40,22 @@ const Blog_Mission2 = ({ title }) => {
       <h2 className="ml-4">{title}</h2>
       <div className="carousel carousel-center space-x-3 h-[250px] mt-1">
         <div className="carousel-item relative border-[1px] rounded-lg drop-shadow-sm w-[300px] ml-4
-        bg-gradient-to-b from-slate-100 to-slate-300">
-          <div className="m-auto flex flex-col">
-            <MdOutlineMessage className="text-[4.5rem] text-blue-600 mx-auto" />
-            <div className="mt-2">
+        bg-white">
+          <div className="m-auto flex flex-col items-center justify-start h-full">
+            <img 
+              src="https://i.ibb.co/Qfhp72w/Untitled-1.png" 
+              className="rounded-tr-lg rounded-tl-lg "
+            />
+            {/* <MdOutlineMessage className="text-[4.5rem] text-blue-600 mx-auto" /> */}
+            <div className="mt-2 text-center">
               <p className="text-md text-slate-600">ไปเที่ยวมาเป็นไงบ้าง ช่วยเล่าหน่อย</p>
-              <p className="text-2xl text-center font-bold text-slate-800">รับ 20 คะแนน</p>
+              <div className="flex items-center justify-center">
+                <RiCopperCoinFill className="my-auto text-xl text-orange-300 drop-shadow-md shadow-black mr-1" />
+                <p className="text-xl text-center font-bold text-slate-800">รับ 20 คะแนน</p>
+              </div>
             </div>
-            <button className="bg-white border-2 tracking-wide w-fit mx-auto px-3 border-blue-500
-              py-2 text-blue-500 mt-4 rounded-2xl text-xl">เริ่มเขียน</button>
+            <button className="bg-[#3c83b0] border-2 tracking-wide w-fit mx-auto px-3 border-[#3c83b0]
+              py-1 text-white mt-2 rounded-xl text-xl">เริ่มเขียน!</button>
           </div>
         </div>
         {ARListDataExp.map((item, index) => (
