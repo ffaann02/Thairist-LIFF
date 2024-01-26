@@ -184,6 +184,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     const InsertToDatabase = () => {
         axios.post(`${import.meta.env.VITE_SERVER_HTTP}/add_new_attraction`, {
             plan_id: planData.plan_id,
+            attraction_id: selectedAttraction.attraction_id,
             attraction_name: selectedAttraction.name,
             attraction_description: selectedAttraction.description,
             tag: selectedAttraction.tag,
@@ -191,13 +192,17 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             end_time: endTimeSelects,
             period: selectedAttraction.period,
             date: dates[currentSelectDay],
-            image_url: selectedAttraction.image_url
+            image_url: selectedAttraction.image_url,
+            province: selectedAttraction.province,
+            district: selectedAttraction.district,
+            adult_price: selectedAttraction.adult_price || null,
+            kid_price: selectedAttraction.kid_price || null,
+            adult_amount: 1,
         })
             .then(res => {
                 console.log(res);
+                // Set display modal State to false
                 DisplayModalState();
-                // navigate to plan page
-                //navigate('/planner');
             })
             .catch(err => console.log(err));
     }

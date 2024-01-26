@@ -9,8 +9,8 @@ import { Calendar } from '@hassanmojab/react-modern-calendar-datepicker';
 import { useUser } from "../../UserContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import PlanList from "./PlanList";
-import LargePicture from "./LargePicture";
-import { generatedPlanID, addHoursToTime, checkName } from "./utils";
+import BannerPlan from "./BannerPlan";
+import { checkName, generatedPlanID, changeTimeLineByDrag, sortByStartTime} from "./utils";
 
 const Planner = () => {
 
@@ -72,26 +72,6 @@ const Planner = () => {
         }
     }, [userProfile])
 
-    const fetchPlanDetail = () => {
-        axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_plan_detail?plan_id=${planID}`)
-                .then(res => {
-                    if (res.data.empty) {
-                        setPlanDetailExist();
-                        if (currentSelectDay === null) {
-                            setCurrentSelectDay(0);
-                        }
-                    }
-                    else {
-                        if (currentSelectDay === null) {
-                            setCurrentSelectDay(0);
-                        } 
-                        setPlanDetailExist(res.data.result);
-                        sortByStartTime(res.data.result, false, selectedDays[currentSelectDay]);
-                    }
-                })
-                .catch(err => console.log(err));
-    }
-
     useEffect(() => {
         if (userProfile && planID && isPlanExist === true) {
             console.log(planID);
@@ -108,12 +88,32 @@ const Planner = () => {
                             setCurrentSelectDay(0);
                         } 
                         setPlanDetailExist(res.data.result);
-                        sortByStartTime(res.data.result, true);
+                        sortByStartTime(res.data.result, setNewOrderPlanDetail, true, selectedDays);
                     }
                 })
                 .catch(err => console.log(err));
         }
     }, [isPlanExist, planID])
+
+    const fetchPlanDetail = () => {
+        axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_plan_detail?plan_id=${planID}`)
+                .then(res => {
+                    if (res.data.empty) {
+                        setPlanDetailExist();
+                        if (currentSelectDay === null) {
+                            setCurrentSelectDay(0);
+                        }
+                    }
+                    else {
+                        if (currentSelectDay === null) {
+                            setCurrentSelectDay(0);
+                        } 
+                        setPlanDetailExist(res.data.result);
+                        sortByStartTime(res.data.result, setNewOrderPlanDetail, false, selectedDays, selectedDays[currentSelectDay]);
+                    }
+                })
+                .catch(err => console.log(err));
+    }
 
     useEffect(() => {
         console.log(editedPlanData);
@@ -168,71 +168,10 @@ const Planner = () => {
         navigate('/activity');
     }
 
-    const sortByStartTime = (attractions, callFirstTime, currentDay) => {
-        const newArray = [...attractions];
-        console.log(newArray);
-        const dataDay = newArray.filter(detail => {
-            if (callFirstTime === true) {
-                return (
-                    detail.formated_date.day === selectedDays[0].day &&
-                    detail.formated_date.month === selectedDays[0].month &&
-                    detail.formated_date.year === selectedDays[0].year
-                );
-            }
-            else {
-                return (
-                    detail.formated_date.day === currentDay.day &&
-                    detail.formated_date.month === currentDay.month &&
-                    detail.formated_date.year === currentDay.year
-                );
-            }
-        });
-        if (dataDay) {
-            // Convert "start_time" to minutes since midnight for easy comparison
-            dataDay.forEach(attraction => {
-                const [hours, minutes] = attraction.start_time.split(':').map(Number);
-                attraction.start_minutes = hours * 60 + minutes;
-            });
-            // Sort the array based on "start_minutes"
-            dataDay.sort((a, b) => a.start_minutes - b.start_minutes);
-            // Remove the temporary "start_minutes" property
-            dataDay.forEach(attraction => delete attraction.start_minutes);
-            console.log(dataDay);
-            setNewOrderPlanDetail(dataDay);
-        }
-    }
-
-    const changeTimeLineByDrag = (sourceIndex, destinationIndex, data) => {
-        console.log(data);
-        // Calculate endtime
-        const source_startTime = data[sourceIndex].start_time;
-        const source_period = data[sourceIndex].period;
-        const destination_startTime = data[destinationIndex].start_time;
-        const destination_period = data[destinationIndex].period;
-        const source_endTime = addHoursToTime(source_startTime, destination_period);
-        const destination_endTime = addHoursToTime(destination_startTime, source_period);
-        // Swap startTime and change endTime
-        data[sourceIndex].start_time = destination_startTime;
-        data[sourceIndex].end_time = destination_endTime;
-        data[destinationIndex].start_time = source_startTime
-        data[destinationIndex].end_time = source_endTime;
-        // Convert "start_time" to minutes since midnight for easy comparison
-        data.forEach(attraction => {
-            const [hours, minutes] = attraction.start_time.split(':').map(Number);
-            attraction.start_minutes = hours * 60 + minutes;
-        });
-        // Sort the array based on "start_minutes"
-        data.sort((a, b) => a.start_minutes - b.start_minutes);
-        // Remove the temporary "start_minutes" property
-        data.forEach(attraction => delete attraction.start_minutes);
-        addToState(data);
-        return data;
-    }
-
     const switchDay = (indexDay, date) => {
         console.log(date);
         setCurrentSelectDay(indexDay);
-        sortByStartTime(planDetailExist, false, date);
+        sortByStartTime(planDetailExist, setNewOrderPlanDetail, false, selectedDays, date);
     }
 
     const handleDragDrop = (result) => {
@@ -243,7 +182,7 @@ const Planner = () => {
             source.index === destination.index)
             return;
         if (type === 'group') {
-            const datachangedTime = changeTimeLineByDrag(source.index, destination.index, newOrderPlanDetail);
+            const datachangedTime = changeTimeLineByDrag(source.index, destination.index, newOrderPlanDetail, editedPlanData, setEditedPlanData);
             return setNewOrderPlanDetail(datachangedTime);
         }
     }
@@ -253,29 +192,6 @@ const Planner = () => {
         if (window.navigator.vibrate) {
             window.navigator.vibrate(100);
         }
-    };
-
-    const addToState = (newDataArray) => {
-        newDataArray.forEach(newData => {
-            // Check if the newData's id already exists in the state
-            const existingItem = editedPlanData.find(item => item.id === newData.id);
-            if (!existingItem) {
-                // If not a duplicate, add the newData to the state
-                setEditedPlanData(prevState => [...prevState, newData]);
-            }
-            else {
-                // If duplicate, check for changes in start_time and end_time
-                if (existingItem.start_time !== newData.start_time ||
-                    existingItem.end_time !== newData.end_time) {
-                    // If the times are different, update the state with the new data
-                    setEditedPlanData(prevState =>
-                        prevState.map(item =>
-                            item.id === newData.id ? { ...item, ...newData } : item
-                        )
-                    );
-                }
-            }
-        });
     };
 
     const handleCancleEditButton = () => {
@@ -318,10 +234,8 @@ const Planner = () => {
                     <div>
                         {newOrderPlanDetail && 
                         <div className="w-full">
-                                <LargePicture 
-                                    data={planDetailExist}/>
+                                <BannerPlan data={newOrderPlanDetail}/>
                         </div>}
-                        
                         <div className="text-center pt-3">
                             <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
                             <DragDropContext onDragEnd={handleDragDrop} onDragStart={() => handleDragStart()}>
@@ -415,21 +329,18 @@ const Planner = () => {
                         <div className="w-full flex">
                             <h3 className="mx-auto font-bold text-lg">สร้างแผนการท่องเที่ยว</h3>
                         </div>
-
                         <div className="w-full mt-4 mb-4 justify-items-center border border-slate-400">
                             <input type="text"
                                 placeholder={planName}
                                 onChange={handleInputName}
                                 className="w-full px-4 py-2 bg-white" />
                         </div>
-
                         <Calendar
                             value={tempSelectedDays}
                             onChange={setTempSelectedDays}
                             shouldHighlightWeekends
                             minimumDate={minimumCalendar}
                         />
-
                         <div className="modal-action">
                             <form method="dialog">
                                 <button className="btn" onClick={() => setTempSelectedDays(selectedDays)}>ยกเลิก</button>
