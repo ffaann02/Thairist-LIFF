@@ -20,9 +20,9 @@ import EmptyFooter from "./components/EmptyFooter";
 // import ARdisplay from "./components/ARdisplay";
 import OldPoint from "./components/OldPoint";
 import Point from "./components/pointPage/Point";
-import ARdisplay from "./components/ARPage/ARdisplay";
 import WebXR from "./components/ARPage/WebXR";
 import Expense from "./components/expensePage/Expense";
+import AR from "./components/ARPage/AR";
 
 function App() {
 
@@ -40,20 +40,20 @@ function App() {
           getUserProfile();
         }
         //for functional
-        // else{
-        //   liff.login();
-        // }
-        // for dev on pc
-        else {
-          const templateProfile =
-          {
-            "userId": "U5b7bef2d143fb728b673cfb6e7ce88e0",
-            "displayName": "Kong Chayapol",
-            "pictureUrl": "https://profile.line-scdn.net/0h54lO-CdPahtBNn7fINgUZDFmaXFiRzMJaAByLycwMCx1ASQabwQsKnwzNC19USsdPVIte30wMS9NJR19X2CWL0YGNyp9BypNbVIs_w",
-            "statusMessage": "templateProfile!"
-          }
-          setUser(templateProfile);
+        else{
+          liff.login();
         }
+        // for dev on pc
+        // else {
+        //   const templateProfile =
+        //   {
+        //     "userId": "U5b7bef2d143fb728b673cfb6e7ce88e0",
+        //     "displayName": "Kong Chayapol",
+        //     "pictureUrl": "https://profile.line-scdn.net/0h54lO-CdPahtBNn7fINgUZDFmaXFiRzMJaAByLycwMCx1ASQabwQsKnwzNC19USsdPVIte30wMS9NJR19X2CWL0YGNyp9BypNbVIs_w",
+        //     "statusMessage": "templateProfile!"
+        //   }
+        //   setUser(templateProfile);
+        // }
       })
       .catch((e) => {
         setMessage("LIFF init failed.");
@@ -77,10 +77,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/activity" element={<Activity />} />
             <Route path="/points" element={<Point/>} />
+            <Route path="/ar" element={<AR/>} />
             {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
-            <Route path="/points/ar" element={<ARdisplay/>} />
-            <Route path="/points/ar2" element={<WebXR/>} />
             <Route path="/planner/search" element={<PlannerSearch />} />
             <Route path="/expense" element={<Expense />} />
           </Routes>

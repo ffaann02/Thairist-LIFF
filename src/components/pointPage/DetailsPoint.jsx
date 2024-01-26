@@ -18,7 +18,7 @@ const DetailsPoint = ({ section, province }) => {
   useEffect(()=>{
     axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_AR_Mission`)
     .then(res =>{
-      console.log(res.data);
+      console.log(res);
       setListData3D(res.data);
       return
     })
