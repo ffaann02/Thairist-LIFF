@@ -23,7 +23,7 @@ const MenuBar = () => {
                         <p className="text-sm ">Plan</p>
                     </div>
                 </Link>
-                <Link to="/ar">
+                <Link to="https://liff.line.me/2000611383-3obyJJlw">
                     <div className={`mx-auto ${location.pathname=="/ar"? "text-blue-700":"text-black"}`}>
                         <BsBox className="text-2xl mx-auto " />
                         <p className="text-sm ">AR</p>
