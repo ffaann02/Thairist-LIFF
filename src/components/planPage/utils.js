@@ -77,29 +77,24 @@ const changeTimeLineByDrag = (sourceIndex, destinationIndex, newOrderState, stat
 const checkName = (oldName, newName) => {
     // Case 1: Use the pervious name
     if (oldName === newName && newName !== "") {
-        console.log("case 1");
         return oldName;
     }
     // Case 2: Auto-fill name
     else if (oldName === newName && newName === "") {
-        console.log("case 2");
         return
     }
     // Case 3: User leave it empty, use previous name
     else if (oldName !== newName && newName === "") {
-        console.log("case 3");
         return oldName;
     }
     // Case 4: Re-name
     else {
-        console.log("case 4");
         return newName;
     }
 }
 
 const sortByStartTime = (attractions, setStateNewOrder, callFirstTime, allDay, currentDay) => {
     const newArray = [...attractions];
-    console.log(newArray);
     const dataDay = newArray.filter(detail => {
         if (callFirstTime === true) {
             return (
@@ -126,7 +121,6 @@ const sortByStartTime = (attractions, setStateNewOrder, callFirstTime, allDay, c
         dataDay.sort((a, b) => a.start_minutes - b.start_minutes);
         // Remove the temporary "start_minutes" property
         dataDay.forEach(attraction => delete attraction.start_minutes);
-        console.log(dataDay);
         setStateNewOrder(dataDay);
     }
 }

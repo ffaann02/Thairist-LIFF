@@ -8,6 +8,9 @@ import { BsSun } from "react-icons/bs"
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { TimePicker } from 'antd';
+import HeaderModal from './HeaderModal';
+import PlanTimeline from './PlanTimeline';
+import { sortByStartTime, findDefaultTime, addHoursToTime, calculateOverlapTime } from './modalUtils';
 
 const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
@@ -43,7 +46,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                     else {
                         setPlanData(res.data);
                         dateFormat(res.data.result);
-                        console.log(res.data.plan_name);
                     }
                 })
                 .catch(err => console.log(err));
@@ -52,7 +54,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
     useEffect(() => {
         if (planData) {
-            // addHoursToTime(selectedAttraction.open_time, selectedAttraction.period);
             axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_plan_detail?plan_id=${planData.plan_id}`)
                 .then(res => {
                     if (res.data.empty) {
@@ -68,13 +69,11 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     useEffect(() => {
         // Already have plan detail
         if (planData && planDetailExist) {
-            console.log(planDetailExist);
-            sortByStartTime(planDetailExist);
+            sortByStartTime(planData, planDetailExist, selectedAttraction, setNewOrderPlanDetail, dates, currentSelectDay, switchDay);
         }
         // Empty array
         else {
             if (dates) {
-                console.log(dates);
                 const duplicateSelectedAttraction = selectedAttraction;
                 duplicateSelectedAttraction.isSelectedAttraction = true;
                 duplicateSelectedAttraction.formated_date = {
@@ -83,15 +82,14 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                     year: parseInt(dates[0].year)
                 }
                 const arrayOfSelectledAttraction = [duplicateSelectedAttraction];
-                console.log(arrayOfSelectledAttraction);
                 setNewOrderPlanDetail(arrayOfSelectledAttraction);
-                findDefaultTime(dates[0], arrayOfSelectledAttraction);
+                findDefaultTime(dates[0], arrayOfSelectledAttraction, selectedAttraction, setDefaultStartTime, setEndTimeSelects);
             }
         }
     }, [planDetailExist, dates])
 
-    const DisplayModalState = () => {
-        displayModalPlan(false, 0);
+    const DisplayModalState = (state) => {
+        displayModalPlan(state, 0);
     }
 
     const dateFormat = (date) => {
@@ -99,85 +97,10 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         setCurrentSelectDay(0);
     }
 
-    const sortByStartTime = (attractions) => {
-        const newArray = [...attractions];
-        // Convert "start_time" to minutes since midnight for easy comparison
-        newArray.forEach(attraction => {
-            const [hours, minutes] = attraction.start_time.split(':').map(Number);
-            attraction.start_minutes = hours * 60 + minutes;
-        });
-        // Sort the array based on "start_minutes"
-        newArray.sort((a, b) => a.start_minutes - b.start_minutes);
-        // Remove the temporary "start_minutes" property
-        newArray.forEach(attraction => delete attraction.start_minutes);
-
-        // merge selectedAttraction to array
-        selectedAttraction.formated_date = {
-            day: parseInt(dates[currentSelectDay].day),
-            month: parseInt(dates[currentSelectDay].month),
-            year: parseInt(dates[currentSelectDay].year)
-        }
-        selectedAttraction.isSelectedAttraction = true;
-        newArray.push(selectedAttraction);
-
-        setNewOrderPlanDetail(newArray);
-        switchDay(0, planData.result[0], newArray);
-    }
-
-    const findDefaultTime = (specific_day, sortedPlanDetail) => {
-        const dataDay = sortedPlanDetail.filter(detail => {
-            return (
-                detail.formated_date.day === specific_day.day &&
-                detail.formated_date.month === specific_day.month &&
-                detail.formated_date.year === specific_day.year &&
-                !detail.isSelectedAttraction
-            );
-        });
-        sortedPlanDetail.forEach(detail => {
-            if (detail.isSelectedAttraction === true) {
-                detail.formated_date.day = specific_day.day;
-                detail.formated_date.month = specific_day.month;
-                detail.formated_date.year = specific_day.year;
-            }
-        });
-        if (dataDay.length > 0) {
-            const [lastHours, lastMinutes] = dataDay[dataDay.length - 1].end_time.split(':');
-            const startTime = `${lastHours}:${lastMinutes}`;
-            const endTime = addHoursToTime(startTime, selectedAttraction.period);
-            setDefaultStartTime(startTime);
-            setEndTimeSelects(endTime);
-        }
-        else {
-            const startTime = selectedAttraction.open_time;
-            const endTime = addHoursToTime(startTime, selectedAttraction.period);
-            setDefaultStartTime(startTime);
-            setEndTimeSelects(endTime);
-        }
-    }
-
     const switchDay = (indexDay, specific_day, sortedPlanDetail) => {
         setCurrentSelectDay(indexDay);
-        calculateOverlapTime(specific_day);
-        findDefaultTime(specific_day, sortedPlanDetail);
-    }
-
-    const addHoursToTime = (baseTime, hoursToAdd) => {
-        // Parse the base time string into hours and minutes
-        const [baseHours, baseMinutes] = baseTime.split(':').map(Number);
-
-        // Calculate the total minutes for the base time
-        const totalBaseMinutes = baseHours * 60 + baseMinutes;
-
-        // Calculate the total minutes for the new time after adding hours
-        const totalNewMinutes = totalBaseMinutes + hoursToAdd * 60;
-
-        // Calculate the hours and minutes for the new time
-        const newHours = Math.floor(totalNewMinutes / 60);
-        const newMinutes = totalNewMinutes % 60;
-
-        // Format the result as HH.MM
-        const formattedResult = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
-        return formattedResult;
+        calculateOverlapTime(selectedAttraction, planDetailExist, specific_day, setDisabledHours);
+        findDefaultTime(specific_day, sortedPlanDetail, selectedAttraction, setDefaultStartTime, setEndTimeSelects);
     }
 
     // update to db
@@ -202,7 +125,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             .then(res => {
                 console.log(res);
                 // Set display modal State to false
-                DisplayModalState();
+                DisplayModalState(false);
             })
             .catch(err => console.log(err));
     }
@@ -211,7 +134,6 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         const endTime = addHoursToTime(timeString, selectedAttraction.period);
         setStartTimeSelects(timeString);
         setEndTimeSelects(endTime);
-
         const newArray = [...newOrderPlanDetail];
         // Convert "start_time" to minutes since midnight for easy comparison
         newArray.forEach(attraction => {
@@ -231,53 +153,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         setNewOrderPlanDetail(newArray);
     };
 
-    const arrayRange = (start, stop, step) =>
-        Array.from(
-            { length: (stop - start) / step + 1 },
-            (value, index) => start + index * step
-        );
-
-    const calculateOverlapTime = (specific_day) => {
-        let disable_hour_array = [];
-        const closed_hour = createClosedHoursArray();
-        disable_hour_array = [...closed_hour];
-        if (planDetailExist) {
-            planDetailExist.map((detail) => {
-                if ((detail.formated_date.day === specific_day.day &&
-                    detail.formated_date.month === specific_day.month &&
-                    detail.formated_date.year === specific_day.year)) {
-                    const start_time = detail.start_time.split(':');
-                    const start_hour = parseInt(start_time[0]);
-                    const end_time = detail.end_time.split(':');
-                    const end_hour = parseInt(end_time[0]);
-                    // Create new array and unions with previous array
-                    const hour_array = [...Array(end_hour - start_hour)].map((_, index) => start_hour + index);
-                    disable_hour_array = [...new Set([...disable_hour_array, ...hour_array])];
-                }
-            })
-        }
-        setDisabledHours(disable_hour_array);
-    }
-
-    const createClosedHoursArray = () => {
-        const open_time = selectedAttraction.open_time.split(':');
-        const close_time = selectedAttraction.close_time.split(':');
-        const open = parseInt(open_time[0]);
-        const close = parseInt(close_time[0]);
-        const closedHours = [];
-        // Adding hours before the market opens
-        for (let i = 0; i < open; i++) {
-            closedHours.push(i);
-        }
-        // Adding hours after the market closes
-        for (let i = close; i < 24; i++) {
-            closedHours.push(i);
-        }
-
-        return closedHours;
-    }
-
-    const disabledTime = (current, type) => {
+    const disabledTime = () => {
         // Disable hours after 6 PM
         return {
             disabledHours: () => [...disabledHours],
@@ -293,7 +169,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
 
                     <div className="relative rounded-xl h-[80%] mx-auto my-auto bg-white overflow-scroll">
                         <div className="grid grid-cols-8 ml-4 mt-4">
-                            <button className="col-span-1 my-auto bg-slate-100 rounded-full w-8 h-8" onClick={() => DisplayModalState()}>
+                            <button className="col-span-1 my-auto bg-slate-100 rounded-full w-8 h-8" onClick={() => DisplayModalState(false)}>
                                 <IoChevronBackSharp className="mx-auto text-slate-800" />
                             </button>
                             <div className="col-span-7 ml-2 my-auto">
@@ -317,118 +193,22 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                             }
                         </div>
 
-                        <div className="">
+                        <HeaderModal selectedAttraction={selectedAttraction}
+                            handleTimeChange={handleTimeChange}
+                            defaultStartTime={defaultStartTime}
+                            disabledTime={disabledTime}
+                            endTimeSelects={endTimeSelects} />
 
-                            <div className='flex justify-items-center pt-6'>
-                                <img src={selectedAttraction.image_url}
-                                    className="mx-auto w-36 h-full shadow-md" />
-                            </div>
-                            <div className="grid grid-cols-12 py-2 pt-4">
-                                {defaultStartTime &&
-                                    <div className="col-span-4 text-left pl-6">
-                                        <p className='text-sm'>เริ่ม</p>
-                                        <TimePicker
-                                            onChange={handleTimeChange}
-                                            // defaultValue={dayjs(defaultStartTime, 'HH:mm')}
-                                            placeholder={defaultStartTime}
-                                            minuteStep={15}
-                                            format={'HH:mm'}
-                                            size="small"
-                                            disabledTime={disabledTime} />
-                                        <p className='text-sm pt-2'>สิ้นสุด</p>
-                                        <TimePicker
-                                            disabled={true}
-                                            placeholder={endTimeSelects}
-                                            format={'HH:mm'}
-                                            size="small" />
-                                    </div>
-                                }
-                                <div className="col-span-8 text-left pt-4 pl-6">
-                                    <p className="text-xl text-bold">{selectedAttraction.name}</p>
-                                    <p className="text-sm">ระยะเวลาที่ใช้: {selectedAttraction.period} ชั่วโมง</p>
-                                    <p className="text-sm">{selectedAttraction.tag}</p>
-                                </div>
-                            </div>
-
-                            <div className='w-full pt-4'>
-                                <div className='border-t-2'></div>
-                            </div>
-
-                            <div className='w-full flex justify-center pt-2'>
-                                <p className='text-lg'>แผนการเที่ยวของคุณ</p>
-                            </div>
-
-                            {newOrderPlanDetail &&
-                                newOrderPlanDetail.map((detail, index) => (
-                                    (detail.formated_date.day === dates[currentSelectDay].day &&
-                                        detail.formated_date.month === dates[currentSelectDay].month &&
-                                        detail.formated_date.year === dates[currentSelectDay].year &&
-                                        !detail.isSelectedAttraction)
-                                        ? (<div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
-                                            <div className="col-span-4 text-left ml-4 flex justify-between">
-                                                <div className='h-full text-black my-auto'>
-                                                    <p className="top-0">{detail.start_time} น.</p>
-                                                    <p className="bottom-0">{detail.end_time} น.</p>
-                                                </div>
-                                                <div className="ml-3 relative mr-3">
-                                                    <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
-                                                    </div>
-                                                    <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                 border-blue-400"></div>
-                                                </div>
-                                            </div>
-                                            <div className="col-span-2">
-                                                <img src={detail.image_url}
-                                                    className="rounded-xl shadow-md w-full h-[3.9rem]" />
-                                            </div>
-                                            <div className="col-span-6 text-left ml-3">
-                                                <p className="text-xl text-bold">{detail.attraction_name}</p>
-                                                <p className="text-slate-400 text-sm">{detail.tag}</p>
-                                            </div>
-                                        </div>)
-                                        : (detail.formated_date.day === dates[currentSelectDay].day &&
-                                            detail.formated_date.month === dates[currentSelectDay].month &&
-                                            detail.formated_date.year === dates[currentSelectDay].year &&
-                                            detail.isSelectedAttraction === true)
-                                            ? <div key={index} className="grid grid-cols-12 text-center py-2 bg-blue-600">
-                                                <div className="col-span-4 text-left ml-4 flex justify-between">
-                                                    {(startTimeSelects && endTimeSelects) ?
-                                                        <div className='h-full text-white my-auto'>
-
-                                                            <p className="top-0">{startTimeSelects}</p>
-                                                            <p className="bottom-0">{endTimeSelects}</p>
-                                                        </div>
-                                                        :
-                                                        <div className='h-full text-white my-auto'>
-
-                                                            <p className="top-0">{defaultStartTime}</p>
-                                                            <p className="bottom-0">{endTimeSelects}</p>
-                                                        </div>}
-
-                                                    <div className="ml-3 relative mr-3">
-                                                        <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
-                                                        </div>
-                                                        <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                                    border-blue-400"></div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-2">
-                                                    <img src={selectedAttraction.image_url}
-                                                        className="rounded-xl shadow-md w-full h-[3.9rem]" />
-                                                </div>
-                                                <div className="col-span-6 text-left ml-2">
-                                                    <p className="text-xl text-bold text-white">{selectedAttraction.name}</p>
-                                                    <p className="text-sm text-white">{selectedAttraction.tag}</p>
-                                                </div>
-                                            </div>
-                                            : null
-                                ))
-                            }
-
-                        </div>
+                        <PlanTimeline selectedAttraction={selectedAttraction}
+                            newOrderPlanDetail={newOrderPlanDetail}
+                            dates={dates}
+                            currentSelectDay={currentSelectDay}
+                            startTimeSelects={startTimeSelects}
+                            endTimeSelects={endTimeSelects}
+                            defaultStartTime={defaultStartTime} />
 
                         <div className="bottom-0 mb-4 mt-4 flex justify-center">
-                            <button className="rounded-lg px-4 py-2 text-red-700 border-[1px] border-red-700" onClick={() => DisplayModalState()}>
+                            <button className="rounded-lg px-4 py-2 text-red-700 border-[1px] border-red-700" onClick={() => DisplayModalState(false)}>
                                 <p className="my-auto">ยกเลิก</p>
                             </button>
                             <button className="ml-4 rounded-lg px-4 py-2 bg-blue-700 text-white" onClick={() => InsertToDatabase()}>
@@ -446,23 +226,23 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                     <div className="relative rounded-xl h-[20%] mx-auto my-auto bg-white overflow-scroll">
                         <div className='w-full h-full'>
                             <div className='flex justify-center'>
-                            <p className='px-8 pt-6 mx-auto my-auto text-xl font-semibold'>คุณยังไม่ได้สร้างแผนการท่องเที่ยว</p>
+                                <p className='px-8 pt-6 mx-auto my-auto text-xl font-semibold'>คุณยังไม่ได้สร้างแผนการท่องเที่ยว</p>
                             </div>
 
                             <div className='flex justify-center'>
-                            <p className='px-12 pt-2 mx-auto my-auto text-lg'>สร้างแผนการท่องเที่ยวได้ตามใจคุณ</p>
+                                <p className='px-12 pt-2 mx-auto my-auto text-lg'>สร้างแผนการท่องเที่ยวได้ตามใจคุณ</p>
                             </div>
-                            
+
                             <div className='flex justify-center gap-2 pb-6 pt-2' >
-                            <button className="mt-4 px-4 py-2 rounded-lg bg-white border border-[#51b3ce]" onClick={() => DisplayModalState()}>
-                                <p className="text-[#51b3ce]">ยกเลิก</p>
-                            </button>
-                            <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => navigate('/planner')}>
-                                <p className="text-white">สร้าง</p>
-                            </button>
+                                <button className="mt-4 px-4 py-2 rounded-lg bg-white border border-[#51b3ce]" onClick={() => DisplayModalState(false)}>
+                                    <p className="text-[#51b3ce]">ยกเลิก</p>
+                                </button>
+                                <button className="mt-4 px-4 py-2 rounded-lg bg-[#51b3ce]" onClick={() => navigate('/planner')}>
+                                    <p className="text-white">สร้าง</p>
+                                </button>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             }

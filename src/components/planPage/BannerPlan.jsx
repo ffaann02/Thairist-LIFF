@@ -8,12 +8,10 @@ const BannerPlan = ({ data }) => {
     const navigate = useNavigate();
 
     const [sortedData, setSortedData] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState();
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
-        console.log(data)
         setSortedData(data);
-        setCurrentIndex(0);
     }, [data]);
 
     const handleClickLeft = (index) => {
@@ -26,7 +24,7 @@ const BannerPlan = ({ data }) => {
 
     return (
         <div className='w-full relative'>
-            {sortedData &&
+            {sortedData && sortedData[currentIndex] &&
                 <>
                     <img src={sortedData[currentIndex].image_url} />
                     <div className='absolute top-0 w-full h-1/2 align-middle z-50'>

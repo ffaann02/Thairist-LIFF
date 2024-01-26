@@ -8,6 +8,7 @@ import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar } from '@hassanmojab/react-modern-calendar-datepicker';
 import { useUser } from "../../UserContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import PlanCalendar from "./PlanCalendar";
 import PlanList from "./PlanList";
 import BannerPlan from "./BannerPlan";
 import { checkName, generatedPlanID, changeTimeLineByDrag, sortByStartTime} from "./utils";
@@ -115,11 +116,11 @@ const Planner = () => {
                 .catch(err => console.log(err));
     }
 
-    useEffect(() => {
-        console.log(editedPlanData);
-    }, [editedPlanData])
+    // useEffect(() => {
+    //     console.log(editedPlanData);
+    // }, [editedPlanData])
 
-    const displayDate = () => {
+    const displayCalendar = () => {
         document.getElementById('my_modal_4').showModal();
     }
 
@@ -220,12 +221,20 @@ const Planner = () => {
         <div className="w-full h-full pt-12">
             <div className="w-full h-full max-w-4xl bg-slate-50 mx-auto min-h-screen">
 
+                <PlanCalendar planName={planName}
+                              handleInputName={handleInputName}
+                              selectedDays={selectedDays}
+                              tempSelectedDays={tempSelectedDays}
+                              setTempSelectedDays={setTempSelectedDays}
+                              handleSelectedDays={handleSelectedDays}
+                              minimumCalendar={minimumCalendar}/>
+
                 {isPlanExist === false && selectedDays.length === 0 || isSelectDaysClicked === false
                     ?
                     <div className="pt-3w-full h-full min-h-screen text-center flex">
                         <div className="m-auto mt-[80%]">
                             <p className="text-xl font-semibold">คุณยังไม่ได้วางแผนการท่องเที่ยว</p>
-                            <button className="mt-4 p-2 px-4 text-lg rounded-lg bg-[#51b3ce]" onClick={displayDate}>
+                            <button className="mt-4 p-2 px-4 text-lg rounded-lg bg-[#51b3ce]" onClick={displayCalendar}>
                                 <p className="my-auto text-white">สร้างแผนการท่องเที่ยว</p>
                             </button>
                         </div>
@@ -236,6 +245,7 @@ const Planner = () => {
                         <div className="w-full">
                                 <BannerPlan data={newOrderPlanDetail}/>
                         </div>}
+
                         <div className="text-center pt-3">
                             <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
                             <DragDropContext onDragEnd={handleDragDrop} onDragStart={() => handleDragStart()}>
@@ -250,7 +260,7 @@ const Planner = () => {
                                             </div>
                                         ))}
                                         <div className="w-fit py-1 px-4 flex">
-                                            <AiFillPlusCircle className="my-auto text-xl text-blue-600" onClick={displayDate} />
+                                            <AiFillPlusCircle className="my-auto text-xl text-blue-600" onClick={displayCalendar} />
                                         </div>
                                     </div>
 
@@ -323,37 +333,6 @@ const Planner = () => {
                             </DragDropContext>
                         </div>
                     </div>}
-
-                <dialog id="my_modal_4" className="modal">
-                    <div className="modal-box w-11/12 max-w-5xl">
-                        <div className="w-full flex">
-                            <h3 className="mx-auto font-bold text-lg">สร้างแผนการท่องเที่ยว</h3>
-                        </div>
-                        <div className="w-full mt-4 mb-4 justify-items-center border border-slate-400">
-                            <input type="text"
-                                placeholder={planName}
-                                onChange={handleInputName}
-                                className="w-full px-4 py-2 bg-white" />
-                        </div>
-                        <Calendar
-                            value={tempSelectedDays}
-                            onChange={setTempSelectedDays}
-                            shouldHighlightWeekends
-                            minimumDate={minimumCalendar}
-                        />
-                        <div className="modal-action">
-                            <form method="dialog">
-                                <button className="btn" onClick={() => setTempSelectedDays(selectedDays)}>ยกเลิก</button>
-                            </form>
-                            <form method="dialog">
-                                <button className="btn bg-[#51b3ce] text-white" onClick={() => handleSelectedDays()}>
-                                    เลือก
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </dialog>
-
             </div>
         </div>
     )
