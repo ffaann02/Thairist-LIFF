@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { IoIosMore } from "react-icons/io";
 import AlertDelete from './AlertDelete';
+import IconTag from '../activityPage/IconTag';
 
 const PlanList = ({ index, detail, refetch }) => {
 
@@ -33,10 +34,12 @@ const PlanList = ({ index, detail, refetch }) => {
             </div>
             <div className="col-span-1 text-left pl-2 flex justify-between">
                 <div className="ml-3 relative mr-3">
-                    <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                    <div className="mt-1 rounded-full bg-slate-200 p-1 flex justify-center">
+                        <IconTag attractionTag={detail.tag} />
                     </div>
-                    <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                                    border-blue-400"></div>
+                    <div className="pt-1 flex items-center justify-center h-full">
+                        <div className="h-full border-l-2 border-dotted border-blue-400"></div>
+                    </div>
                 </div>
             </div>
             <div className="col-span-3 pl-2">
@@ -58,10 +61,10 @@ const PlanList = ({ index, detail, refetch }) => {
             </div>
 
             {displayAlertDelete === true &&
-                <AlertDelete 
-                    detail = {detail}
-                    handleCancle = {handleCancle}
-                    handleDelete = {handleDelete}
+                <AlertDelete
+                    detail={detail}
+                    handleCancle={handleCancle}
+                    handleDelete={handleDelete}
                 />
             }
         </div>

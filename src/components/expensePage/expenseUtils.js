@@ -20,8 +20,7 @@ const splitByDay = (data, dates) => {
                                   item.formated_date.month === date.month && 
                                   item.formated_date.year === date.year);
         const formatDate = `${date.day}/${date.month}/${date.year}`;
-        splitedData.push(matched);
-        // splitedData[formatDate] = matched;                          
+        splitedData.push(matched);                       
     })
     return splitedData;
 }
@@ -97,5 +96,17 @@ const calculateExpense = (sortedData, setStateEachList, setStateEachDay, setStat
     setStateEnableEdit(arrayEnableEdit);
 }
 
+const initArrayState = (nestedArrayData, state, setState, initValue) => {
+    let arrayState = [];
+    nestedArrayData.map((dataDay, index) => {
+        let initEachList = [];
+        dataDay.map((list, index) => {
+            initEachList.push(false);
+        })
+        arrayState.push(initEachList);
+    })
+    return arrayState;
+}
 
-export { sortByTime, calculateExpense }
+
+export { sortByTime, calculateExpense, splitByDay, initArrayState }

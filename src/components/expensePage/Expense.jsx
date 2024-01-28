@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { useUser } from "../../UserContext";
 import axios from 'axios';
 import { sortByTime, calculateExpense } from './expenseUtils';
-import DayList from './DayList';
+import TypeBar from './TypeBar';
+import PlanType from './PlanType';
+import UserType from './UserType';
 
 const Expense = () => {
 
     const { userProfile, setUser } = useUser();
+
+    const [section, setSection] = useState(0);
 
     const [planID, setPlanID] = useState();
     const [planName, setPlanName] = useState();
@@ -129,24 +133,40 @@ const Expense = () => {
                             <p className='text-3xl'>{expenseTotal} บาท</p>
                         </div>
                     </div>
-                    {sortedPlanList.map((list, index) => (
-                        <DayList key={index}
-                            day={planDate[index].day}
-                            month={monthNames[planDate[index].month - 1]}
-                            year={planDate[index].year + 543}
-                            indexDay={index}
-                            sortedData={list}
-                            expenseEachList={expenseEachList[index]}
-                            expenseEachDay={expenseEachDay[index]}
-                            expenseEachPlan={expenseEachDay}
-                            isUseTicket={isUseTicket[index]}
-                            adultAmount={adultAmount[index]}
-                            kidAmount={kidAmount[index]}
-                            handleAmountChange={handleAmountChange}
-                            enableEdit={enableEdit[index]}
-                            enableEditChange={handleEdit}
-                            handleCustomPriceChange={handleCustomPriceChange} />
-                    ))}
+
+                    <TypeBar section={section}
+                        setSection={setSection} />
+
+                    {section === 0 &&
+                        <div className='pt-4'>
+                            <div className='border-2 rounded-t-3xl'>
+                                {sortedPlanList.map((list, index) => (
+                                    <PlanType key={index}
+                                        day={planDate[index].day}
+                                        month={monthNames[planDate[index].month - 1]}
+                                        year={planDate[index].year + 543}
+                                        indexDay={index}
+                                        sortedData={list}
+                                        expenseEachList={expenseEachList[index]}
+                                        expenseEachDay={expenseEachDay[index]}
+                                        expenseEachPlan={expenseEachDay}
+                                        isUseTicket={isUseTicket[index]}
+                                        adultAmount={adultAmount[index]}
+                                        kidAmount={kidAmount[index]}
+                                        handleAmountChange={handleAmountChange}
+                                        enableEdit={enableEdit[index]}
+                                        enableEditChange={handleEdit}
+                                        handleCustomPriceChange={handleCustomPriceChange} />
+                                ))}
+                            </div>
+                        </div>
+                    }
+
+                    {section === 1 &&
+                        <UserType userID={userProfile.userId}
+                                  planID={planID} 
+                                  planDate={planDate}/>
+                    }
 
                 </div>
             }

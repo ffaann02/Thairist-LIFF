@@ -1,6 +1,9 @@
 import React from 'react'
+import { GiIsland } from "react-icons/gi";
+import IconTag from './IconTag';
 
-const PlanTimeline = ({ selectedAttraction, newOrderPlanDetail, dates, currentSelectDay, startTimeSelects, endTimeSelects, defaultStartTime }) => {
+const TimelineModal = ({ selectedAttraction, newOrderPlanDetail, dates, currentSelectDay, startTimeSelects, endTimeSelects, defaultStartTime }) => {
+
     return (
         <div>
             <div className='w-full flex justify-center pt-2'>
@@ -19,10 +22,12 @@ const PlanTimeline = ({ selectedAttraction, newOrderPlanDetail, dates, currentSe
                                     <p className="bottom-0">{detail.end_time} น.</p>
                                 </div>
                                 <div className="ml-3 relative mr-3">
-                                    <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                                    <div className="mt-1 rounded-full bg-slate-200 p-1 flex justify-center">
+                                        <IconTag attractionTag = {detail.tag}/>
                                     </div>
-                                    <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                 border-blue-400"></div>
+                                    <div className="pt-1 flex items-center justify-center h-full">
+                                        <div className="h-full border-l-2 border-dotted border-blue-400"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-span-2">
@@ -53,11 +58,13 @@ const PlanTimeline = ({ selectedAttraction, newOrderPlanDetail, dates, currentSe
                                             <p className="bottom-0">{endTimeSelects}</p>
                                         </div>}
 
-                                    <div className="ml-3 relative mr-3">
-                                        <div className="mt-1 rounded-full bg-slate-200 p-2 mx-auto">
+                                    <div className="ml-3 relative mr-3 text-center">
+                                        <div className="mt-1 rounded-full bg-slate-200 p-1 flex justify-center">
+                                            <IconTag attractionTag = {selectedAttraction.tag}/>
                                         </div>
-                                        <div className="h-[80%] mt-1 border-l-2 justify-self-center absolute mx-auto w-full border-dotted
-                                                                    border-blue-400"></div>
+                                        <div className="pt-1 flex items-center justify-center h-full">
+                                            <div className="h-full border-l-2 border-dotted border-white"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-span-2">
@@ -76,4 +83,4 @@ const PlanTimeline = ({ selectedAttraction, newOrderPlanDetail, dates, currentSe
     )
 }
 
-export default PlanTimeline
+export default TimelineModal

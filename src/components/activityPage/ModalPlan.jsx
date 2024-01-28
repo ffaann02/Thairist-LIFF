@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { TimePicker } from 'antd';
 import HeaderModal from './HeaderModal';
-import PlanTimeline from './PlanTimeline';
+import TimelineModal from './TimelineModal';
 import { sortByStartTime, findDefaultTime, addHoursToTime, calculateOverlapTime } from './modalUtils';
 
 const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
@@ -33,6 +33,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     const [disabledHours, setDisabledHours] = useState([]);
     const [newOrderPlanDetail, setNewOrderPlanDetail] = useState();
     const [defaultStartTime, setDefaultStartTime] = useState();
+    const [ticketAmount, setTicketAmount] = useState([null, null]);
 
     useEffect(() => {
         if (userProfile) {
@@ -120,7 +121,8 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
             district: selectedAttraction.district,
             adult_price: selectedAttraction.adult_price || null,
             kid_price: selectedAttraction.kid_price || null,
-            adult_amount: 1,
+            adult_amount: ticketAmount[0],
+            kid_amount: ticketAmount[1]
         })
             .then(res => {
                 console.log(res);
@@ -162,6 +164,10 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
         };
     };
 
+    useEffect(() => {
+        console.log(ticketAmount);
+    }, [ticketAmount])
+
     return (
         <div>
             {planData && dates &&
@@ -197,9 +203,10 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                             handleTimeChange={handleTimeChange}
                             defaultStartTime={defaultStartTime}
                             disabledTime={disabledTime}
-                            endTimeSelects={endTimeSelects} />
+                            endTimeSelects={endTimeSelects} 
+                            setTicketAmount={setTicketAmount}/>
 
-                        <PlanTimeline selectedAttraction={selectedAttraction}
+                        <TimelineModal selectedAttraction={selectedAttraction}
                             newOrderPlanDetail={newOrderPlanDetail}
                             dates={dates}
                             currentSelectDay={currentSelectDay}
