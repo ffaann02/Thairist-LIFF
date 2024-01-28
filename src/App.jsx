@@ -21,10 +21,12 @@ import EmptyFooter from "./components/EmptyFooter";
 import OldPoint from "./components/OldPoint";
 import Point from "./components/pointPage/Point";
 import WebXR from "./components/ARPage/WebXR";
+import Expense from "./components/expensePage/Expense";
 import AR from "./components/ARPage/AR";
 import History from "./components/overviewHistoryPage/History";
 import Help from "./components/helpPage/Help";
 import DocumentRequest from "./components/docPage/DocumentRequest";
+import UploadImage from "./components/UploadImage";
 
 function App() {
 
@@ -83,9 +85,11 @@ function App() {
             {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
             <Route path="/planner/search" element={<PlannerSearch />} />
+            <Route path="/expense" element={<Expense />} />
             <Route path="/history" element={<History/>} />
             <Route path="/help" element={<Help/>} />
             <Route path="/document" element={<DocumentRequest/>} />
+            <Route path="/upload-image" element={<UploadImage />}/>
           </Routes>
           {!isOpenAR ? <MenuBar />:null}
           {!isOpenAR ? <EmptyFooter />:null}
