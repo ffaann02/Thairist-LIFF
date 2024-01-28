@@ -77,12 +77,10 @@ function App() {
           {!isOpenAR ? <Topbar />:null}
           <Routes>
             <Route path="/planner" element={<Planner />} />
-            {/* <Route path="/planner" element={<OldPlanner />} /> */}
             <Route path="/" element={<Home />} />
             <Route path="/activity" element={<Activity />} />
             <Route path="/points" element={<Point/>} />
             <Route path="/ar" element={<AR/>} />
-            {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
             <Route path="/planner/search" element={<PlannerSearch />} />
             <Route path="/expense" element={<Expense />} />
