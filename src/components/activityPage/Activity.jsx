@@ -6,17 +6,21 @@ import "@egjs/react-flicking/dist/flicking-inline.css";
 import axios from "axios";
 import LargeCard from "./LargeCard";
 import ModalPlan from "./ModalPlan";
+import ModalReadmore from "./ModalReadmore";
+import SearchBox from "./SearchBox";
+import { useUser } from "../../UserContext";
 
 const Workshop = () => {
 
-    const [attractions, setAttraction] = useState();
+    const [attractions, setAttractions] = useState();
     const [selectedCard, setSelectedCard] = useState();
-
+    const { userProfile } = useUser();
     useEffect(() => {
+        setAttractions(attractions)
         axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_tourist_attraction`)
             .then(res => {
                 console.log(res.data);
-                setAttraction(res.data);
+                setAttractions(res.data);
             })
             .catch(err => console.log(err));
     }, [])
@@ -46,91 +50,76 @@ const Workshop = () => {
         ]);
 
     const [isDisplayModalPlan, setIsDisplayModalPlan] = useState(false)
+    const [isDisplayReadmore, setIsDisplayReadmore] = useState(false);
     const handleModalPlanState = (newState, index) => {
         setIsDisplayModalPlan(newState);
         setSelectedCard(index);
     }
 
+    const handleModalReadmoreState = (newState, index) => {
+        console.log("hello:" + index);
+        setIsDisplayReadmore(newState);
+        setSelectedCard(index);
+    }
+
     return (
-        <div className="w-full h-full pt-6 bg-slate-50 ">
-            <div className="w-full h-full max-w-4xl mx-auto min-h-screen">
+        <>
+            {userProfile && <div className="w-full h-full pt-6 bg-slate-50 ">
+                <div className="w-full h-full max-w-4xl mx-auto min-h-screen">
+                    {isDisplayModalPlan &&
+                        <ModalPlan
+                            displayModalPlan={handleModalPlanState}
+                            selectedAttraction={attractions[selectedCard]}
+                        />
+                    }
+                    {isDisplayReadmore &&
+                        <ModalReadmore
+                            displayModalReadmore={handleModalReadmoreState}
+                            selectedAttraction={attractions[selectedCard]}
+                        />
+                    }
+                    <SearchBox userProfile={userProfile} attractions={attractions} setAttractions={setAttractions} />
+                    <>
+                        <p className="px-4 mt-4">ผลลัพธ์การค้นหา</p>
+                        {attractions &&
+                            <div className="gap-x-2 gap-4 px-3">
+                                {attractions.map((place, index) => (
+                                    <LargeCard
+                                        key={index}
+                                        id={index}
+                                        data={place}
+                                        displayModalPlan={handleModalPlanState}
+                                        displayModalReadmore={handleModalReadmoreState}
+                                    />
+                                ))}
+                            </div>
+                        }
 
-                {isDisplayModalPlan &&
-                    <ModalPlan
-                        displayModalPlan={handleModalPlanState}
-                        selectedAttraction={attractions[selectedCard]}
-                    />
-                }
-
-                <div className='px-6 mx-auto pt-10'>
-                    <div className="relative flex items-center w-full h-12 rounded-lg shadow-md bg-white overflow-hidden border-[1px] border-[#10000]">
-                        <div className="grid place-items-center h-full w-12 text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
+                        <div className="ml-8 mt-8 mb-2 text-lg font-semibold">
+                            <p>กิจกรรมยอดนิยม</p>
                         </div>
 
-                        <input
-                            className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
-                            type="text"
-                            id="search"
-                            placeholder="ค้นหา" />
-                    </div>
-                </div>
-
-                <div className="mt-8 ml-6 flex">
-                    <button className="ml-2 rounded-lg px-4 py-1 flex bg-blue-100 text-blue-500 font-semibold border-[0.5px] border-blue-500">
-                        <p className="my-auto">เปิดอยู่</p>
-                    </button>
-                    <button className="ml-2 rounded-lg px-4 py-1 flex bg-blue-100 text-blue-500 font-semibold border-[0.5px] border-blue-500">
-                        <p className="my-auto">ทำขนม</p>
-                    </button>
-                    <button className="ml-2 rounded-lg px-4 py-1 flex text-slate-500 font-semibold border-[0.5px] border-slate-500">
-                        <p className="my-auto">เดินป่า</p>
-                    </button>
-                    <button className="ml-2 rounded-lg px-4 py-1 flex text-slate-500 font-semibold border-[0.5px] border-slate-500">
-                        <p className="my-auto">ดำน้ำ</p>
-                    </button>
-                </div>
-
-
-                {attractions &&
-                    <div>
-                        {attractions.map((place, index) => (
-                            <LargeCard
-                                key={index}
-                                id={index}
-                                data={place}
-                                displayModalPlan={handleModalPlanState}
-                            />
-                        ))}
-                    </div>
-                }
-
-                <div className="ml-8 mt-8 mb-2 text-lg font-semibold">
-                    <p>กิจกรรมยอดนิยม</p>
-                </div>
-
-                <div className="w-full h-full mt-2">
-                    <Flicking renderOnlyVisible={true}>
-                        {panels.map((trip) =>
-                        (
-                            <div className="-ml-24 h-40 w-[90%] rounded-xl pr-28 relative" key={trip.id}>
-                                <img src={trip.img}
-                                    className="rounded-xl h-full w-full" />
-                                <div className="w-full absolute bottom-0 pr-28">
-                                    <div className="w-full bg-blue-400 bg-opacity-50 py-1 px-2 rounded-b-xl">
-                                        <p className="text-white text-lg tracking-widest">{trip.name}</p>
-                                        <p className="text-white text-sm tracking-widest">{trip.time}</p>
+                        <div className="w-full h-full mt-2">
+                            <Flicking renderOnlyVisible={true}>
+                                {panels.map((trip) =>
+                                (
+                                    <div className="-ml-24 h-40 w-[90%] rounded-xl pr-28 relative" key={trip.id}>
+                                        <img src={trip.img}
+                                            className="rounded-xl h-full w-full" />
+                                        <div className="w-full absolute bottom-0 pr-28">
+                                            <div className="w-full bg-blue-400 bg-opacity-50 py-1 px-2 rounded-b-xl">
+                                                <p className="text-white text-lg tracking-widest">{trip.name}</p>
+                                                <p className="text-white text-sm tracking-widest">{trip.time}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        ))}
-                    </Flicking>
+                                ))}
+                            </Flicking>
+                        </div>
+                    </>
                 </div>
-
-            </div>
-        </div>
+            </div>}
+        </>
     )
 }
 
