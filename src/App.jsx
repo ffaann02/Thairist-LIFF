@@ -22,6 +22,9 @@ import OldPoint from "./components/OldPoint";
 import Point from "./components/pointPage/Point";
 import WebXR from "./components/ARPage/WebXR";
 import AR from "./components/ARPage/AR";
+import History from "./components/overviewHistoryPage/History";
+import Help from "./components/helpPage/Help";
+import DocumentRequest from "./components/docPage/DocumentRequest";
 
 function App() {
 
@@ -39,20 +42,20 @@ function App() {
           getUserProfile();
         }
         //for functional
-        else{
-          liff.login();
-        }
-        // for dev on pc
-        // else {
-        //   const templateProfile =
-        //   {
-        //     "userId": "U5b7bef2d143fb728b673cfb6e7ce88e0",
-        //     "displayName": "Kong Chayapol",
-        //     "pictureUrl": "https://profile.line-scdn.net/0h54lO-CdPahtBNn7fINgUZDFmaXFiRzMJaAByLycwMCx1ASQabwQsKnwzNC19USsdPVIte30wMS9NJR19X2CWL0YGNyp9BypNbVIs_w",
-        //     "statusMessage": "templateProfile!"
-        //   }
-        //   setUser(templateProfile);
+        // else{
+        //   liff.login();
         // }
+        // for dev on pc
+        else {
+          const templateProfile =
+          {
+            "userId": "U5b7bef2d143fb728b673cfb6e7ce88e0",
+            "displayName": "Kong Chayapol",
+            "pictureUrl": "https://profile.line-scdn.net/0h54lO-CdPahtBNn7fINgUZDFmaXFiRzMJaAByLycwMCx1ASQabwQsKnwzNC19USsdPVIte30wMS9NJR19X2CWL0YGNyp9BypNbVIs_w",
+            "statusMessage": "templateProfile!"
+          }
+          setUser(templateProfile);
+        }
       })
       .catch((e) => {
         setMessage("LIFF init failed.");
@@ -80,6 +83,9 @@ function App() {
             {/* <Route path="/points" element={<OldPoint />} /> */}
             <Route path="/points/camera" element={<CameraComponent />} />
             <Route path="/planner/search" element={<PlannerSearch />} />
+            <Route path="/history" element={<History/>} />
+            <Route path="/help" element={<Help/>} />
+            <Route path="/document" element={<DocumentRequest/>} />
           </Routes>
           {!isOpenAR ? <MenuBar />:null}
           {!isOpenAR ? <EmptyFooter />:null}
