@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
-import { AiFillCaretLeft, AiFillCaretRight, AiFillPlusCircle } from "react-icons/ai"
-import { MdOutlineTempleBuddhist } from "react-icons/md"
-import { IoWaterOutline, IoFastFoodOutline } from "react-icons/io5"
+import { AiFillPlusCircle } from "react-icons/ai"
+import { FiAlertCircle } from "react-icons/fi";
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar } from '@hassanmojab/react-modern-calendar-datepicker';
 import { useUser } from "../../UserContext";
@@ -12,6 +11,7 @@ import PlanCalendar from "./PlanCalendar";
 import PlanList from "./PlanList";
 import BannerPlan from "./BannerPlan";
 import { checkName, generatedPlanID, changeTimeLineByDrag, sortByStartTime} from "./utils";
+import EmptyPlan from "./EmptyPlan";
 
 const Planner = () => {
 
@@ -250,13 +250,13 @@ const Planner = () => {
                             <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
                             <DragDropContext onDragEnd={handleDragDrop} onDragStart={() => handleDragStart()}>
                                 <div className="">
-                                    <div className="flex px-1 mx-auto justify-center mb-1">
+                                    <div className="flex px-8 mx-auto justify-center mb-1">
                                         {selectedDays.map((date, index) => (
                                             <div className={`w-fit border-b-4 py-1 px-2 
                                                 ${currentSelectDay === index ? "border-[#51b3ce] text-slate-800" : "border-slate-200 text-slate-500"}`}
                                                 key={index} onClick={() => switchDay(index, date)}>
-                                                <p>วัน {index + 1}</p>
-                                                <p>{date.day} {monthNames[date.month - 1]} {date.year + 543}</p>
+                                                <p className="text-sm">วัน {index + 1}</p>
+                                                <p className="text-xs">{date.day} {monthNames[date.month - 1]} {date.year + 543}</p>
                                             </div>
                                         ))}
                                         <div className="w-fit py-1 px-4 flex">
@@ -265,8 +265,14 @@ const Planner = () => {
                                     </div>
 
                                     {isDraggingEnabled &&
-                                        <div>
-                                            <p>กดค้างและลากแผนการเที่ยวที่คุณต้องการเปลี่ยนเวลา</p>
+                                        <div className="py-2 px-4">
+                                            <div className="bg-white px-2 py-1 rounded-xl border border-blue-400 text-sm text-left">
+                                                <div className="flex">
+                                                <FiAlertCircle className="text-blue-500 text-xl font-bold my-auto"/>
+                                                <span className="font-bold ml-1 text-blue-500 my-auto">แนะนำการใช้งาน: </span>
+                                                </div>
+                                                <span>กดค้างและลากแผนการเที่ยวที่คุณต้องการเปลี่ยนเวลา</span>
+                                            </div>
                                         </div>
                                     }
 
@@ -301,10 +307,7 @@ const Planner = () => {
                                                             </Draggable>
                                                         ))}
                                                     </div>
-                                                    : <div>
-                                                        <p className="font-semibold ">คุณยังไม่มีสถานที่หรือกิจกรรมใด ๆ ในแผนการท่องเที่ยว</p>
-                                                        <p className="text-slate-600">คลิกปุ่มข้างล่างเพื่อเพิ่มได้เลย</p>
-                                                    </div>}
+                                                    : <EmptyPlan />}
                                             </div>
                                         )}
                                     </Droppable>
