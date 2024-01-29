@@ -7,7 +7,7 @@ const Carouselitem = [
     },
     {
         title: "10 เกาะน่าเที่ยวเมืองไทย",
-        url: "https://img-prod.api-onscene.com/cdn-cgi/image/format=auto,width=1600/https://sls-prod.api-onscene.com/partner_files/trueidintrend/185983/A7A496A4-7B8F-4A12-862A-9FE0B5B0969B.png",
+        url: "https://i.ibb.co/RB8m82W/island.jpg",
     },
     {
         title: "10 สุดยอดสถานที่ท่องเที่ยวทางธรรมชาติไทย",
@@ -15,15 +15,16 @@ const Carouselitem = [
     },
     {
         title: "10 สถานที่ท่องเที่ยวไทย ติดอันดับโลก",
-        url: "https://static.cdntap.com/tap-assets-prod/wp-content/uploads/sites/25/2021/09/thailand-top-tourist-attractions-in-the-world-w.jpg",
+
+        url: "https://i.ibb.co/QMb5HV6/1620457379-2.jpg",
     },
     {
         title: "10 อันดับแหล่งท่องเที่ยวยอดนิยมในเมืองไทยแห่งปี",
-        url: "https://s.isanook.com/tr/0/ui/283/1417415/1d6c90f8619235f16e18988c7a363a62_1571064708.jpg",
+        url: "https://i.ibb.co/d2QbV2C/Wat-Arun-Bangkok-sightseeing.jpg",
     },
     {
-        title: "10 สถานที่ทำบุญกลางปี",
-        url: "https://daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg",
+        title: "10 อันดับแหล่งท่องเที่ยวหน้าหนาว",
+        url: "https://i.ibb.co/rGbRVf9/bongpiang101.jpg",
     },
 ];
 
