@@ -28,12 +28,12 @@ const PlanList = ({ index, detail, refetch }) => {
         <div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
             <div className="col-span-2 text-left ml-4 flex justify-between">
                 <div className='h-full text-black text-sm my-auto'>
-                    <p className="top-0">{detail.start_time} น.</p>
-                    <p className="bottom-0">{detail.end_time} น.</p>
+                    <p className="top-0 text-xs">{detail.start_time} น.</p>
+                    <p className="bottom-0 text-xs">{detail.end_time} น.</p>
                 </div>
             </div>
-            <div className="col-span-1 text-left pl-2 flex justify-between">
-                <div className="ml-3 relative mr-3">
+            <div className="col-span-1 text-left flex justify-center">
+                <div className="">
                     <div className="mt-1 rounded-full bg-slate-200 p-1 flex justify-center">
                         <IconTag attractionTag={detail.tag} />
                     </div>
@@ -42,15 +42,15 @@ const PlanList = ({ index, detail, refetch }) => {
                     </div>
                 </div>
             </div>
-            <div className="col-span-3 pl-2">
+            <div className="col-span-3 px-1">
                 <img src={detail.image_url}
-                    className="rounded-xl shadow-md w-full h-[3.9rem]" />
+                    className="rounded-lg shadow-md w-full h-[3.9rem]" />
             </div>
             <div className="col-span-5 text-left pl-2">
-                <p className="text-xl text-bold">{detail.attraction_name}</p>
-                <p className="text-slate-400 text-sm">{detail.tag}</p>
+                <p className="text-lg text-bold">{detail.attraction_name}</p>
+                <p className="text-slate-400 text-xs">{detail.tag}</p>
             </div>
-            <div className='col-span-1 mt-2 ml-0'>
+            <div className='col-span-1 mt-2 text-left'>
                 <div className="dropdown dropdown-end">
                     <IoIosMore tabIndex={0} role="button" />
                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
