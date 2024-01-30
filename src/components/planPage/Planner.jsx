@@ -11,7 +11,7 @@ import PlanCalendar from "./PlanCalendar";
 import PlanList from "./PlanList";
 import BannerPlan from "./BannerPlan";
 import { checkName, generatedPlanID, changeTimeLineByDrag, sortByStartTime} from "./utils";
-import EmptyPlan from "./EmptyPlan";
+import NoPlan from "./NoPlan";
 
 const Planner = () => {
 
@@ -231,14 +231,7 @@ const Planner = () => {
 
                 {isPlanExist === false && selectedDays.length === 0 || isSelectDaysClicked === false
                     ?
-                    <div className="pt-3w-full h-full min-h-screen text-center flex">
-                        <div className="m-auto mt-[80%]">
-                            <p className="text-xl font-semibold">คุณยังไม่ได้วางแผนการท่องเที่ยว</p>
-                            <button className="mt-4 p-2 px-4 text-lg rounded-lg bg-[#51b3ce]" onClick={displayCalendar}>
-                                <p className="my-auto text-white">สร้างแผนการท่องเที่ยว</p>
-                            </button>
-                        </div>
-                    </div>
+                    <NoPlan displayCalendar={displayCalendar}/>
                     :
                     <div>
                         {newOrderPlanDetail && 
@@ -307,7 +300,10 @@ const Planner = () => {
                                                             </Draggable>
                                                         ))}
                                                     </div>
-                                                    : <EmptyPlan />}
+                                                    : <div>
+                                                    <p className="font-semibold ">คุณยังไม่มีสถานที่หรือกิจกรรมใด ๆ ในแผนการท่องเที่ยว</p>
+                                                    <p className="text-slate-600">คลิกปุ่มข้างล่างเพื่อเพิ่มได้เลย</p>
+                                                </div>}
                                             </div>
                                         )}
                                     </Droppable>
