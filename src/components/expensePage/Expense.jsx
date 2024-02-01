@@ -5,6 +5,9 @@ import { sortByTime, calculateExpense } from './expenseUtils';
 import TypeBar from './TypeBar';
 import PlanType from './PlanType';
 import UserType from './UserType';
+import TitleBack from '../TitleBack';
+import HeaderExpense from './HeaderExpense';
+import OverAllType from './OverAllType';
 
 const Expense = () => {
 
@@ -25,6 +28,8 @@ const Expense = () => {
     const [kidAmount, setKidAmount] = useState();
     const [isUseTicket, setIsUseTicked] = useState();
     const [enableEdit, setEnableEdit] = useState();
+
+    const [userTotalExpense, setUserTotalExpense] = useState(0);
 
     const monthNames = ["ม.ค.", "ก.พ.", "มี.ย.", "เม.ย.", "พ.ค.", "มิ.ย.",
         "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
@@ -124,21 +129,24 @@ const Expense = () => {
 
     return (
         <div className='w-full pt-10'>
+
+            <div className='text-sm'>
+                <TitleBack title={"ค่าใช้จ่าย"} backUrl={'/plan'} />
+            </div>
+
             {planName && planDate && sortedPlanList && expenseEachDay &&
                 <div>
-                    <div className='w-full h-1/4 bg-[#51b3ce] px-6 py-6'>
-                        <p className='text-2xl font-semibold px-6 text-white'>{planName}</p>
-                        <div className='w-full bg-white rounded-xl px-6 py-4'>
-                            <p className=''>ค่าใช้จ่ายทั้งหมด</p>
-                            <p className='text-3xl'>{expenseTotal} บาท</p>
-                        </div>
-                    </div>
 
                     <TypeBar section={section}
                         setSection={setSection} />
 
                     {section === 0 &&
                         <div className='pt-4'>
+                            <HeaderExpense
+                                planName={planName}
+                                expenseTotal={expenseTotal}
+                                detail="ค่าใช้จ่ายตามแผนการท่องเที่ยวหลัก"
+                            />
                             <div className='border-2 rounded-t-3xl'>
                                 {sortedPlanList.map((list, index) => (
                                     <PlanType key={index}
@@ -163,9 +171,30 @@ const Expense = () => {
                     }
 
                     {section === 1 &&
-                        <UserType userID={userProfile.userId}
-                                  planID={planID} 
-                                  planDate={planDate}/>
+                        <div className='pt-4'>
+                            <HeaderExpense
+                                planName={planName}
+                                expenseTotal={userTotalExpense}
+                                detail="ค่าใช้จ่ายเพิ่มเติม"
+                            />
+                            <UserType 
+                                userID={userProfile.userId}
+                                planID={planID}
+                                planDate={planDate}
+                                setUserTotalExpense={setUserTotalExpense} />
+                        </div>
+                    }
+
+                    {section === 2 &&
+                        <div className='pt-4'>
+                            <OverAllType 
+                                planID={planID}
+                                planName={planName}
+                                planDate={planDate}
+                                totalMainExpense={expenseTotal}
+                                MainExpenseEachDay={expenseEachDay}/>
+                            
+                        </div>
                     }
 
                 </div>

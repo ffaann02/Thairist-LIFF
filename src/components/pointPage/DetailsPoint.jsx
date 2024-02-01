@@ -9,9 +9,12 @@ import ExcHistory from "./HistoryPoint";
 import AR_Mission1 from "./Mission/AR_Mission1";
 import Blog_Mission2 from "./Mission/Blog_Mission2";
 import Review_Mission3 from "./Mission/Review_Mission3";
+import { useUser } from "../../UserContext";
 
 
 const DetailsPoint = ({ section, province }) => {
+
+  const {userProfile, setUser} = useUser();
 
   // AR Mission 1 Data from MySQL
   const [ListData3D, setListData3D] = useState();
@@ -26,6 +29,23 @@ const DetailsPoint = ({ section, province }) => {
       })
       .catch(err => console.log(err))
   }, [])
+
+  // AR_History Data from MySQL
+  const [AR_History, setAR_History] = useState();
+  useEffect(() => {
+    if(userProfile){
+      console.log(userProfile);
+      axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_AR_History_userId`, {
+        params: { user_id: userProfile.userId }
+      })
+        .then(res => {
+          setAR_History(res.data);
+          return
+        })
+        .catch(err => console.log(err))
+    }
+  }, [userProfile])
+
   //--------------------------------
   
   // exchangepoint_history 1 Data from MySQL
@@ -119,7 +139,7 @@ const DetailsPoint = ({ section, province }) => {
       </div>
 
       {section === 0 && <div className="flex flex-col gap-y-2 mt-4">
-        <AR_Mission1 title={"ภารกิจค้นหาความลับผ่านโลก 3 มิติ"} ARListData3D = {ListData3D}/>
+        <AR_Mission1 title={"ภารกิจค้นหาความลับผ่านโลก 3 มิติ"} ARListData3D = {ListData3D} AR_History={AR_History}/>
         <Blog_Mission2 title={"กิจกรรมแบ่งปันประสบการณ์ รับคะแนนเพิ่ม"}/>
         <Review_Mission3 title={"รีวิวสถานที่ท่องเที่ยวรับ 3 คะแนน"}/>
       </div>}   

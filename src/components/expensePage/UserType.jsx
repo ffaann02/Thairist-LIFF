@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import InputCollapse from './InputCollapse'
 import HistoryCollapse from './HistoryCollapse'
-import { splitByDay, initArrayState } from './expenseUtils'
+import { splitByDay, initArrayState, calculateUserExpense } from './expenseUtils'
 
-const UserType = ({ userID, planID, planDate }) => {
+const UserType = ({ userID, planID, planDate, setUserTotalExpense }) => {
 
     const [userExpense, setUserExpense] = useState([]);
     const [sortedUserExpense, setSortedUserExpense] = useState();
 
     const [enableEdit, setEnableEdit] = useState();
+
+    const [userExpenseEachDay, setUserExpenseEachDay] = useState();
 
     const fetchUserExpense = () => {
         axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_user_expense?plan_id=${planID}`)
@@ -36,6 +38,10 @@ const UserType = ({ userID, planID, planDate }) => {
             setSortedUserExpense(splitDayData);
             const enableEditState = initArrayState(splitDayData);
             setEnableEdit(enableEditState);
+            // For header;
+            const [totalExpense, expenseEachDay] = calculateUserExpense(splitDayData);
+            setUserTotalExpense(totalExpense);
+            setUserExpenseEachDay(expenseEachDay);
         }
     }, [userExpense])
 
@@ -88,7 +94,8 @@ const UserType = ({ userID, planID, planDate }) => {
                 userExpense={userExpense}
                 sortedUserExpense={sortedUserExpense}
                 enableEdit={enableEdit}
-                UpdateUserExpense={UpdateUserExpense} />
+                UpdateUserExpense={UpdateUserExpense}
+                userExpenseEachDay={userExpenseEachDay} />
 
             <InputCollapse planDate={planDate}
                 InsertUserExpense={InsertUserExpense}

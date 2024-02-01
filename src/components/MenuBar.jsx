@@ -17,8 +17,8 @@ const MenuBar = () => {
                         <p className="text-sm ">Home</p>
                     </div>
                 </Link>
-                <Link to="/planner">
-                    <div className={`mx-auto ${location.pathname=="/planner"? "text-blue-700":"text-black"}`}>
+                <Link to="/plan">
+                    <div className={`mx-auto ${location.pathname=="/plan"? "text-blue-700":"text-black"}`}>
                         <RiFilePaper2Line className="text-2xl mx-auto " />
                         <p className="text-sm ">Plan</p>
                     </div>
