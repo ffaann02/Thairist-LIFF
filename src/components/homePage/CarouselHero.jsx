@@ -3,7 +3,7 @@ import { PiHandsPrayingFill } from "react-icons/pi";
 const Carouselitem = [
     {
         title: "10 สถานที่ทำบุญกลางปี",
-        url: "https://www.govivigo.com/content/upload/images/Thailand%20Travel_North/Thailand_Travel_North_Doi-Inthanon-National-Park_Chiang-Mai_1.jpg",
+        url: "https://news.thaipbs.or.th/media/TSNBg3wSBdng7ijMhaNWyslaoDlY3AwCNCoRjZVIbLZ.jpg",
     },
     {
         title: "10 เกาะน่าเที่ยวเมืองไทย",
