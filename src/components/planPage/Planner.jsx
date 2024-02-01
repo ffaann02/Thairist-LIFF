@@ -274,7 +274,7 @@ const Planner = () => {
                                             <div {...provided.droppableProps} ref={provided.innerRef}>
                                                 {newOrderPlanDetail
                                                     ?
-                                                    <div>
+                                                    <div className="">
                                                         {newOrderPlanDetail.map((detail, index) => (
                                                             <Draggable
                                                                 draggableId={index.toString()}

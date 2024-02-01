@@ -108,5 +108,20 @@ const initArrayState = (nestedArrayData, state, setState, initValue) => {
     return arrayState;
 }
 
+const calculateUserExpense = (sortedData) => {
+    let totalPrice = 0;
+    let priceEachDay = [];
+    sortedData.map((dataDay) => {
+        console.log(dataDay);
+        let price = 0;
+        dataDay.map((dataDay) => {
+            price += dataDay.price
+            totalPrice += dataDay.price;
+        })
+        priceEachDay.push(price);
+    })
+    return [totalPrice, priceEachDay];
+}
 
-export { sortByTime, calculateExpense, splitByDay, initArrayState }
+
+export { sortByTime, calculateExpense, splitByDay, initArrayState, calculateUserExpense }

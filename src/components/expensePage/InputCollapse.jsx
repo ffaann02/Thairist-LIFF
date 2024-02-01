@@ -7,7 +7,7 @@ const InputCollapse = ({ planDate, InsertUserExpense, userExpense }) => {
         "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
     ];
 
-    const categoryChoices = ["ค่าเดินทาง", "ค่าอาหาร", "ค่าที่พัก"];
+    const categoryChoices = ["ค่าเดินทาง", "ค่าอาหาร", "ค่าที่พัก", "ค่าบัตรเข้าชมสถานที่ท่องเที่ยว"];
 
     const [categorySelected, setCategorySelected] = useState(categoryChoices[0]);
     const [tempDetail, setTempDetail] = useState("");
@@ -23,6 +23,11 @@ const InputCollapse = ({ planDate, InsertUserExpense, userExpense }) => {
 
     const handleSaveButton = () => {
         InsertUserExpense(categorySelected, tempDetail, tempPrice, dateSelected);
+    }
+
+    function closeCollapse() {
+        const details = document.querySelector('.collapse');
+        details.open = false;
     }
 
     return (
@@ -67,11 +72,11 @@ const InputCollapse = ({ planDate, InsertUserExpense, userExpense }) => {
                         </select>
                     </div>
                     <div className='w-full flex justify-center gap-4 pt-2'>
-                        <button className="mt-4 px-4 py-1 rounded-lg text-sm bg-white border border-[#51b3ce]">
+                        <button className="mt-4 px-4 py-1 rounded-lg text-sm bg-white border border-[#51b3ce]" onClick={() => closeCollapse()}>
                             <span className="text-[#51b3ce]">ยกเลิก</span>
                         </button>
-                        <button className="mt-4 px-4 py-1 rounded-lg text-sm bg-[#51b3ce]">
-                            <span className="text-white" onClick={() => handleSaveButton()}>บันทึก</span>
+                        <button className="mt-4 px-4 py-1 rounded-lg text-sm bg-[#51b3ce]" onClick={() => handleSaveButton()}>
+                            <span className="text-white" >บันทึก</span>
                         </button>
                     </div>
                 </div>

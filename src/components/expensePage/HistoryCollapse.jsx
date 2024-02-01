@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const HistoryCollapse = ({ planDate, userExpense, sortedUserExpense, enableEdit, UpdateUserExpense }) => {
+const HistoryCollapse = ({ planDate, userExpense, sortedUserExpense, enableEdit, UpdateUserExpense, userExpenseEachDay }) => {
 
     const monthNames = ["ม.ค.", "ก.พ.", "มี.ย.", "เม.ย.", "พ.ค.", "มิ.ย.",
         "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
@@ -53,11 +53,10 @@ const HistoryCollapse = ({ planDate, userExpense, sortedUserExpense, enableEdit,
                                                         <span className='text-sm'>หมวดหมู่: {expense.category}</span>
                                                         <span className='pl-2 underline text-sm text-slate-400'
                                                             onClick={() => handleEnableEdit(dateIndex, index, true)}>แก้ไข</span>
-
                                                     </div>
                                                     <p className='text-[#51b3ce] font-bold'>{expense.price}</p>
+                                                    
                                                 </div>
-
                                                 {/* Render Edit mode */}
                                                 {tempEnableEdit && tempEnableEdit[dateIndex][index] === true &&
                                                     <div>
@@ -111,6 +110,7 @@ const HistoryCollapse = ({ planDate, userExpense, sortedUserExpense, enableEdit,
 
                                             </div>
                                         ))}
+                                        <p className='text-right pt-1'>รวมทั้งวัน {userExpenseEachDay[dateIndex]} บาท</p>
                                     </div>
                                     : <div>
                                         <p className='font-bold'>ไม่มีบันทึกของวันนี้</p>
