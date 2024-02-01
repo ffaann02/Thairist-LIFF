@@ -13,8 +13,12 @@ import { FaPhoneAlt } from "react-icons/fa"
 import { FaBahtSign } from "react-icons/fa6"
 import { CiLocationOn } from "react-icons/ci";
 import { MdCancel } from "react-icons/md";
+import Rating from './Rating';
 
 const ModalReadmore = ({ displayModalReadmore, selectedAttraction }) => {
+
+    console.log(selectedAttraction.review);
+
     const tags = selectedAttraction.tag.split(',');
     useEffect(() => {
         console.log(selectedAttraction);
@@ -28,13 +32,7 @@ const ModalReadmore = ({ displayModalReadmore, selectedAttraction }) => {
                     <img src={selectedAttraction.image_url} className="rounded-t-lg" />
                     <div className='px-1 mt-2'>
                         <p className='text-xl font-bold mt-1'>{selectedAttraction.name}</p>
-                        <div className="rating my-1 w-full">
-                            <input type="radio" name="rating-1" className="mask mask-star" />
-                            <input type="radio" name="rating-1" className="mask mask-star" checked />
-                            <input type="radio" name="rating-1" className="mask mask-star" />
-                            <input type="radio" name="rating-1" className="mask mask-star" />
-                            <input type="radio" name="rating-1" className="mask mask-star" />
-                        </div>
+                        <Rating rating={selectedAttraction.review}/>
                         <p className=''>{selectedAttraction.description}</p>
                         <div className='flex gap-x-2 mt-2'>
                             <button className="rounded-lg px-2 py-1 flex text-red-700 border-[1px] border-red-700">

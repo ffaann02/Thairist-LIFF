@@ -53,7 +53,6 @@ const AR_Mission1 = ({ title, ARListData3D, AR_History }) => {
   const [arUrl, setArUrl] = useState('https://pngimg.com/d/mario_PNG125.png');
 
 
-
   const [arHistoryMatched, setArHistoryMatched] = useState();
 
   useEffect(() => {
@@ -72,7 +71,7 @@ const AR_Mission1 = ({ title, ARListData3D, AR_History }) => {
         {ARListData3D && userProfile &&
           ARListData3D.map((mission, index) => (
             <Link to={`https://liff.line.me/2000611383-Pqqw005D/?userId=${userProfile.userId}&id=${mission.id}&lat=${mission.coordinate_lat}
-            &long=${mission.coordinate_long}&province=${mission.province}&location=${mission.location}&ar_url=${mission.ar_url}`}
+            &long=${mission.coordinate_long}&province=${mission.province}&location=${mission.location}&ar_url=${mission.ar_url}&userId=${userProfile.userId}`}
               className="carousel-item relative border-[1px] rounded-lg drop-shadow-sm ml-4" key={index} onClick={(e) => disabledLink(e, arHistoryMatched, mission.id)}>
               {/* <div className="carousel-item relative border-[1px] rounded-lg drop-shadow-sm ml-4" key={index}> */}
               <div className="absolute top-1 left-2 bg-white py-1 px-2 rounded-lg border-2 font-bold text-sm">
@@ -93,7 +92,9 @@ const AR_Mission1 = ({ title, ARListData3D, AR_History }) => {
                   <p className="text-sm">{mission.location}</p>
                 </div>
               </div>
-              <img src={mission.ar_url} className="absolute z-10 w-32 right-4 top-4" style={{ filter: 'brightness(20%)' }} />
+              {arHistoryMatched && arHistoryMatched.includes(mission.id) 
+              ? <img src={mission.ar_url} className="absolute z-10 w-32 right-4 top-4" />
+              : <img src={mission.ar_url} className="absolute z-10 w-32 right-4 top-4" style={{ filter: 'brightness(20%)' }} />}
               <img
                 src={mission.url}
                 className="w-[300px] rounded-lg"

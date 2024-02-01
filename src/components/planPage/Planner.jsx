@@ -10,7 +10,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import PlanCalendar from "./PlanCalendar";
 import PlanList from "./PlanList";
 import BannerPlan from "./BannerPlan";
-import { checkName, generatedPlanID, changeTimeLineByDrag, sortByStartTime} from "./utils";
+import { checkName, generatedPlanID, changeTimeLineByDrag, sortByStartTime } from "./utils";
 import NoPlan from "./NoPlan";
 
 const Planner = () => {
@@ -24,7 +24,7 @@ const Planner = () => {
         year: currentDate.getFullYear(),
         month: currentDate.getMonth() + 1,
         day: currentDate.getDate()
-      };
+    };
 
     const [isPlanExist, setIsPlanExist] = useState(false);
     const [planID, setPlanID] = useState();
@@ -87,7 +87,7 @@ const Planner = () => {
                     else {
                         if (currentSelectDay === null) {
                             setCurrentSelectDay(0);
-                        } 
+                        }
                         setPlanDetailExist(res.data.result);
                         sortByStartTime(res.data.result, setNewOrderPlanDetail, true, selectedDays);
                     }
@@ -98,22 +98,22 @@ const Planner = () => {
 
     const fetchPlanDetail = () => {
         axios.get(`${import.meta.env.VITE_SERVER_HTTP}/fetch_plan_detail?plan_id=${planID}`)
-                .then(res => {
-                    if (res.data.empty) {
-                        setPlanDetailExist();
-                        if (currentSelectDay === null) {
-                            setCurrentSelectDay(0);
-                        }
+            .then(res => {
+                if (res.data.empty) {
+                    setPlanDetailExist();
+                    if (currentSelectDay === null) {
+                        setCurrentSelectDay(0);
                     }
-                    else {
-                        if (currentSelectDay === null) {
-                            setCurrentSelectDay(0);
-                        } 
-                        setPlanDetailExist(res.data.result);
-                        sortByStartTime(res.data.result, setNewOrderPlanDetail, false, selectedDays, selectedDays[currentSelectDay]);
+                }
+                else {
+                    if (currentSelectDay === null) {
+                        setCurrentSelectDay(0);
                     }
-                })
-                .catch(err => console.log(err));
+                    setPlanDetailExist(res.data.result);
+                    sortByStartTime(res.data.result, setNewOrderPlanDetail, false, selectedDays, selectedDays[currentSelectDay]);
+                }
+            })
+            .catch(err => console.log(err));
     }
 
     // useEffect(() => {
@@ -172,7 +172,10 @@ const Planner = () => {
     const switchDay = (indexDay, date) => {
         console.log(date);
         setCurrentSelectDay(indexDay);
-        sortByStartTime(planDetailExist, setNewOrderPlanDetail, false, selectedDays, date);
+        if(planDetailExist){
+            sortByStartTime(planDetailExist, setNewOrderPlanDetail, false, selectedDays, date);
+        }
+        
     }
 
     const handleDragDrop = (result) => {
@@ -222,22 +225,22 @@ const Planner = () => {
             <div className="w-full h-full max-w-4xl bg-slate-50 mx-auto min-h-screen">
 
                 <PlanCalendar planName={planName}
-                              handleInputName={handleInputName}
-                              selectedDays={selectedDays}
-                              tempSelectedDays={tempSelectedDays}
-                              setTempSelectedDays={setTempSelectedDays}
-                              handleSelectedDays={handleSelectedDays}
-                              minimumCalendar={minimumCalendar}/>
+                    handleInputName={handleInputName}
+                    selectedDays={selectedDays}
+                    tempSelectedDays={tempSelectedDays}
+                    setTempSelectedDays={setTempSelectedDays}
+                    handleSelectedDays={handleSelectedDays}
+                    minimumCalendar={minimumCalendar} />
 
                 {isPlanExist === false && selectedDays.length === 0 || isSelectDaysClicked === false
                     ?
-                    <NoPlan displayCalendar={displayCalendar}/>
+                    <NoPlan displayCalendar={displayCalendar} />
                     :
                     <div>
-                        {newOrderPlanDetail && 
-                        <div className="w-full">
-                                <BannerPlan data={newOrderPlanDetail}/>
-                        </div>}
+                        {newOrderPlanDetail &&
+                            <div className="w-full">
+                                <BannerPlan data={newOrderPlanDetail} />
+                            </div>}
 
                         <div className="text-center pt-3">
                             <p className="mb-2 ">แผนการเที่ยวของคุณ</p>
@@ -261,8 +264,8 @@ const Planner = () => {
                                         <div className="py-2 px-4">
                                             <div className="bg-white px-2 py-1 rounded-xl border border-blue-400 text-sm text-left">
                                                 <div className="flex">
-                                                <FiAlertCircle className="text-blue-500 text-xl font-bold my-auto"/>
-                                                <span className="font-bold ml-1 text-blue-500 my-auto">แนะนำการใช้งาน: </span>
+                                                    <FiAlertCircle className="text-blue-500 text-xl font-bold my-auto" />
+                                                    <span className="font-bold ml-1 text-blue-500 my-auto">แนะนำการใช้งาน: </span>
                                                 </div>
                                                 <span>กดค้างและลากแผนการเที่ยวที่คุณต้องการเปลี่ยนเวลา</span>
                                             </div>
@@ -293,23 +296,28 @@ const Planner = () => {
                                                                                 key={index}
                                                                                 index={index}
                                                                                 detail={detail}
-                                                                                refetch={handleDeleteButton}/>
+                                                                                refetch={handleDeleteButton} />
                                                                             : null}
                                                                     </div>
                                                                 )}
                                                             </Draggable>
                                                         ))}
                                                     </div>
-                                                    : <div>
-                                                    <p className="font-semibold ">คุณยังไม่มีสถานที่หรือกิจกรรมใด ๆ ในแผนการท่องเที่ยว</p>
-                                                    <p className="text-slate-600">คลิกปุ่มข้างล่างเพื่อเพิ่มได้เลย</p>
-                                                </div>}
+                                                    : <div className="py-2 px-12">
+                                                        <div className="bg-white px-2 py-1 rounded-xl border border-blue-400 text-sm text-left">
+                                                            <div className="flex">
+                                                                <FiAlertCircle className="text-blue-500 text-xl font-bold my-auto" />
+                                                                <span className="font-bold ml-1 text-blue-500 my-auto">แนะนำการใช้งาน: </span>
+                                                            </div>
+                                                            <span>คุณยังไม่เพิ่มสถานที่ท่องเที่ยวหรือกิจกรรมใด ๆ ในแผนการท่องเที่ยว</span>
+                                                        </div>
+                                                    </div>}
                                             </div>
                                         )}
                                     </Droppable>
 
                                     {(isDraggingEnabled && planDetailExist)
-                                        ? <div>
+                                        && <div>
                                             <button className="ml-2 mt-4 px-4 py-2 rounded-lg  bg-white border border-[#51b3ce]" onClick={() => handleCancleEditButton()}>
                                                 <p className="text-[#51b3ce]">ยกเลิก</p>
                                             </button>
@@ -317,8 +325,11 @@ const Planner = () => {
                                                 <p className="text-white">บันทึก</p>
                                             </button>
                                         </div>
-                                        : <button className="ml-2 mt-4 px-4 py-2 rounded-lg bg-white border border-[#51b3ce]" onClick={() => setIsDraggingEnabled(true)}>
-                                            <p className="text-[#51b3ce]">แก้ไข</p>
+                                    }
+
+                                    {(!isDraggingEnabled && planDetailExist) &&
+                                        <button className="ml-2 mt-4 px-4 py-2 rounded-lg bg-white border border-[#51b3ce]" onClick={() => setIsDraggingEnabled(true)}>
+                                        <p className="text-[#51b3ce]">แก้ไข</p>
                                         </button>
                                     }
 
