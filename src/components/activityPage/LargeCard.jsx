@@ -21,7 +21,7 @@ const LargeCard = ({ id, data, displayModalPlan, displayModalReadmore }) => {
             <div className="rounded-xl overflow-hidden shadow-lg border-2 border-slate-200 border-b-0 grid grid-cols-12">
                 <div className="col-span-5 w-full h-full">
                     <img
-                        className="object-cover h-full"
+                        className="w-full h-full object-cover"
                         src={data.image_url}
                         alt="Sunset in the mountains" />
                 </div>
