@@ -45,20 +45,20 @@ function App() {
           getUserProfile();
         }
         //for functional
-        // else{
-        //   liff.login();
-        // }
-        // for dev on pc
-        else {
-          const templateProfile =
-          {
-            "userId": "U5b7bef2d143fb728b673cfb6e7ce88e0",
-            "displayName": "Kong Chayapol",
-            "pictureUrl": "https://profile.line-scdn.net/0h54lO-CdPahtBNn7fINgUZDFmaXFiRzMJaAByLycwMCx1ASQabwQsKnwzNC19USsdPVIte30wMS9NJR19X2CWL0YGNyp9BypNbVIs_w",
-            "statusMessage": "templateProfile!"
-          }
-          setUser(templateProfile);
+        else{
+          liff.login();
         }
+        // for dev on pc
+        // else {
+          // const templateProfile =
+          // {
+          //   "userId": "U5b7bef2d143fb728b673cfb6e7ce88e0",
+          //   "displayName": "Kong Chayapol",
+          //   "pictureUrl": "https://profile.line-scdn.net/0h54lO-CdPahtBNn7fINgUZDFmaXFiRzMJaAByLycwMCx1ASQabwQsKnwzNC19USsdPVIte30wMS9NJR19X2CWL0YGNyp9BypNbVIs_w",
+          //   "statusMessage": "templateProfile!"
+          // }
+          // setUser(templateProfile);
+        // }
       })
       .catch((e) => {
         setMessage("LIFF init failed.");
