@@ -51,6 +51,7 @@ const Planner = () => {
             console.log(`user_id: ${userProfile.userId}`);
             axios.get(`${import.meta.env.VITE_SERVER_HTTP}/check_plan_exist?owner_id=${userProfile.userId}`)
                 .then(res => {
+                    console.log(res.data);
                     if (res.data.empty) {
                         setIsPlanExist(false);
                         setPlanName("");

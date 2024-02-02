@@ -85,7 +85,7 @@ const UserType = ({ userID, planID, planDate, setUserTotalExpense }) => {
 
     return (
         <div className='w-full pt-4 px-6'>
-            <div className='w-full px-2 py-2 bg-white rounded-xl border'>
+            <div className='w-full px-4 py-2 bg-white rounded-xl border'>
                 <span className='font-bold'>คำแนะนำ:</span>
                 <span className='ml-2'>คุณสามารถจดบันทึกค่าใช้จ่ายเพิ่มเติม นอกเหนือจากค่าใช้จ่ายตามแผนการท่องเที่ยวหลักของคุณได้</span>
             </div>

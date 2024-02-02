@@ -57,8 +57,8 @@ const OverAllType = ({ planID, planName, planDate, totalMainExpense, MainExpense
                 </div>
             </div>
             {planDate.map((date, index) => (
-                    <div key={index} className='pt-4 pb-4 border'>
-                        <p className='bg-[#a3dff0] w-fit ml-2 px-3 py-2 rounded-3xl text-blue-900 font-bold'>
+                    <div key={index} className='pt-4 pb-4 border mb-1'>
+                        <p className='bg-[#a3dff0] w-fit ml-2 px-3 py-2 rounded-2xl text-blue-900 font-bold'>
                             {date.day} {monthNames[date.month - 1]} {date.year + 543}
                         </p>
                         <div className='px-4 pt-2'>
