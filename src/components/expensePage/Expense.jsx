@@ -147,7 +147,13 @@ const Expense = () => {
                                 expenseTotal={expenseTotal}
                                 detail="ค่าใช้จ่ายตามแผนการท่องเที่ยวหลัก"
                             />
-                            <div className='border-2 rounded-t-3xl'>
+                            <div className='px-6 pt-4'>
+                                <div className='w-full px-4 py-2 bg-white rounded-xl border'>
+                                    <span className='font-bold'>คำแนะนำ:</span>
+                                    <span className='ml-2'>คุณสามารถแก้ไขรายจ่ายได้ (แผนการท่องเที่ยวประเภทที่ไม่ใช้ตั๋วเข้าชม) ตัวอย่างเช่น รายจ่ายร้านอาหารต่าง ๆ</span>
+                                </div>
+                            </div>
+                            <div className='px-6 pt-2 rounded-t-lg'>
                                 {sortedPlanList.map((list, index) => (
                                     <PlanType key={index}
                                         day={planDate[index].day}
@@ -177,7 +183,7 @@ const Expense = () => {
                                 expenseTotal={userTotalExpense}
                                 detail="ค่าใช้จ่ายเพิ่มเติม"
                             />
-                            <UserType 
+                            <UserType
                                 userID={userProfile.userId}
                                 planID={planID}
                                 planDate={planDate}
@@ -187,13 +193,13 @@ const Expense = () => {
 
                     {section === 2 &&
                         <div className='pt-4'>
-                            <OverAllType 
+                            <OverAllType
                                 planID={planID}
                                 planName={planName}
                                 planDate={planDate}
                                 totalMainExpense={expenseTotal}
-                                MainExpenseEachDay={expenseEachDay}/>
-                            
+                                MainExpenseEachDay={expenseEachDay} />
+
                         </div>
                     }
 
