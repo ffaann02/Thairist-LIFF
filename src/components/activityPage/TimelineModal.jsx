@@ -16,7 +16,7 @@ const TimelineModal = ({ selectedAttraction, newOrderPlanDetail, dates, currentS
                         detail.formated_date.year === dates[currentSelectDay].year &&
                         !detail.isSelectedAttraction)
                         ? (<div key={index} className="grid grid-cols-12 text-center py-2 mt-1">
-                            <div className="col-span-4 text-left ml-4 flex justify-between">
+                            <div className="col-span-4 text-left ml-4 text-sm flex justify-between">
                                 <div className='h-full text-black my-auto'>
                                     <p className="top-0">{detail.start_time} น.</p>
                                     <p className="bottom-0">{detail.end_time} น.</p>
@@ -35,7 +35,7 @@ const TimelineModal = ({ selectedAttraction, newOrderPlanDetail, dates, currentS
                                     className="rounded-xl shadow-md w-full h-[3.9rem]" />
                             </div>
                             <div className="col-span-6 text-left ml-3">
-                                <p className="text-xl text-bold">{detail.attraction_name}</p>
+                                <p className="text-lg text-bold">{detail.attraction_name}</p>
                                 <p className="text-slate-400 text-sm">{detail.tag}</p>
                             </div>
                         </div>)
@@ -44,7 +44,7 @@ const TimelineModal = ({ selectedAttraction, newOrderPlanDetail, dates, currentS
                             detail.formated_date.year === dates[currentSelectDay].year &&
                             detail.isSelectedAttraction === true)
                             ? <div key={index} className="grid grid-cols-12 text-center py-2 bg-blue-600">
-                                <div className="col-span-4 text-left ml-4 flex justify-between">
+                                <div className="col-span-4 text-left  ml-4 text-sm flex justify-between">
                                     {(startTimeSelects && endTimeSelects) ?
                                         <div className='h-full text-white my-auto'>
 
@@ -54,8 +54,8 @@ const TimelineModal = ({ selectedAttraction, newOrderPlanDetail, dates, currentS
                                         :
                                         <div className='h-full text-white my-auto'>
 
-                                            <p className="top-0">{defaultStartTime}</p>
-                                            <p className="bottom-0">{endTimeSelects}</p>
+                                            <p className="top-0">{defaultStartTime} น.</p>
+                                            <p className="bottom-0">{endTimeSelects} น.</p>
                                         </div>}
 
                                     <div className="ml-3 relative mr-3 text-center">

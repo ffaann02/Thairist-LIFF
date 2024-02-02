@@ -25,15 +25,15 @@ const ModalReadmore = ({ displayModalReadmore, selectedAttraction }) => {
     }, [])
     return (
         <div>
-            <div className="justify-center items-center flex fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
-                <div className="relative rounded-xl my-auto bg-white p-2 mx-4 max-w-sm pb-1">
+            <div className="justify-center items-center flex fixed inset-0 z-[1000] outline-none focus:outline-none bg-black bg-opacity-50">
+                <div className="relative rounded-xl my-auto bg-white p-2 mx-4 max-w-sm pb-2">
                     <MdCancel className='absolute -top-3 -right-1 text-4xl text-white bg-red-500 rounded-full'
                         onClick={() => { displayModalReadmore() }} />
                     <img src={selectedAttraction.image_url} className="rounded-t-lg" />
                     <div className='px-1 mt-2'>
                         <p className='text-xl font-bold mt-1'>{selectedAttraction.name}</p>
                         <Rating rating={selectedAttraction.review}/>
-                        <p className=''>{selectedAttraction.description}</p>
+                        <p className='text-sm'>{selectedAttraction.description}</p>
                         <div className='flex gap-x-2 mt-2'>
                             <button className="rounded-lg px-2 py-1 flex text-red-700 border-[1px] border-red-700">
                                 <FaBahtSign className="my-auto" />

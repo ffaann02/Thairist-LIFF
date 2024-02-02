@@ -9,7 +9,7 @@ import { Link, useLocation } from "react-router-dom"
 const MenuBar = () => {
     const location = useLocation();
     return (
-        <div className="fixed z-[2000] w-full bottom-0 text-center">
+        <div className="fixed z-[900] w-full bottom-0 text-center">
             <div className="w-full h-full py-3 rounded-xl px-4 grid grid-cols-5 bg-slate-50 border-t-2">
                 <Link to="/">
                     <div className={`mx-auto ${location.pathname=="/"? "text-blue-700":"text-black"}`}>

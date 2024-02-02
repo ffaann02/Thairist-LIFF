@@ -171,10 +171,10 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
     return (
         <div>
             {planData && dates &&
-                <div className="justify-center items-center flex overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none bg-black bg-opacity-50">
+                <div className="justify-center items-center flex flex-col overflow-x-hidden fixed inset-0 z-[1000] outline-none focus:outline-none bg-black bg-opacity-50 py-4 px-3">
 
-                    <div className="relative rounded-xl h-[80%] mx-auto my-auto bg-white overflow-scroll">
-                        <div className="grid grid-cols-8 ml-4 mt-4">
+                    <div className="relative rounded-xl rounded-b-none mx-auto my-auto bg-white overflow-scroll">
+                        <div className="grid grid-cols-8 ml-4 mt-4 sticky top-0 pt-2 bg-white z-[1200]">
                             <button className="col-span-1 my-auto bg-slate-100 rounded-full w-8 h-8" onClick={() => DisplayModalState(false)}>
                                 <IoChevronBackSharp className="mx-auto text-slate-800" />
                             </button>
@@ -184,7 +184,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                             </div>
                         </div>
 
-                        <div className="flex px-1 mt-4 mx-auto justify-center mb-1 text-center">
+                        <div className="flex px-1 mt-4 mx-auto justify-center text-center">
                             {newOrderPlanDetail &&
                                 dates.map((date, index) => (
                                     <div
@@ -203,8 +203,8 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                             handleTimeChange={handleTimeChange}
                             defaultStartTime={defaultStartTime}
                             disabledTime={disabledTime}
-                            endTimeSelects={endTimeSelects} 
-                            setTicketAmount={setTicketAmount}/>
+                            endTimeSelects={endTimeSelects}
+                            setTicketAmount={setTicketAmount} />
 
                         <TimelineModal selectedAttraction={selectedAttraction}
                             newOrderPlanDetail={newOrderPlanDetail}
@@ -214,15 +214,14 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                             endTimeSelects={endTimeSelects}
                             defaultStartTime={defaultStartTime} />
 
-                        <div className="bottom-0 mb-4 mt-4 flex justify-center">
-                            <button className="rounded-lg px-4 py-2 text-red-700 border-[1px] border-red-700" onClick={() => DisplayModalState(false)}>
-                                <p className="my-auto">ยกเลิก</p>
-                            </button>
-                            <button className="ml-4 rounded-lg px-4 py-2 bg-blue-700 text-white" onClick={() => InsertToDatabase()}>
-                                <p className="my-auto">ยืนยัน</p>
-                            </button>
-                        </div>
-
+                    </div>
+                    <div className='flex bg-white w-full justify-center py-2 rounded-xl rounded-t-none'>
+                        <button className="rounded-lg px-4 py-2 text-red-700 border-[1px] border-red-700" onClick={() => DisplayModalState(false)}>
+                            <p className="my-auto">ยกเลิก</p>
+                        </button>
+                        <button className="ml-4 rounded-lg px-4 py-2 bg-blue-700 text-white" onClick={() => InsertToDatabase()}>
+                            <p className="my-auto">ยืนยัน</p>
+                        </button>
                     </div>
                 </div>
             }
@@ -240,7 +239,7 @@ const ModalPlan = ({ displayModalPlan, selectedAttraction }) => {
                                 <p className='px-12 pt-2 mx-auto my-auto text-lg'>สร้างแผนการท่องเที่ยวได้ตามใจคุณ</p>
                             </div>
 
-                            <div className='flex justify-center gap-2 pb-6 pt-2' >
+                            <div className='flex justify-center pb-6' >
                                 <button className="mt-4 px-4 py-2 rounded-lg bg-white border border-[#51b3ce]" onClick={() => DisplayModalState(false)}>
                                     <p className="text-[#51b3ce]">ยกเลิก</p>
                                 </button>
