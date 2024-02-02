@@ -48,14 +48,14 @@ const PlanType = ({ day, month, year, indexDay, sortedData, expenseEachList, exp
     }
 
     return (
-        <div className=''>
-            <details className="collapse collapse-arrow bg-base-200 rounded-t-3xl">
+        <div className='pt-2'>
+            <details className="collapse collapse-arrow bg-base-200 rounded-t-lg">
                 <summary className="collapse-title text-xl font-medium">{day} {month} {year}</summary>
-                <div className="collapse-content">
+                <div className="collapse-content px-0 pt-2 bg-white border">
                     {sortedData.map((data, index) => (
-                        <div key={index} className='bg-white p-3 rounded-xl m-2'>
-                            <div className='w-full flex justify-between text-lg font-medium'>
-                                <p className='left-0 font-bold'>{data.attraction_name}</p>
+                        <div key={index} className='rounded-xl m-2 pt-2 px-2'>
+                            <div className='w-full flex justify-between text-md font-semibold'>
+                                <p className='left-0'>{data.attraction_name}</p>
                                 <p className=' mr-4 text-[#51b3ce] font-bold'>{expenseEachList[index]}</p>
                             </div>
                             <details className='pt-1 w-full collapse collapse-arrow flex justify-between'>
@@ -63,7 +63,7 @@ const PlanType = ({ day, month, year, indexDay, sortedData, expenseEachList, exp
                                 <div className="collapse-content px-0 w-full text-left">
                                     <div className='w-full mt-4 boder border-t-2'>
                                         <p className='mt-4 text-sm text-black'>รายละเอียดเพิ่มเติม</p>
-                                        <p className='mt-2 text-sm text-slate-600'>หมวดหมู่: xxx</p>
+                                        {/* <p className='mt-2 text-sm text-slate-600'>หมวดหมู่: xxx</p> */}
                                         {isUseTicket[index] === true &&
                                             <div className='flex mt-2'>
                                                 <p className='text-sm text-slate-600'>ค่าเข้าชม:</p>
@@ -161,7 +161,7 @@ const PlanType = ({ day, month, year, indexDay, sortedData, expenseEachList, exp
                         </div>
                     ))}
                     <div className='w-full'>
-                        <p className='text-right text-xl px-2'>รวมทั้งวัน {expenseEachDay} บาท</p>
+                        <p className='text-right font-bold px-4'>รวมทั้งวัน {expenseEachDay} บาท</p>
                     </div>
                 </div>
             </details>

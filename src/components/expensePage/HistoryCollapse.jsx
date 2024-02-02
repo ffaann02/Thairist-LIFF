@@ -40,14 +40,15 @@ const HistoryCollapse = ({ planDate, userExpense, sortedUserExpense, enableEdit,
             {planDate && sortedUserExpense &&
                 <div>
                     {planDate.map((date, dateIndex) => (
-                        <details key={dateIndex} className="collapse collapse-arrow bg-base-200">
-                            <summary className="collapse-title text-xl font-medium">{date.day} {monthNames[date.month - 1]} {date.year + 543}</summary>
-                            <div className="collapse-content">
+                        <div className='pb-2'>
+                        <details key={dateIndex} className="collapse collapse-arrow bg-base-200 rounded-lg">
+                            <summary className="collapse-title text-lg font-medium">{date.day} {monthNames[date.month - 1]} {date.year + 543}</summary>
+                            <div className="collapse-content px-0 pb-0 bg-white border">
                                 {sortedUserExpense[dateIndex].length > 0
-                                    ? <div>
+                                    ? <div className='pt-2 '>
                                         {sortedUserExpense[dateIndex].map((expense, index) => (
                                             <div key={index}>
-                                                <div className='flex justify-between pt-2'>
+                                                <div className='flex justify-between pt-2 px-4'>
                                                     <div>
                                                         <p className='font-bold'>{expense.detail}</p>
                                                         <span className='text-sm'>หมวดหมู่: {expense.category}</span>
@@ -60,7 +61,7 @@ const HistoryCollapse = ({ planDate, userExpense, sortedUserExpense, enableEdit,
                                                 {/* Render Edit mode */}
                                                 {tempEnableEdit && tempEnableEdit[dateIndex][index] === true &&
                                                     <div>
-                                                        <div className='pt-4 text-sm'>
+                                                        <div className='pt-4 text-sm px-4'>
                                                             <span>หมวดหมู่</span>
                                                             <select className="select select-bordered w-full"
                                                                 value={categorySelected || expense.category}
@@ -110,14 +111,15 @@ const HistoryCollapse = ({ planDate, userExpense, sortedUserExpense, enableEdit,
 
                                             </div>
                                         ))}
-                                        <p className='text-right pt-1'>รวมทั้งวัน {userExpenseEachDay[dateIndex]} บาท</p>
+                                        <p className='text-right px-4 pt-1 font-semibold'>รวมทั้งวัน {userExpenseEachDay[dateIndex]} บาท</p>
                                     </div>
                                     : <div>
-                                        <p className='font-bold'>ไม่มีบันทึกของวันนี้</p>
+                                        <p className='font-bold px-4 pt-4'>ไม่มีบันทึกของวันนี้</p>
                                     </div>
                                 }
                             </div>
                         </details>
+                        </div>
                     ))}
                 </div>
             }
