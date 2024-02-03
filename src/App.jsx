@@ -39,10 +39,10 @@ function App() {
 
   useEffect(() => {
     liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
-      .then(() => {
+      .then(async() => {
         setMessage("LIFF init succeeded.");
         if (liff.isLoggedIn()) {
-          getUserProfile();
+          await getUserProfile();
         }
         //for functional
         else{
