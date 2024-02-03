@@ -43,6 +43,13 @@ function App() {
         setMessage("LIFF init succeeded.");
         if (liff.isLoggedIn()) {
           await getUserProfile();
+          if(userProfile){
+            console.log(userProfile);
+            return;
+          }
+          else{
+            liff.login();
+          }
         }
         //for functional
         else{
