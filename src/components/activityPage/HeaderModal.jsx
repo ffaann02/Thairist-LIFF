@@ -55,7 +55,7 @@ const HeaderModal = ({ selectedAttraction, handleTimeChange, defaultStartTime, d
                             <div className='flex gap-2'>
                                 <p>ราคา:</p>
                                 <p>ผู้ใหญ่ {selectedAttraction.adult_price}</p>
-                                <p>เด็ก {selectedAttraction.adult_price}</p>
+                                <p>เด็ก {selectedAttraction.kid_price}</p>
                             </div>
                             <div className='pt-2'>
                                 <div className='grid grid-cols-6 align-middle mt-2'>
