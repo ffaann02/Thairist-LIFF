@@ -1,5 +1,5 @@
 # Thairist (Thai + Tourist)
-Web application platform to promote Thai traveling with LINE chatbot and Gamification system with local identity.
+Web application platform and LINE chatbot to promote Thai traveling with LINE chatbot and Gamification system with local identity.
 - Award: 🥉 2nd Runner Up, Thailand I new Gen Award 2024
 ## Key Features
 1. **Augment Reality (AR) Gamification Reward**:
